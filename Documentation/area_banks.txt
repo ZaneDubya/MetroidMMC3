@@ -67,7 +67,7 @@ this common section.
 There are a number of routines in this section. I do not know what the purpose
 of any of them are.
 
-Unknown routines        8058
+Unknown routine         8058
 ...                     80B0
                         80B8
                         80FB
@@ -84,17 +84,29 @@ Unknown routines        8058
                         822B
                         8244
                         82A5
-                        ...   Many more...
+                        82B3
+                        833F
+                        8395
+                        83F5
+                        8441
+                        8441
+                        844B
+                        84A7
+                        84FE
+                        855A
+                        8563
                         856B
                         
 ------------------------[ 2.3 Unknown routines/data  ]--------------------------
 There are four routines in this section. I do not know what the purpose of any
 of them are.
 
-Unknown routines        8B79
+Unknown routine         8B79
 ...                     8B8C
                         8B9D
-                        8BD5
+Unknown data            8BD1 (four byts of data).
+Unknown routine         8BD5
+Unknown data            8D3A (38 bytes of data)
 
 
 ==============================[ 3. Area Specific ]==============================

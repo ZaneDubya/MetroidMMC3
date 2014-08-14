@@ -1,9 +1,9 @@
 Metroid for MMC3
 ===========
 This is the source code of METROID, as disassembled by SnoBro and commented by
-Dirty McDingus (nmikstas@yahoo.com). The source code has been changed to use the
-MMC3 (the original METROID game used the MMC1), but no other functionality has
-been removed or added. You can reassemble this using the Ophis Assembler:
+Dirty McDingus. The source code has been changed to use the MMC3 (the original
+METROID game used the MMC1), but no other functionality has been removed or
+added. You can reassemble this using the Ophis Assembler:
 https://hkn.eecs.berkeley.edu/~mcmartin/ophis/
 
 The disassembly is separated by bank, so I set up a rudimentary make system that
