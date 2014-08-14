@@ -1,0 +1,5 @@
+REM Set the work directory.
+set workdir=obj
+set bindir=bin
+rmdir /s /q %workdir%
+rmdir /s /q %bindir%

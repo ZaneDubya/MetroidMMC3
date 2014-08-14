@@ -1,0 +1,118 @@
+Metroid NES ROM Documentation
+Area ROM Banks
+
+==============================[ 1. Introduction ]===============================
+The events of Metroid NES occur on the planet Zebes, which is divided into five
+distinct Areas: Brinstar, Norfair, Tourian, Kraid's Hideout, and Ridley's
+Hideout. The data for each of these Areas is located in a separate 16kb ROM bank
+which is loaded at runtime into $8000-$BFFF of the NES address space.
+
+While the main Game Engine ROM bank is relatively well documented, much of the
+World ROM banks have not yet been labeled and commented.
+
+Interestingly, about 47% of every Area ROM bank is identical to every other
+Area ROM bank, containing common routines and data. Thus, an Area ROM bank may
+be separated into the portion that is common to every Area bank ($8000-$8D5F and
+$B200-$BFFF) and the portion that is different for each Area bank ($8D60-$B1FF).
+
+    Table 1.1: Area ROM bank portions.
+    ROM Addr.       Size in bytes   Name            Documented in...
+    $8000-$8D5F     $0D60 (3424)    Common I        Section 2
+    $8F60-$B1FF     $24A0 (9376)    Area Specific   Section 4
+    $B200-$BFFF     $0E00 (3584)    Sound Engine    Disassembly
+
+================================[ 2. Common I ]=================================
+This portion of the Area ROM bank is common to each Area bank. It begins at
+$8000 and runs for $0D60 (3424) bytes. Much of the data in this section has been
+documented in the disassembly, but the routines in this section remain
+undocumented.
+
+    Table 2.1: Common I Routines & Data
+    ROM Addr.   Size in bytes   Name/Purpose                Documented in...
+    $8000       72              Jump Table                  2.1
+    $8048       1306            Unknown routines/data       2.2
+    $8572                       Object Anim Data Tables     Disassembly
+    $860B                       Sprite Draw Ptr Tables      Disassembly
+    $86FD                       Sprite Placement Dat Tables Disassembly
+    $87CB                       Sprite Frame Data Tables    Disassembly
+    $8B13                       Samus Enter Door Routine    Disassembly
+    $8B79                       Unknown routines/data       2.3
+
+------------------------------[ 2.1 Jump Table  ]-------------------------------
+The Jump Table consists of 24 "JMP $XXXX" instructions. These jumps all point to
+addresses in the always-present Game Engine bank ($C000-$FFFF) or addresses in
+this first Common I section ($8000-$8D5F).
+
+It would be interesting to note where these instructions point to (only 4 of the
+24 addresses are currently named/documented), and where these instructions are
+called from. What is their purpose?
+
+------------------------[ 2.2 Unknown routines/data  ]--------------------------
+
+2.2.A: 8 WORDS
+This section starts with 8 words (16 bytes). Interestingly, each of the words is
+repeated once (the pattern is 0,1,2,2,1,0,3,3), and each of the words is the
+address of a 'RTS' instruction at the end of a currently undocumented routine in
+this common section.
+    $84FD       RTS     Address 0
+    $84A6       RTS     Address 1
+    $844A       RTS     Address 2
+    $844A       RTS     Address 2 (repeat)
+    $84A6       RTS     Address 1 (repeat)
+    $84FD       RTS     Address 0 (repeat)
+    $83F4       RTS     Address 3 (repeat)
+    $83F4       RTS     Address 3 (repeat)
+    
+2.2.B: Unknown routines
+There are a number of routines in this section. I do not know what the purpose
+of any of them are.
+
+Unknown routines        8058
+...                     80B0
+                        80B8
+                        80FB
+                        8134
+                        816E
+                        81B1
+                        81B8
+                        81C0
+                        81C7
+                        81DA
+                        81F6
+                        81FC
+                        820F
+                        822B
+                        8244
+                        82A5
+                        ...   Many more...
+                        856B
+                        
+------------------------[ 2.3 Unknown routines/data  ]--------------------------
+There are four routines in this section. I do not know what the purpose of any
+of them are.
+
+Unknown routines        8B79
+...                     8B8C
+                        8B9D
+                        8BD5
+
+
+==============================[ 3. Area Specific ]==============================
+This is the largest of the three sections of an Area Specific ROM Bank. It
+contains graphics data and routines that area only called in this Area, and a
+small amount of common data.
+
+Graphics Data           8D60    
+Palette Ptr Table       9560
+Area Ptr Table          9598    8 word pointers
+Secondary JMP table?    95A8    9 jump instructions - all but Tourian are all
+                                "JMP $EAEA" - expect that these are unused.
+AreaRoutine Ptr         95C3    JMP to area specific routine (9D35 in Brinstar).
+TwosCompliment_         95C6
+Special room value      95CC
+Music init value        95CD
+Base damage value       95CE    2bytes - CE is low health, CF is high health.
+Item rooms              95D0    7 x 1byte used to start item room music
+Samus position          95D7    3bytes - X, Y, vertical screen pos.
+????                    95DA    11 bytes of data?
+                        ...
