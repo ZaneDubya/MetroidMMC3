@@ -1663,13 +1663,14 @@ LBD6A:  .word $BDDA, $BDDC, $BDCD, $0000
 LBD72:  .byte $0B, $FF, $F0, $01, $01
 LBD77:  .word $B022, $B031, $B000, $0000
 
-;End game music(not used this memory page).
+;End game music
 LBD7F:  .byte $17, $00, $00, $02, $01
-LBD84:  .word $0100, $0300, $0500, $0700
+LBD84:  .word $AC00, $ADC5, $ACF5, $AE8E
 
-;Intro music(not used this memory page).
+
+;Intro music
 LBD8C:  .byte $17, $00, $F0, $02, $05
-LBD91:  .word $0100, $0300, $0500, $0700
+LBD91:  .word $B0B9, $B000, $B076, $B115
 
 ;Fade in music
 LBD99:  .byte $0B, $00, $F0, $02, $00
