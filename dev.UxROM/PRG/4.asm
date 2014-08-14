@@ -1,1 +1,1 @@
-.require "../code/Worlds/Kraid.asm" ; pg 4
+.require "../code/Areas/Kraid.asm" ; pg 4

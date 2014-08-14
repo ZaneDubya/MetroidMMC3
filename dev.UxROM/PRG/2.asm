@@ -1,1 +1,1 @@
-.require "../code/Worlds/Norfair.asm" ; pg 2
+.require "../code/Areas/Norfair.asm" ; pg 2

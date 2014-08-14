@@ -1,1 +1,1 @@
-.require "../code/Worlds/Tourian.asm" ; pg 3
+.require "../code/Areas/Tourian.asm" ; pg 3

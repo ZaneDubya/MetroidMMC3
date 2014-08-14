@@ -1,1 +1,1 @@
-.require "../code/Worlds/Ridley.asm" ; pg 5
+.require "../code/Areas/Ridley.asm" ; pg 5

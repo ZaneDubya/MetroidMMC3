@@ -1,1 +1,1 @@
-.require "../code/Worlds/Brinstar.asm"  ; Brinstar, pg 1
+.require "../code/Areas/Brinstar.asm"  ; Brinstar, pg 1
