@@ -53,7 +53,7 @@ echo .include "code/header.asm" >> %workdir%\make.asm
 
 REM compile each of the banks in prg.txt, and add each to the make.asm file.
 for /f "tokens=1-2 delims=," %%G in (%workdir%/prg.txt) do (
-	echo|set /p=%%G: 
+	echo %%G:
 	ophis -o "%workdir%/%%H.bin" "%workdir%\PRG\%%H.asm"
 	echo .incbin "%%H.bin" >> %workdir%\make.asm
 )
