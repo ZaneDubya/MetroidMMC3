@@ -14,9 +14,12 @@ requires the windows shell, of course).
 
 Moving forward...
 ===========
-The source code is currently about 75% documented, which is an amazing
+The source code is currently about 85% documented, which is an amazing
 accomplishment. I'd like to see the remainder of the source code documented, but
 it's too big a project for me to take on as an individual. Would anyone be
 interested in taking it on as a group project? Each interested person could
 take on a single undocumented routine, one at a time, figure out what it does,
 and then name it and document it.
+
+Discussion of this code is available at the NESDEV community:
+http://forums.nesdev.com/viewtopic.php?f=2&t=11529
