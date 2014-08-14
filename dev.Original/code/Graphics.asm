@@ -15,7 +15,16 @@
 
 .org $8000
 
-.require "Defines.asm"
+;-------------------------------------------[ Defines ]----------------------------------------------
+
+.alias PPUControl0		$2000	;
+.alias PPUControl1		$2001	;PPU hardware control registers.
+.alias PPUStatus		$2002	;
+
+.alias MMC1Reg0			$8000	;Writing to any of these addresses or any--> 
+.alias MMC1Reg1			$A000	;address in between will write configuration-->
+.alias MMC1Reg2			$C000	;bits to the MMC chip.
+.alias MMC1Reg3			$E000	;
 
 ;--------------------------------------[ Forward declarations ]--------------------------------------
 

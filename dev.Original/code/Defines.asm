@@ -26,34 +26,34 @@
 ;The bits of the change and status addresses represent the following joypad buttons:
 ;bit 7=A, bit 6=B, bit 5=SELECT, bit 4=START, bit 3=Up, bit 2=Down, bit 1=Left, bit 0=Right.
 
-.alias Joy1Change   	$12	;These addresses store any button changes-->
+.alias Joy1Change   		$12	;These addresses store any button changes-->
 .alias Joy2Change		$13	;that happened since last frame(pads 1 and 2).
-.alias Joy1Status   	$14	;These two addresses store all buttons-->
+.alias Joy1Status   		$14	;These two addresses store all buttons-->
 .alias Joy2Status		$15	;currently being pressed on the two controllers.
-.alias Joy1Retrig   	$16	;These two addresses store any buttons that need-->
+.alias Joy1Retrig   		$16	;These two addresses store any buttons that need-->
 .alias Joy2Retrig		$17	;to retrigger after being held down by player.
-.alias RetrigDelay1   	$18	;These two addresses are counters that control-->
+.alias RetrigDelay1   		$18	;These two addresses are counters that control-->
 .alias RetrigDelay2		$19	;The retriggering of held down buttons.
 
 .alias NMIStatus		$1A	;0=NMI in progress. anything else, NMI not in progress.
-.alias PPUDataPending	$1B	;1=not PPU data pending, 1=data pending.
-.alias PalDataPending	$1C	;Pending palette data. Palette # = PalDataPending - 1.
-.alias GameMode			$1D ;0 = Game is playing, 1 = At title/password screen
+.alias PPUDataPending		$1B	;1=not PPU data pending, 1=data pending.
+.alias PalDataPending		$1C	;Pending palette data. Palette # = PalDataPending - 1.
+.alias GameMode			$1D     ;0 = Game is playing, 1 = At title/password screen
 .alias MainRoutine		$1E	;5 = Game paused, 3 = Game engine running
 .alias TitleRoutine		$1F	;Stores title routine number currently running.
 .alias NextRoutine		$20	;Stores next routine to jump to after WaitTimer expires.
 .alias CurrentBank		$23	;0 thru 7. current memory page in lower memory block.
-.alias SwitchPending	$24	;Switch memory page. Page # = SwitchPending - 1.
+.alias SwitchPending		$24	;Switch memory page. Page # = SwitchPending - 1.
 .alias MMCReg0Cntrl		$25	;Stores bits to be loaded into MMC1 Register 0.
-.alias SwitchUpperBits	$28	;Used to store bits 3 and 4 for MMC1 register 3.  Bits-->
-                            ;3 and 4 should always be 0 under normal conditions.
+.alias SwitchUpperBits		$28	;Used to store bits 3 and 4 for MMC1 register 3.  Bits-->
+					;3 and 4 should always be 0 under normal conditions.
 
 .alias TimerDelay		$29	;Count down from 9 to 0. Decremented every frame.
 .alias Timer1			$2A	;Decremented every frame after set.
 .alias Timer2			$2B	;Decremented every frame after set.
 .alias Timer3			$2C	;Decremented every 10 frames after set.
 
-.alias FrameCount		$2D ;Increments every frame(overflows every 256 frames).
+.alias FrameCount		$2D     ;Increments every frame(overflows every 256 frames).
 
 .alias RandomNumber1		$2E	;Random numbers used--> 	
 .alias RandomNumber2		$2F	;throughout the game.

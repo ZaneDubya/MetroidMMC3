@@ -20,7 +20,7 @@
 
 .org $C000
 
-.require "Defines.asm"
+.include "Defines.asm"
 
 ;-------------------------------------[ Forward declarations ]--------------------------------------
 
@@ -69,7 +69,7 @@ LC019:	rts				;
 ;------------------------------------------[ Startup ]----------------------------------------------
 
 Startup:
-LC01A:	lda #$00			    ;
+LC01A:	lda #$00			;
 LC01C:	sta MMC1Reg1 			;Clear bit 0. MMC1 is serial controlled
 LC01F:	sta MMC1Reg1			;Clear bit 1
 LC022:	sta MMC1Reg1			;Clear bit 2
@@ -81,15 +81,15 @@ LC031:	sta MMC1Reg2			;Clear bit 2
 LC034:	sta MMC1Reg2			;Clear bit 3
 LC037:	sta MMC1Reg2			;Clear bit 4 
 LC03A:	jsr MMCWriteReg3		;($C4FA)Swap to PRG bank #0 at $8000
-LC03D:	dex				        ;X = $FF
-LC03E:	txs				        ;S points to end of stack page
+LC03D:	dex				;X = $FF
+LC03E:	txs				;S points to end of stack page
 
 ;Clear RAM at $000-$7FF.
-LC03F:	ldy #$07			    ;High byte of start address.
-LC041:	sty $01				    ;
+LC03F:	ldy #$07			;High byte of start address.
+LC041:	sty $01				;
 LC043:	ldy #$00      			;Low byte of start address.
 LC045:	sty $00       			;$0000 = #$0700
-LC047:	tya	    			    ;A = 0
+LC047:	tya	    			;A = 0
 LC048:*	sta ($00),y    			;clear address
 LC04A:	iny				;
 LC04B:	bne -	  			;Repeat for entire page.
@@ -946,25 +946,25 @@ LC4B3:	nop				;Prepare to set PPU for vertical mirroring (again).
 LC4B4:	lda #$47			;
 
 SetPPUMirror:
-LC4B6:	lsr				        ;
-LC4B7:	lsr				        ;Move bit 3 to bit 0 position.
-LC4B8:	lsr				        ;
-LC4B9:	and #$01			    ;Remove all other bits.
-LC4BB:	sta $00				    ;Store at address $00.
+LC4B6:	lsr				;
+LC4B7:	lsr				;Move bit 3 to bit 0 position.
+LC4B8:	lsr				;
+LC4B9:	and #$01			;Remove all other bits.
+LC4BB:	sta $00				;Store at address $00.
 LC4BD:	lda MMCReg0Cntrl		;
-LC4BF:	and #$FE			    ;Load MMCReg0Cntrl and remove bit 0.
-LC4C1:	ora $00				    ;Replace bit 0 with stored bit at $00.
+LC4BF:	and #$FE			;Load MMCReg0Cntrl and remove bit 0.
+LC4C1:	ora $00				;Replace bit 0 with stored bit at $00.
 LC4C3:	sta MMCReg0Cntrl		;
 LC4C5:	sta MMC1Reg0			;
-LC4C8:	lsr				        ;
+LC4C8:	lsr				;
 LC4C9:	sta MMC1Reg0			;
-LC4Cc:	lsr				        ;
+LC4Cc:	lsr				;
 LC4CD:	sta MMC1Reg0			;
-LC4D0:	lsr				        ;Load new configuration data serially-->
+LC4D0:	lsr				;Load new configuration data serially-->
 LC4D1:	sta MMC1Reg0			;into MMC1Reg0.
-LC4D4:	lsr				        ;
+LC4D4:	lsr				;
 LC4D5:	sta MMC1Reg0			;
-LC4D8:	rts				        ;
+LC4D8:	rts				;
 
 PrepPPUMirror:
 LC4D9:	lda MirrorCntrl			;Load MirrorCntrl into A.
@@ -999,6 +999,7 @@ LC4F6:	ora $00				;bank to switch to.
 LC4F8:	sta SwitchUpperBits		;Store any new bits set in 3 or 4(there should be none).
 
 ;Loads the lower memory page with the bank specified in A.
+
 MMCWriteReg3:
 LC4FA:	sta MMC1Reg3			;Write bit 0 of ROM bank #.
 LC4FD:	lsr				;
@@ -9590,6 +9591,6 @@ LFFF5:	.byte $04, $01, $06, $01, $BC
 
 ;-----------------------------------------[ Interrupt vectors ]--------------------------------------
 
-.word NMI			;($C0D9)NMI vector.
-.word RESET			;($FFB0)Reset vector.
-.word RESET			;($FFB0)IRQ vector.
+LBFFA: 	.word NMI			;($C0D9)NMI vector.
+LBFFC:	.word RESET			;($FFB0)Reset vector.
+LBFFE: 	.word RESET			;($FFB0)IRQ vector.

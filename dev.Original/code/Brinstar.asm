@@ -18,15 +18,15 @@
 
 .org $8000
 
-.require "Defines.asm"
+.include "Defines.asm"
 
 ;--------------------------------------[ Forward declarations ]--------------------------------------
 
-.alias startup			    $C01A
-.alias NMI			        $C0D9
-.alias ChooseRoutine	    $C27C
-.alias Adiv32			    $C2BE
-.alias Amul16			    $C2C5
+.alias startup			$C01A
+.alias NMI			$C0D9
+.alias ChooseRoutine		$C27C
+.alias Adiv32			$C2BE
+.alias Amul16			$C2C5
 .alias TwosCompliment		$C3D4
 .alias Base10Subtract		$C3FB
 .alias SubtractHealth		$CE92
@@ -6171,21 +6171,21 @@ LBFA6:	.byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00
 ;----------------------------------------------[ RESET ]--------------------------------------------
 
 RESET:
-LBFB0:	SEI				        ;Disables interrupt.
-LBFB1:	CLD				        ;Sets processor to binary mode.
-LBFB2:	LDX #$00			    ;
+LBFB0:	SEI				;Disables interrupt.
+LBFB1:	CLD				;Sets processor to binary mode.
+LBFB2:	LDX #$00			;
 LBFB4:	STX PPUControl0			;Clear PPU control registers.
 LBFB7:	STX PPUControl1			;
 LBFBA:*	LDA PPUStatus			;
-LBFBD:	BPL -				    ;Wait for VBlank.
+LBFBD:	BPL -				;Wait for VBlank.
 LBFBF:*	LDA PPUStatus			;
-LBFC2:	BPL -				    ;
-LBFC4:	ORA #$FF			    ; A = $FF
-LBFC6:	STA MMC1Reg0			; This will reset the MMC1, because the MSB is
-LBFC9:	STA MMC1Reg1			; set.
+LBFC2:	BPL -				;
+LBFC4:	ORA #$FF			;
+LBFC6:	STA MMC1Reg0			;Reset MMC1 chip.-->
+LBFC9:	STA MMC1Reg1			;(MSB is set).
 LBFCC:	STA MMC1Reg2			;
 LBFCF:	STA MMC1Reg3			;
-LBFD2:	JMP Startup			    ;($C01A)Does preliminry housekeeping.
+LBFD2:	JMP Startup			;($C01A)Does preliminry housekeeping.
 
 ;Not used.
 LBFD5: 	.byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF, $00, $00, $00, $00, $00
