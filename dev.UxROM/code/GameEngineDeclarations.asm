@@ -48,3 +48,4 @@
 .alias  SetProjectileAnim       $D2FA   ;World
 .alias  UpdateEnemyAnim         $E094   ;World
 .alias  VerticalRoomCentered    $E21B   ;World
+.alias  DrawTileBlast           $FEDC   ;World

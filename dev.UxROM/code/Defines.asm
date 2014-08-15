@@ -705,8 +705,8 @@
 ;---------------------------------------[ More enemy RAM ]-------------------------------------------
 
 .alias Enstatus                 $6AF4   ;Keeps track of enemy statuses.
-                                    ;#$00=Enemy slot not in use,-->
-                                    ;#$04=Enemy frozen.
+                                        ;#$00=Enemy slot not in use,-->
+                                        ;#$04=Enemy frozen.
 .alias EnRadY                   $6AF5   ;Distance in pixels from middle of enemy to top or botom.
 .alias EnRadX                   $6AF6   ;Distance in pixels from middle of enemy to left or right.
 .alias EnAnimFrame              $6AF7   ;Index into enemy animation frame data.

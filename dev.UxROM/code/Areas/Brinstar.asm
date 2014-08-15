@@ -217,17 +217,18 @@ L95D9:  .byte $B0                       ;Samus start verticle screen position.
 
 L95DA:  .byte $01, $00, $03, $43, $00, $00, $00, $00, $00, $00, $69 
 
+; Enemy Routine Chooser. Calls a routine from the following table,
+; based on the value of the index in EnDataIndex, X.
 L95E5:  LDA EnDataIndex, X
-L95E8:  JSR $8024
-
-L95EB:  .word $99B8
+L95E8:  JSR CommonJump_ChooseRoutine
+L95EB:  .word $99B8     ; Enemy dies
 L95ED:  .word $99D3
-L95EF:  .word $99E5
-L95F1:  .word $99D8
-L95F3:  .word $99FA
-L95F5:  .word $9A4C
-L95F7:  .word $9AF5
-L95F9:  .word $9B32
+L95EF:  .word $99E5     ; Waver update
+L95F1:  .word $99D8     ; Floater update
+L95F3:  .word $99FA     ; Skree update
+L95F5:  .word $9A4C     ; Zoomer update
+L95F7:  .word $9AF5     ; Swooper update
+L95F9:  .word $9B32     ; Zeb update
 L95FB:  .word $9BA2
 L95FD:  .word $9BD2
 L95FF:  .word $9C1A
@@ -354,24 +355,28 @@ L9983:  .byte $07, $C2, $06, $A2, $05, $92, $05, $12, $06, $22, $07, $42, $50, $
 
 L9992:  .byte $05, $C2, $04, $A2, $03, $92, $03, $12, $04, $22, $05, $42, $50, $72, $FF
 
-L99A1:  LDA $81
-L99A3:  CMP #$01
-L99A5:  BEQ $99B0
-L99A7:  CMP #$03
-L99A9:  BEQ $99B5
-L99AB:  LDA $00
-L99AD:  JMP $8000
-L99B0:  LDA $01
-L99B2:  JMP $8003
-L99B5:  JMP $8006
-
-L99B8:  LDA #$09
-L99BA:  STA $85
-L99BC:  STA $86
-L99BE:  LDA EnStatus,X
-L99C1:  CMP #$03
+;Called from 99D0, when an enemy dies.
+L99A1:  LDA $81                             ;
+L99A3:  CMP #$01                            ;if (Mem[$81] == #$01)
+L99A5:  BEQ $99B0                           ;{
+L99A7:  CMP #$03                            ;   A = Mem[$01]
+L99A9:  BEQ $99B5                           ;   JMP CommonJump_UnknownUpdateAnim1
+L99AB:  LDA $00                             ;}
+L99AD:  JMP CommonJump_UnknownUpdateAnim0   ;else if (Mem[$81] == #$03)
+L99B0:  LDA $01                             ;{ JMP CommonJump_Unknown06 }
+L99B2:  JMP CommonJump_UnknownUpdateAnim1   ;else
+L99B5:  JMP CommonJump_Unknown06             ;{
+                                            ;   A = Mem[$00]
+                                            ;   JMP CommonJump_UnknownUpdateAnim0
+                                            ;}
+;Called when an enemy dies.
+L99B8:  LDA #$09                    ;
+L99BA:  STA $85                     ;Mem[$85] = #$09
+L99BC:  STA $86                     ;Mem[$86] = #$09
+L99BE:  LDA EnStatus,X              ;
+L99C1:  CMP #$03                    ;
 L99C3:  BEQ $99C8
-L99C5:  JSR $801B
+L99C5:  JSR CommonJump_Unknown1B
 L99C8:  LDA #$06
 L99CA:  STA $00
 L99CC:  LDA #$08
@@ -383,8 +388,9 @@ L99D5:  JMP $99BA
 L99D8:  LDA EnStatus,X
 L99DB:  CMP #$03
 L99DD:  BEQ $99E2
-L99DF:  JSR $801E
+L99DF:  JSR CommonJump_Unknown1E
 L99E2:  JMP $99C8
+
 L99E5:  LDA #$21
 L99E7:  STA $85
 L99E9:  LDA #$1E
@@ -392,7 +398,7 @@ L99EB:  STA $86
 L99ED:  LDA EnStatus,X
 L99F0:  CMP #$03
 L99F2:  BEQ $99F7
-L99F4:  JSR $801B
+L99F4:  JSR CommonJump_Unknown1B
 L99F7:  JMP $99C8
 L99FA:  LDA $81
 L99FC:  CMP #$01
@@ -426,14 +432,15 @@ L9A3B:  DEY
 L9A3C:  DEY 
 L9A3D:  BPL $9A22
 L9A3F:  LDA #$02
-L9A41:  JMP $8000
+L9A41:  JMP CommonJump_UnknownUpdateAnim0
 L9A44:  LDA #$08
-L9A46:  JMP $8003
-L9A49:  JMP $8006
+L9A46:  JMP CommonJump_UnknownUpdateAnim1
+L9A49:  JMP CommonJump_Unknown06
 
-L9A4C:  JSR $8009
-L9A4F:  AND #$03
-L9A51:  BEQ $9A87
+ZoomerUpdate:
+L9A4C:  JSR CommonJump_Unknown09    ; A = random value
+L9A4F:  AND #$03                    ; A &= #$03
+L9A51:  BEQ Zoomer9A87              ; if (A == 0) goto $9A87
 L9A53:  LDA $81
 L9A55:  CMP #$01
 L9A57:  BEQ $9A44
@@ -441,7 +448,7 @@ L9A59:  CMP #$03
 L9A5B:  BEQ $9A49
 L9A5D:  LDA EnStatus,X
 L9A60:  CMP #$03
-L9A62:  BEQ $9A87
+L9A62:  BEQ Zoomer9A87
 L9A64:  LDA $040A,X
 L9A67:  AND #$03
 L9A69:  CMP #$01
@@ -456,34 +463,39 @@ L9A7C:  BNE $9A84
 L9A7E:  JSR $9AE2
 L9A81:  JSR $9AA8
 L9A84:  JSR $9AC6
-L9A87:  LDA #$03
-L9A89:  JSR $800C
-L9A8C:  JMP $8006
-L9A8F:  LDA $0405,X
-L9A92:  LSR 
-L9A93:  LDA $040A,X
-L9A96:  AND #$03
-L9A98:  ROL 
-L9A99:  TAY 
-L9A9A:  LDA $9AA0,Y
-L9A9D:  JMP $800F
+Zoomer9A87:
+    LDA #$03
+    JSR CommonJump_UpdateEnemyAnim
+    JMP CommonJump_Unknown06
+
+Zoomer9A8F:
+    LDA $0405,X
+    LSR 
+    LDA $040A,X
+    AND #$03
+    ROL 
+    TAY 
+    LDA $9AA0,Y
+    JMP CommonJump_ResetAnimIndex
 
 L9AA0:  .byte $35, $35, $3E, $38, $3B, $3B, $38, $3E 
 
 L9AA8:  LDX PageIndex
-L9AAA:  BCS $9AC5
+L9AAA:  BCS ZoomerL9AC5
 L9AAC:  LDA $00
-L9AAE:  BNE $9ABD
+L9AAE:  BNE Zoomer9ABD
 L9AB0:  LDY $040A,X
 L9AB3:  DEY 
 L9AB4:  TYA 
 L9AB5:  AND #$03
 L9AB7:  STA $040A,X
 L9ABA:  JMP $9A8F
-L9ABD:  LDA $0405,X
-L9AC0:  EOR #$01
-L9AC2:  STA $0405,X
-L9AC5:  RTS
+Zoomer9ABD:
+    LDA $0405,X
+    EOR #$01
+    STA $0405,X
+ZoomerL9AC5:
+    RTS
 
 L9AC6:  JSR $9ADA
 L9AC9:  JSR $9AE2
@@ -512,6 +524,7 @@ L9AF0:  LDA $8048,Y
 L9AF3:  PHA 
 L9AF4:  RTS
 
+SwooperUpdate:
 L9AF5:  LDA $81
 L9AF7:  CMP #$01
 L9AF9:  BEQ $9B2D
@@ -534,10 +547,10 @@ L9B1E:  BCS $9B25
 L9B20:  LDA #$00
 L9B22:  STA $6AFE,X
 L9B25:  LDA #$03
-L9B27:  JMP $8000
-L9B2A:  JMP $8006
+L9B27:  JMP CommonJump_UnknownUpdateAnim0
+L9B2A:  JMP CommonJump_Unknown06
 L9B2D:  LDA #$08
-L9B2F:  JMP $8003
+L9B2F:  JMP CommonJump_UnknownUpdateAnim1
 L9B32:  LDA EnStatus,X
 L9B35:  CMP #$02
 L9B37:  BNE $9B71
@@ -570,18 +583,18 @@ L9B75:  BMI $9B95
 L9B77:  LDA EnStatus,X
 L9B7A:  CMP #$02
 L9B7C:  BNE $9B95
-L9B7E:  JSR $8036
+L9B7E:  JSR CommonJump_Unknown36
 L9B81:  PHA 
-L9B82:  JSR $8039
+L9B82:  JSR CommonJump_Unknown39
 L9B85:  STA $05
 L9B87:  PLA 
 L9B88:  STA $04
 L9B8A:  JSR $9CA8
-L9B8D:  JSR $8027
+L9B8D:  JSR CommonJump_Unknown27
 L9B90:  BCC $9B9A
 L9B92:  JSR $9C96
 L9B95:  LDA #$03
-L9B97:  JMP $8003
+L9B97:  JMP CommonJump_UnknownUpdateAnim1
 L9B9A:  LDA #$00
 L9B9C:  STA EnStatus,X
 L9B9F:  RTS
@@ -622,21 +635,21 @@ L9BEB:  BMI $9C12
 L9BED:  LDA EnStatus,X
 L9BF0:  CMP #$02
 L9BF2:  BNE $9C12
-L9BF4:  JSR $802D
+L9BF4:  JSR CommonJump_Unknown2D
 L9BF7:  LDX PageIndex
 L9BF9:  LDA $00
 L9BFB:  STA $0402,X
-L9BFE:  JSR $8030
+L9BFE:  JSR CommonJump_Unknown30
 L9C01:  LDX PageIndex
 L9C03:  LDA $00
 L9C05:  STA $0403,X
-L9C08:  JSR $8033
+L9C08:  JSR CommonJump_EnemyBGCollision
 L9C0B:  BCS $9C12
 L9C0D:  LDA #$03
 L9C0F:  STA EnStatus,X
 L9C12:  LDA #$01
-L9C14:  JSR $800C
-L9C17:  JMP $8006
+L9C14:  JSR CommonJump_UpdateEnemyAnim
+L9C17:  JMP CommonJump_Unknown06
 L9C1A:  JMP $9BD2
 L9C1D:  LDX #$50
 L9C1F:  JSR $9C2A
@@ -670,7 +683,7 @@ L9C53:  BEQ $9C60
 L9C55:  LDA #$00
 L9C57:  STA EnStatus,X
 L9C5A:  STA EnSpecialAttribs,X
-L9C5D:  JSR $802A
+L9C5D:  JSR CommonJump_Unknown2A
 L9C60:  LDA $0405
 L9C63:  STA $0405,X
 L9C66:  LSR 
@@ -693,7 +706,7 @@ L9C7D:  LDA $9CBB,Y
 L9C80:  STA $05
 L9C82:  LDX #$00
 L9C84:  JSR $9CA8
-L9C87:  JSR $8027
+L9C87:  JSR CommonJump_Unknown27
 L9C8A:  LDX PageIndex
 L9C8C:  BCC $9CA7
 L9C8E:  LDA EnStatus,X

@@ -11,73 +11,118 @@
 .require "../GameEngineDeclarations.asm"
 
 ;-----------------------------------------[ Start of code ]------------------------------------------
+; The CommonJump table. Area code will JMP/JSR directly to this table.
+; Name / Address JMP/JSR to.            ; JMP/JSR?  Area?   Description      
+CommonJump_UnknownUpdateAnim0:          ; JMP       All     UpdateEnemyAnim, followed 
+    JMP $F410                           ;                   by call to $8058
+CommonJump_UnknownUpdateAnim1:          ; JMP       All     UpdateEnemyAnim, followed 
+    JMP $F438                           ;                   by call to $F416
+CommonJump_Unknown06:                   ; JMP       All     ??????
+    JMP $F416                           ; 
+CommonJump_Unknown09:                   ; JSR       BKNR    Get a random value, using EnIndex (X)
+    JMP $F852                           ;                   and current NES frame (0-255)
+CommonJump_UpdateEnemyAnim:             ; JSR       BKNR    Advance to next frame 
+    JMP UpdateEnemyAnim                 ;                   of enemy's animation.
+CommonJump_ResetAnimIndex:              ; Both      BKNR    ??????
+    JMP $F68D                           ;
+CommonJump_Unused12:                    ; N/A       None    Not used by any Area code.
+    JMP $F83E                           ;
+CommonJump_Unused15:                    ; N/A       None    Not used by any Area code.
+    JMP $F85A                           ;
+CommonJump_Unused18:                    ; N/A       None    Not used by any Area code.
+    JMP $FBB9                           ;
+CommonJump_Unknown1B:                   ; JSR       BKNR    ??????
+    JMP $FB88                           ;
+CommonJump_Unknown1E:                   ; JSR       BKNR    ??????
+    JMP $FBCA                           ;
+CommonJump_Unknown21:                   ; Both      NR      ??????
+    JMP $F870                           ;
+CommonJump_ChooseRoutine:               ; JSR       All     Calls ChooseRoutine in GameEngine
+    JMP ChooseRoutine                   ; 
+CommonJump_Unknown27:                   ; JSR       All     ??????
+    JMP $FD8F                           ;
+CommonJump_Unknown2A:                   ; Both      All     ??????    
+    JMP $EB6E                           ;
+CommonJump_Unknown2D:                   ; JSR       BK      ??????
+    JMP $8244                           ;
+CommonJump_Unknown30:                   ; JSR       BK      ??????
+    JMP $8318                           ;
+CommonJump_EnemyBGCollision:            ; JSR       BK      ??????
+    JMP $FA1E                           ;
+CommonJump_Unknown36:                   ; JSR       BKNR    ??????    
+    JMP $833F                           ;
+CommonJump_Unknown39:                   ; JSR       BKNR    ??????    
+    JMP $8395                           ;
+CommonJump_Unknown3C:                   ; JSR       T       ??????
+    JMP $DD8B                           ;
+CommonJump_DrawTileBlast:               ; JSR       T       Calls DrawTileBlast
+    JMP DrawTileBlast                   ; 
+CommonJump_SubtractHealth:              ; JSR       T       Calls SubtractHealth
+    JMP SubtractHealth                  ; 
+CommonJump_Base10Subtract:              ; JSR       T       Calls Base10Subtract
+    JMP Base10Subtract                  ; 
 
-L8000:  JMP $F410
-L8003:  JMP $F438
-L8006:  JMP $F416
-L8009:  JMP $F852
-L800C:  JMP UpdateEnemyAnim             ;($E094)
-L800F:  JMP $F68D
-L8012:  JMP $F83E
-L8015:  JMP $F85A
-L8018:  JMP $FBB9
-L801B:  JMP $FB88
-L801E:  JMP $FBCA
-L8021:  JMP $F870
-L8024:  JMP ChooseRoutine               ;($C27C)
-L8027:  JMP $FD8F
-L802A:  JMP $EB6E
-L802D:  JMP $8244
-L8030:  JMP $8318
-L8033:  JMP $FA1E
-L8036:  JMP $833F
-L8039:  JMP $8395
-L803C:  JMP $DD8B
-L803F:  JMP $FEDC
-L8042:  JMP SubtractHealth              ;($CE92)
-L8045:  JMP Base10Subtract              ;($C3FB)
-
+; These are the addresses of four RTS instructions. Each address is repeated
+; one time, in this order: A B C C B A D D
 L8048:  .word $84FD, $84A6, $844A, $844A, $84A6, $84FD, $83F4, $83F4
 
-L8058:  LDX PageIndex
-L805A:  LDA $0405,X
-L805D:  ASL 
-L805E:  BMI ++++++++
-L8060:  LDA EnStatus,X
-L8063:  CMP #$02
-L8065:  BNE ++++++++
-L8067:  JSR $8244
-L806A:  LDA $00
-L806C:  BPL ++
-L806E:  JSR TwosCompliment              ;($C3D4)
-L8071:  STA $66
-L8073:* JSR $83F5
-L8076:  JSR $80B8
-L8079:  DEC $66
-L807B:  BNE -
-L807D:* BEQ ++
-L807F:  STA $66
-L8081:* JSR $844B
-L8084:  JSR $80FB
-L8087:  DEC $66
-L8089:  BNE -
-L808B:* JSR $8318
-L808E:  LDA $00
-L8090:  BPL ++
-L8092:  JSR TwosCompliment              ;($C3D4)
-L8095:  STA $66
-L8097:* JSR $84A7
-L809A:  JSR $816E
-L809D:  DEC $66
-L809F:  BNE -
-L80A1:* BEQ ++
-L80A3:  STA $66
-L80A5:* JSR $84FE
-L80A8:  JSR $8134
-L80AB:  DEC $66
-L80AD:  BNE -
-L80AF:* RTS
- 
+L8058:  LDX PageIndex                   ;   X = Index to object data ($00, $10, $20 ... $f0)
+L805A:  LDA $0405,X                     ;   A = EnData05 of object X.       
+L805D:  ASL                             ;   if (A & $40 == $40) 
+L805E:  BMI ++++++++                    ;   { rts }
+L8060:  LDA EnStatus,X                  ;   A = EnStatus of object X. 
+L8063:  CMP #$02                        ;   if (A == 2) { rts }
+L8065:  BNE ++++++++                    ;
+L8067:  JSR $8244                       ;   ???
+L806A:  LDA $00                         ;   A = Mem[$00] (set by $8244???)
+L806C:  BPL ++                          ;   if (A & $80 == $80)
+                                        ;   {
+L806E:  JSR TwosCompliment              ;       A = $100 - A 
+L8071:  STA $66                         ;       Mem[$66] = A
+                                        ;       while (Mem[$66] != 0)
+                                        ;       {
+L8073:* JSR $83F5                       ;           ???
+L8076:  JSR $80B8                       ;           ???
+L8079:  DEC $66                         ;           Mem[$66]--
+L807B:  BNE -                           ;       }
+                                        ;       ; Because Mem[$66] == 0, we skip the next loop.
+                                        ;   }
+L807D:* BEQ ++                          ;   else if (A != 0)
+                                        ;   {
+L807F:  STA $66                         ;       Mem[$66] = A
+                                        ;       while (Mem[$66] != 0)
+                                        ;       {
+L8081:* JSR $844B                       ;           ???    
+L8084:  JSR $80FB                       ;           ???
+L8087:  DEC $66                         ;           Mem[$66]--
+                                        ;       }
+L8089:  BNE -                           ;   }
+L808B:* JSR $8318                       ;   ???
+L808E:  LDA $00                         ;   A == Mem[$00] (set by $8318???)
+L8090:  BPL ++                          ;   if (A & $80 == $80)
+                                        ;   {
+L8092:  JSR TwosCompliment              ;       A = $100 - A 
+L8095:  STA $66                         ;       Mem[$66] = A
+                                        ;       while (Mem[$66] != 0)
+                                        ;       {
+L8097:* JSR $84A7                       ;           ???    
+L809A:  JSR $816E                       ;           ???
+L809D:  DEC $66                         ;           Mem[$66]--
+L809F:  BNE -                           ;       }
+                                        ;       ; Because Mem[$66] == 0, we skip the next loop.
+                                        ;   }
+L80A1:* BEQ ++                          ;   else if (A != 0)
+                                        ;   {
+L80A3:  STA $66                         ;       Mem[$66] = A
+                                        ;       while (Mem[$66] != 0)
+                                        ;       {
+L80A5:* JSR $84FE                       ;           ???
+L80A8:  JSR $8134                       ;           ???
+L80AB:  DEC $66                         ;           Mem[$66]--
+L80AD:  BNE -                           ;       }
+                                        ;   }
+L80AF:* RTS                             ;   rts
+
 L80B0:  LDY EnDataIndex,X
 L80B3:  LDA $977B,Y
 L80B6:  ASL                             ;*2 

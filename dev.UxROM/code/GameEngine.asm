@@ -8045,7 +8045,7 @@ LF3E6:  lda $0405,x
         jsr LF75B
         jsr LF51E
 LF40A:* jsr LF536
-        jmp $95E5
+        jmp $95E5                       ; Area Enemy update
 
 LF410:  jsr UpdateEnemyAnim
         jsr $8058
@@ -9439,7 +9439,7 @@ LFE83:  lda #$00
         sta $03
 Exit23: rts
 
-        DrawTileBlast:
+DrawTileBlast:
         lda PPUStrIndex
         cmp #$1F
         bcs Exit23
