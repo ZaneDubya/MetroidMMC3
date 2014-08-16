@@ -66,8 +66,8 @@ CommonJump_Base10Subtract:              ; JSR       T       Calls Base10Subtract
 ; one time, in this order: A B C C B A D D
 L8048:  .word $84FD, $84A6, $844A, $844A, $84A6, $84FD, $83F4, $83F4
 
-L8058:  LDX PageIndex                   ;   X = Index to object data ($00, $10, $20 ... $f0)
-L805A:  LDA $0405,X                     ;   A = EnData05 of object X.       
+L8058:  LDX PageIndex                   ;   X = Index of object we are working on ($00, $10, $20 ... $f0)
+L805A:  LDA EnData05,X                  ;   A = EnData05 of object X.       
 L805D:  ASL                             ;   if (A & $40 == $40) 
 L805E:  BMI ++++++++                    ;   { rts }
 L8060:  LDA EnStatus,X                  ;   A = EnStatus of object X. 
@@ -130,7 +130,7 @@ L80B7:  RTS
 
 L80B8:  LDX PageIndex
 L80BA:  BCS $80FA
-L80BC:  LDA $0405,X
+L80BC:  LDA EnData05,X
 L80BF:  BPL $80C7
 L80C1:  JSR $81FC
 L80C4:  JMP $80F6
@@ -160,7 +160,7 @@ L80FA:  RTS
  
 L80FB:  LDX PageIndex
 L80FD:  BCS $8133
-L80FF:  LDA $0405,X
+L80FF:  LDA EnData05,X
 L8102:  BPL $810A
 L8104:  JSR $81FC
 L8107:  JMP $812F
@@ -188,7 +188,7 @@ L8134:  LDX PageIndex
 L8136:  BCS $816D
 L8138:  JSR $80B0
 L813B:  BPL $815E
-L813D:  LDA $0405,X
+L813D:  LDA EnData05,X
 L8140:  BMI $8148
 L8142:  JSR $81C7
 L8145:  JMP $8169
@@ -214,7 +214,7 @@ L816E:  LDX PageIndex
 L8170:  BCS $81B0
 L8172:  JSR $80B0
 L8175:  BPL $81A0
-L8177:  LDA $0405,X
+L8177:  LDA EnData05,X
 L817A:  BMI $8182
 L817C:  JSR $81C7
 L817F:  JMP $81AC
@@ -299,7 +299,7 @@ L8224:  SBC $0402,X
 L8227:  STA $0402,X
 L822A:  RTS 
 
-L822B:  LDA $0405,X
+L822B:  LDA EnData05,X
 L822E:  BPL $8232
 L8230:  LSR 
 L8231:  LSR 
@@ -317,7 +317,7 @@ L8243:  RTS
 L8244:  JSR $80B0
 L8247:  BPL $824C
 L8249:  JMP $833F
-L824C:  LDA $0405,X
+L824C:  LDA EnData05,X
 L824F:  AND #$20
 L8251:  EOR #$20
 L8253:  BEQ $82A2
@@ -407,17 +407,17 @@ L82FB:  LDY EnDataIndex,X
 L82FE:  LDA $968B,Y
 L8301:  AND #$20
 L8303:  BEQ $8312
-L8305:  LDA $0405,X
+L8305:  LDA EnData05,X
 L8308:  EOR #$05
 L830A:  ORA $968B,Y
 L830D:  AND #$1F
-L830F:  STA $0405,X
+L830F:  STA EnData05,X
 L8312:  JSR $81B1
 L8315:  JMP $82A2
 L8318:  JSR $80B0
 L831B:  BPL $8320
 L831D:  JMP $8395
-L8320:  LDA $0405,X
+L8320:  LDA EnData05,X
 L8323:  AND #$20
 L8325:  EOR #$20
 L8327:  BEQ $833C
@@ -555,7 +555,7 @@ L843C:  INC EnYRoomPos,X
 L843F:  CLC 
 L8440:  RTS
 
-L8441:  LDA $0405,X
+L8441:  LDA EnData05,X
 L8444:  BMI $8449
 L8446:  INC $6B01,X
 L8449:  SEC 
@@ -600,7 +600,7 @@ L8495:  BEQ $849D
 L8497:  DEC EnYRoomPos,X
 L849A:  CLC 
 L849B:  BCC $84A6
-L849D:  LDA $0405,X
+L849D:  LDA EnData05,X
 L84A0:  BMI $84A5
 L84A2:  DEC $6B01,X
 L84A5:  SEC 
@@ -641,7 +641,7 @@ L84EC:  BNE $84F4
 L84EE:  INC EnXRoomPos,X
 L84F1:  CLC 
 L84F2:  BCC $84FD
-L84F4:  LDA $0405,X
+L84F4:  LDA EnData05,X
 L84F7:  BPL $84FC
 L84F9:  INC $6B01,X
 L84FC:  SEC 
@@ -685,7 +685,7 @@ L8548:  BEQ $8550
 L854A:  DEC EnXRoomPos,X
 L854D:  CLC 
 L854E:  BCC $8559
-L8550:  LDA $0405,X
+L8550:  LDA EnData05,X
 L8553:  BPL $8558
 L8555:  DEC $6B01,X
 L8558:  SEC 
@@ -701,8 +701,8 @@ L8566:  EOR $FF
 L8568:  AND #$01
 L856A:  RTS
 
-L856B:  EOR $0405,X
-L856E:  STA $0405,X
+L856B:  EOR EnData05,X
+L856E:  STA EnData05,X
 L8571:  RTS 
 
 ;---------------------------------[ Object animation data tables ]----------------------------------

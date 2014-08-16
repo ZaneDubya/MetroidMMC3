@@ -371,7 +371,7 @@
 ;                               $0402
 ;                               $0403
 ;                               $0404
-;                               $0405
+.alias EnData05                 $0405
 .alias EnCounter                $0406   ;Counts such things as explosion time.
 ;                               $0407
 ;                               $0408
