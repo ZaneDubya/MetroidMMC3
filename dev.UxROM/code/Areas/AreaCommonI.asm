@@ -12,67 +12,69 @@
 
 ;-----------------------------------------[ Start of code ]------------------------------------------
 ; The CommonJump table. Area code will JMP/JSR directly to this table.
-; Name / Address JMP/JSR to.            ; JMP/JSR?  Area?   Description      
-CommonJump_UnknownUpdateAnim0:          ; JMP       All     UpdateEnemyAnim, followed 
-    JMP $F410                           ;                   by call to $8058
-CommonJump_UnknownUpdateAnim1:          ; JMP       All     UpdateEnemyAnim, followed 
-    JMP $F438                           ;                   by call to $F416
-CommonJump_Unknown06:                   ; JMP       All     ??????
-    JMP $F416                           ; 
-CommonJump_Unknown09:                   ; JSR       BKNR    Get a random value, using EnIndex (X)
-    JMP $F852                           ;                   and current NES frame (0-255)
-CommonJump_UpdateEnemyAnim:             ; JSR       BKNR    Advance to next frame 
-    JMP UpdateEnemyAnim                 ;                   of enemy's animation.
-CommonJump_ResetAnimIndex:              ; Both      BKNR    ??????
-    JMP $F68D                           ;
-CommonJump_Unused12:                    ; N/A       None    Not used by any Area code.
-    JMP $F83E                           ;
-CommonJump_Unused15:                    ; N/A       None    Not used by any Area code.
-    JMP $F85A                           ;
-CommonJump_Unused18:                    ; N/A       None    Not used by any Area code.
-    JMP $FBB9                           ;
-CommonJump_Unknown1B:                   ; JSR       BKNR    ??????
-    JMP $FB88                           ;
-CommonJump_Unknown1E:                   ; JSR       BKNR    ??????
-    JMP $FBCA                           ;
-CommonJump_Unknown21:                   ; Both      NR      ??????
-    JMP $F870                           ;
-CommonJump_ChooseRoutine:               ; JSR       All     Calls ChooseRoutine in GameEngine
-    JMP ChooseRoutine                   ; 
-CommonJump_Unknown27:                   ; JSR       All     ??????
-    JMP $FD8F                           ;
-CommonJump_Unknown2A:                   ; Both      All     ??????    
-    JMP $EB6E                           ;
-CommonJump_Unknown2D:                   ; JSR       BK      ??????
-    JMP $8244                           ;
-CommonJump_Unknown30:                   ; JSR       BK      ??????
-    JMP $8318                           ;
-CommonJump_EnemyBGCollision:            ; JSR       BK      ??????
-    JMP $FA1E                           ;
-CommonJump_Unknown36:                   ; JSR       BKNR    ??????    
-    JMP $833F                           ;
-CommonJump_Unknown39:                   ; JSR       BKNR    ??????    
-    JMP $8395                           ;
-CommonJump_Unknown3C:                   ; JSR       T       ??????
-    JMP $DD8B                           ;
-CommonJump_DrawTileBlast:               ; JSR       T       Calls DrawTileBlast
-    JMP DrawTileBlast                   ; 
-CommonJump_SubtractHealth:              ; JSR       T       Calls SubtractHealth
-    JMP SubtractHealth                  ; 
-CommonJump_Base10Subtract:              ; JSR       T       Calls Base10Subtract
-    JMP Base10Subtract                  ; 
+; Name / Address JMP/JSR to.        ; JMP/JSR?  Area?   Description      
+CommonJump_UnknownUpdateAnim0:      ; JMP       All     UpdateEnemyAnim, followed 
+    JMP $F410                       ;                   by call to $8058
+CommonJump_UnknownUpdateAnim1:      ; JMP       All     UpdateEnemyAnim, followed 
+    JMP $F438                       ;                   by call to $F416
+CommonJump_Unknown06:               ; JMP       All     ??????
+    JMP $F416                       ; 
+CommonJump_Unknown09:               ; JSR       BKNR    Get a random value, using EnIndex (X)
+    JMP $F852                       ;                   and current NES frame (0-255)
+CommonJump_UpdateEnemyAnim:         ; JSR       BKNR    Advance to next frame 
+    JMP UpdateEnemyAnim             ;                   of enemy's animation.
+CommonJump_ResetAnimIndex:          ; Both      BKNR    ??????
+    JMP $F68D                       ;
+CommonJump_Unused12:                ; N/A       None    Not used by any Area code.
+    JMP $F83E                       ;
+CommonJump_Unused15:                ; N/A       None    Not used by any Area code.
+    JMP $F85A                       ;
+CommonJump_Unused18:                ; N/A       None    Not used by any Area code.
+    JMP $FBB9                       ;
+CommonJump_Unknown1B:               ; JSR       BKNR    ??????
+    JMP $FB88                       ;
+CommonJump_Unknown1E:               ; JSR       BKNR    ??????
+    JMP $FBCA                       ;
+CommonJump_Unknown21:               ; Both      NR      ??????
+    JMP $F870                       ;
+CommonJump_ChooseRoutine:           ; JSR       All     Calls ChooseRoutine in GameEngine
+    JMP ChooseRoutine               ; 
+CommonJump_Unknown27:               ; JSR       All     ??????
+    JMP $FD8F                       ;
+CommonJump_Unknown2A:               ; Both      All     ??????    
+    JMP $EB6E                       ;
+CommonJump_Unknown2D:               ; JSR       BK      ??????
+    JMP $8244                       ;
+CommonJump_Unknown30:               ; JSR       BK      ??????
+    JMP $8318                       ;
+CommonJump_EnemyBGCollision:        ; JSR       BK      ??????
+    JMP $FA1E                       ;
+CommonJump_Unknown36:               ; JSR       BKNR    ??????    
+    JMP $833F                       ;
+CommonJump_Unknown39:               ; JSR       BKNR    ??????    
+    JMP $8395                       ;
+CommonJump_Unknown3C:               ; JSR       T       ??????
+    JMP $DD8B                       ;
+CommonJump_DrawTileBlast:           ; JSR       T       Calls DrawTileBlast
+    JMP DrawTileBlast               ; 
+CommonJump_SubtractHealth:          ; JSR       T       Calls SubtractHealth
+    JMP SubtractHealth              ; 
+CommonJump_Base10Subtract:          ; JSR       T       Calls Base10Subtract
+    JMP Base10Subtract              ; 
 
-; These are the addresses of four RTS instructions. Each address is repeated
-; one time, in this order: A B C C B A D D
+; These are the addresses of four common routines (minus one). These routines
+; are called by pushing the address onto the stack, and then executing RTS. An
+; example of this calling scheme can be seen at $9AE2 in the Brinstar ROM bank.
+; Each address is repeated one time, in this order: A B C C B A D D
 L8048:  .word $84FD, $84A6, $844A, $844A, $84A6, $84FD, $83F4, $83F4
 
 L8058:  LDX PageIndex                   ;   X = Index of object we are working on ($00, $10, $20 ... $f0)
 L805A:  LDA EnData05,X                  ;   A = EnData05 of object X.       
 L805D:  ASL                             ;   if (A & $40 == $40) 
-L805E:  BMI ++++++++                    ;   { rts }
+L805E:  BMI ++++++++                    ;       { rts }
 L8060:  LDA EnStatus,X                  ;   A = EnStatus of object X. 
-L8063:  CMP #$02                        ;   if (A == 2) { rts }
-L8065:  BNE ++++++++                    ;
+L8063:  CMP #$02                        ;   if (A == 2) 
+L8065:  BNE ++++++++                    ;       { rts }
 L8067:  JSR $8244                       ;   ???
 L806A:  LDA $00                         ;   A = Mem[$00] (set by $8244???)
 L806C:  BPL ++                          ;   if (A & $80 == $80)
@@ -123,7 +125,8 @@ L80AD:  BNE -                           ;       }
                                         ;   }
 L80AF:* RTS                             ;   rts
 
-L80B0:  LDY EnDataIndex,X
+
+L80B0:  LDY EnDataIndex,X               
 L80B3:  LDA $977B,Y
 L80B6:  ASL                             ;*2 
 L80B7:  RTS
@@ -314,6 +317,7 @@ L823E:  LDA $96DC,Y
 L8241:  STA $82
 L8243:  RTS
 
+Common8244:
 L8244:  JSR $80B0
 L8247:  BPL $824C
 L8249:  JMP $833F

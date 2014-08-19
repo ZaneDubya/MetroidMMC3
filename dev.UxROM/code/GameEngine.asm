@@ -3287,7 +3287,7 @@ LD4A8:  tya
         sta $0728,x
 *       rts
 
-LD4B4:  lda $0405,x
+LD4B4:  lda EnData05,x
 LD4B7:  and #$02
 LD4B9:  bne +
 LD4BB:  sta EnStatus,x
@@ -4633,10 +4633,10 @@ AddToMaxMissiles:
         asl
         sta $08
         ldx PageIndex
-        lda $0405,x
+        lda EnData05,x
         and #$FD
         ora $08
-        sta $0405,x
+        sta EnData05,x
         lda $08
         beq ++
         jmp LDEDE
@@ -6735,14 +6735,14 @@ LEB4D:  tay                             ;Save enemy position data in Y.
         jsr GetNameTable                ;($EB85)Get name table to place enemy on.
         sta EnNameTable,x               ;Store name table.
         ldy EnDataIndex,x               ;Load A with index to enemy data.
-        asl $0405,x                     ;*2
+        asl EnData05,x                     ;*2
         jsr LFB7B
         jmp LF85A
 
 IsSlotTaken:
 LEB7A:  lda EnStatus,x
         beq +
-        lda $0405,x
+        lda EnData05,x
         and #$02
 *       rts
 
@@ -6961,7 +6961,7 @@ LEC9B:  ldx ScrollDir
         eor EnNameTable,x
         lsr
         bcs +
-        lda $0405,x
+        lda EnData05,x
         and #$02
         bne +
         sta EnStatus,x
@@ -7979,7 +7979,7 @@ LF351:  stx PageIndex           ;PageIndex starts at $50 and is subtracted by $F
 
 *       jmp KillObject                  ;($FA18)Free enemy data slot.
 
-LF37F:  lda $0405,x
+LF37F:  lda EnData05,x
         and #$02
         bne +
         lda EnYRoomPos,x     ; Y coord
@@ -8000,7 +8000,7 @@ LF37F:  lda $0405,x
 *       ldx PageIndex
         rts
 
-LF3AA:  lda $0405,x
+LF3AA:  lda EnData05,x
         asl
         rol
         tay
@@ -8011,10 +8011,10 @@ LF3AA:  lda $0405,x
         tya
         ror
         ror
-        sta $0405,x
+        sta EnData05,x
         rts
 
-LF3BE:  lda $0405,x
+LF3BE:  lda EnData05,x
         asl
         bmi +
         lda #$00
@@ -8030,10 +8030,10 @@ LF3BE:  lda $0405,x
         jsr LF7BA
 *       jmp ++
 
-LF3E6:  lda $0405,x
+LF3E6:  lda EnData05,x
         asl
         bmi ++
-        lda $0405,x
+        lda EnData05,x
         and #$20
         beq +
         ldy EnDataIndex,x
@@ -8436,8 +8436,8 @@ LF6B9:  lda #$00
         bpl +
         jmp $820F
 
-LF744:  ora $0405,x
-        sta $0405,x
+LF744:  ora EnData05,x
+        sta EnData05,x
 *       rts
 
 LF74B:  ldy EnDataIndex,x
@@ -8458,7 +8458,7 @@ LF75B:  lda #$E7
         lda $96AB,y
         beq +++++
         tay
-        lda $0405,x
+        lda EnData05,x
         and #$02
         beq ++++
         tya
@@ -8472,7 +8472,7 @@ LF75B:  lda #$E7
         lda ObjectY
         sta $00
         ldy EnYRoomPos,x
-        lda $0405,x
+        lda EnData05,x
         bmi +
         ldy ObjectX
         sty $00
@@ -8494,13 +8494,13 @@ LF75B:  lda #$E7
         cmp $02
         bcc ++
 *       lda $06
-LF7B3:  and $0405,x
-        sta $0405,x
+LF7B3:  and EnData05,x
+        sta EnData05,x
 *       rts
 
 LF7BA:  dec EnDelay,x
         bne +
-        lda $0405,x
+        lda EnData05,x
         and #$08
         bne ++
         inc EnDelay,x
@@ -8543,7 +8543,7 @@ LF7BA:  dec EnDelay,x
         sta $0402,x
         lda $9767,y
         sta $0403,x
-        lda $0405,x
+        lda EnData05,x
         bmi +
         lsr
         bcc ++
@@ -8556,10 +8556,10 @@ LF7BA:  dec EnDelay,x
 *       lda #$DF
         jmp LF7B3
 
-LF83E:  lda $0405,x
+LF83E:  lda EnData05,x
 LF841:  jmp +
 
-LF844:  lda $0405,x
+LF844:  lda EnData05,x
         bpl +
         lsr
         lsr
@@ -8587,7 +8587,7 @@ LF85A:  ldy EnDataIndex,x
 *       sta EnHitPoints,x
 *       rts
 
-LF870:  lda $0405,x
+LF870:  lda EnData05,x
         and #$10
         beq -
         lda $87
@@ -8601,7 +8601,7 @@ LF870:  lda $0405,x
         bcs ++
         sta $0404,y
         jsr LF92C
-        lda $0405,x
+        lda EnData05,x
         lsr
         lda $85
         pha
@@ -8616,7 +8616,7 @@ LF870:  lda $0405,x
         ldx PageIndex
         lda #$01
         sta EnStatus,y
-        and $0405,x
+        and EnData05,x
         tax
         lda Table15,x
         sta $0403,y
@@ -8624,7 +8624,7 @@ LF870:  lda $0405,x
         sta $0402,y
         ldx PageIndex
         jsr LF8F8
-        lda $0405,x
+        lda EnData05,x
         lsr
         pla
         tax
@@ -8639,7 +8639,7 @@ LF870:  lda $0405,x
         ldx PageIndex
         bit $87
         bvc ++
-        lda $0405,x
+        lda EnData05,x
         and #$01
         tay
         lda $0083,y
@@ -8658,7 +8658,7 @@ LF8F8:  lda $85
         cmp #$02
         bcc +
         ldx PageIndex
-        lda $0405,x
+        lda EnData05,x
         lsr
         lda $88
         rol
@@ -8688,8 +8688,8 @@ Table15:
 LF92C:  lda #$02
         sta EnRadY,y
         sta EnRadX,y
-        ora $0405,y
-        sta $0405,y
+        ora EnData05,y
+        sta EnData05,y
         rts
 
 LF93B:  ldx #$B0
@@ -8699,7 +8699,7 @@ LF93B:  ldx #$B0
         cmp #$60
         bne -
 LF949:  stx PageIndex
-        lda $0405,x
+        lda EnData05,x
         and #$02
         bne +
         jsr KillObject                  ;($FA18)Free enemy data slot.
@@ -8923,7 +8923,7 @@ LFAFF:  sty PageIndex
         ldx $0729,y
         lda EnStatus,x
         beq +
-        lda $0405,x
+        lda EnData05,x
         and #$02
         bne Exit13
 *       sta $0404,x
@@ -8956,7 +8956,7 @@ LFAFF:  sty PageIndex
         sta EnStatus,x
         and ScrollDir
         asl
-        sta $0405,x
+        sta EnData05,x
         ldy EnDataIndex,x
         jsr LFB7B
         jmp LF85A
@@ -8966,9 +8966,9 @@ LFAFF:  sty PageIndex
         sta EnDelay,x
         jmp KillObject                  ;($FA18)Free enemy data slot.
 
-LFB7B:  jsr $80B0
-        ror $0405,x
-        lda EnemyInitDelayTbl,y         ;($96BB)Load initial delay for enemy movement.
+LFB7B:  jsr $80B0                       ;
+        ror EnData05,x
+        lda EnemyInitDelayTbl,y         ;(Load initial delay for enemy movement.
         sta EnDelay,x           ;
 
 Exit13: 
