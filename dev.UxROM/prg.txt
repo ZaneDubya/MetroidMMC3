@@ -1,8 +1,0 @@
-Title,0
-Brinstar,1
-Norfair,2
-Tourian,3
-Kraid,4
-Ridley,5
-Graphics,6
-GameEngine,7

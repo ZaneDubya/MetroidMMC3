@@ -66,7 +66,7 @@ L805A:  .word EnterPassword             ;($9147)User enters password.
 L805C:  .word DisplayPassword           ;($9359)After game over, display password on screen.
 L805E:  .word WaitForSTART              ;($9394)Wait for START when showing password.
 L8060:  .word StartContinueScreen       ;($90BA)Displays START/Continue screen.
-L8062:  .word GameOver                  ;($939E)Displays "GAME OVER".
+L8062:  .word GameOverTitle             ;($939E)Displays "GAME OVER".
 L8064:  .word EndGame                   ;($9AA7)Show ending of the game.
 L8066:  .word SetTimer                  ;($C4AA)Set delay timer.
 
@@ -2307,7 +2307,7 @@ L9398:  BEQ +                           ;If start not pressed, branch.
 L939A:  JMP CheckPassword               ;($8C5E)Check if password is correct.
 L939D:* RTS                             ;
 
-GameOver:
+GameOverTitle:
 L939E:  JSR ClearAll                    ;($909F)Turn off screen, erase sprites and nametables.
 L93A1:  LDX #$B9                        ;Low byte of start of PPU data.
 L93A3:  LDY #$93                        ;High byte of start of PPU data.

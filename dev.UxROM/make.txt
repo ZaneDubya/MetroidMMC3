@@ -1,0 +1,9 @@
+map,code/GameEngine.asm,code/GameEngineDeclarations.asm
+prg,Title,0
+prg,Brinstar,1
+prg,Norfair,2
+prg,Tourian,3
+prg,Kraid,4
+prg,Ridley,5
+prg,Graphics,6
+prg,GameEngine,7

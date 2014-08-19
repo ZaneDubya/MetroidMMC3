@@ -1,15 +1,14 @@
 REM Make.bat
-REM Created for Galezie by Zane Wagner. (c) 2013.
 
 :start
 @echo off
 REM Make sure Ophis is installed.
-ophis >nul 2>nul
-if %ERRORLEVEL% neq 9009 goto ophis_exists
-echo Ophis is not installed or is not in path.
-echo Please download Ophis from http://michaelcmartin.github.io/Ophis/
-pause
-exit /b
+REM ophis >nul 2>nul
+REM if %ERRORLEVEL% neq 9009 goto ophis_exists
+REM echo Ophis is not installed or is not in path.
+REM echo Please download Ophis from http://michaelcmartin.github.io/Ophis/
+REM pause
+REM exit /b
 :ophis_exists
 
 REM Fail if no source directory has been passed.
@@ -30,7 +29,7 @@ mkdir %workdir%
 
 REM Copy data/code from the source directory to the work directory.
 echo|set /p=Copying make files...
-copy %srcdir%\prg.txt %workdir%\prg.txt >NUL
+copy %srcdir%\make.txt %workdir%\make.txt >NUL
 echo  done.
 echo|set /p=Copying Data files... 
 mkdir %workdir%\data
@@ -51,11 +50,20 @@ copy /y NUL %workdir%\make.asm >NUL
 echo .outfile "bin/%srcdir%.nes" >> %workdir%\make.asm
 echo .include "code/header.asm" >> %workdir%\make.asm
 
-REM compile each of the banks in prg.txt, and add each to the make.asm file.
-for /f "tokens=1-2 delims=," %%G in (%workdir%/prg.txt) do (
-	echo %%G:
-	ophis -o "%workdir%/%%H.bin" "%workdir%\PRG\%%H.asm"
-	echo .incbin "%%H.bin" >> %workdir%\make.asm
+REM compile each of the banks in make.txt, and add each to the make.asm file.
+for /f "tokens=1-3 delims=," %%G in (%workdir%/make.txt) do (
+    if %%G==map (
+        echo Mapping %%H:
+        util\ophis.exe -m "map.txt" "%workdir%/%%H"
+        del "ophis.bin"
+        util\getlabels.exe "map.txt" "%workdir%/%%I"
+        REM del "map.txt"
+    )
+    if %%G==prg (
+        echo Assembling %%H:
+        ophis -o "%workdir%/%%I.bin" "%workdir%\PRG\%%I.asm"
+        echo .incbin "%%I.bin" >> %workdir%\make.asm
+    )
 )
 
 if not exist bin goto move
