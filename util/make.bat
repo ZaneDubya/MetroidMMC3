@@ -57,7 +57,7 @@ for /f "tokens=1-3 delims=," %%G in (%workdir%/make.txt) do (
         util\ophis.exe -m "map.txt" "%workdir%/%%H"
         del "ophis.bin"
         util\getlabels.exe "map.txt" "%workdir%/%%I"
-        REM del "map.txt"
+        del "map.txt"
     )
     if %%G==prg (
         echo Assembling %%H:
