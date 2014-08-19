@@ -5644,6 +5644,6 @@ LB134:  .byte $FF                       ;
 
 .advance $B200, $00
 
-.include "Areas/AreaCommonII.asm"
+.include "SoundEngine.asm"
 
 .advance $C000, $00

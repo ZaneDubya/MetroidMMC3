@@ -7,8 +7,8 @@
 
 ;Area ROM Bank Common Routines & Data II ($B200 - $BFFF)
 
-.require "../Defines.asm"
-.require "../GameEngineDeclarations.asm"
+.require "Defines.asm"
+.require "GameEngineDeclarations.asm"
 
 ;------------------------------------------[ Sound Engine ]------------------------------------------
 

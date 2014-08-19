@@ -11,7 +11,7 @@
 .require "../Defines.asm"
 .require "../GameEngineDeclarations.asm"
 
-.include "AreaCommonI.asm"
+.include "AreaCommon.asm"
 
 ;------------------------------------------[ Graphics data ]-----------------------------------------
 
@@ -2356,6 +2356,6 @@ LB134:  .byte $FF                       ;
 
 .advance $B200, $00
 
-.include "AreaCommonII.asm"
+.include "../SoundEngine.asm"
 
 .advance $C000, $00

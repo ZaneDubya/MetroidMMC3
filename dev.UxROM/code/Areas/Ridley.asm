@@ -11,7 +11,7 @@
 .require "../Defines.asm"
 .require "../GameEngineDeclarations.asm"
 
-.include "AreaCommonI.asm"
+.include "AreaCommon.asm"
 
 ;------------------------------------------[ Graphics data ]-----------------------------------------
 
@@ -2067,6 +2067,6 @@ B1F7:   .byte $30, $E8, $E8, $C8, $90, $60, $00, $00, $00
 
 .advance $B200, $00
 
-.include "AreaCommonII.asm"
+.include "../SoundEngine.asm"
 
 .advance $C000, $00
