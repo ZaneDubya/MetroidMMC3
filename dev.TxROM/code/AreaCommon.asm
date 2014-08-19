@@ -7,8 +7,8 @@
 
 ;Area ROM Bank Common Routines & Data ($8000 - $8D60)
 
-.require "../Defines.asm"
-.require "../GameEngineDeclarations.asm"
+.require "Defines.asm"
+.require "GameEngineDeclarations.asm"
 
 ;-----------------------------------------[ Start of code ]------------------------------------------
 ; The CommonJump table. Area code will JMP/JSR directly to this table.
