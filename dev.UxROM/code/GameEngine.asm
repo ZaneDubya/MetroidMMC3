@@ -20,6 +20,7 @@
 .alias AreaPointers             $9598
 .alias AreaRoutine              $95C3
 .alias EnemyHitPointTbl         $962B
+.alias EnemyDataTable8B         $968B
 .alias EnemyInitDelayTbl        $96BB
 .alias DecSpriteYCoord          $988A
 .alias NMIScreenWrite           $9A07
@@ -3057,6 +3058,7 @@ LD2EB:  tya
 
 SetProjectileAnim:
 LD2FA:  sta AnimResetIndex,x
+SetProjectileAnim2:
         sta AnimIndex,x
         lda #$00
         sta AnimDelay,x
@@ -4304,6 +4306,7 @@ Exit9:  rts
         bne -----          ; branch always
 
 LDC1C:  lda MapPosX
+MapScrollRoutine:
         sta $07
         lda MapPosY
         sta $06
@@ -4487,7 +4490,7 @@ LDCFC:  lda InArea
 *       lda $040C,x
         asl
         bmi LDD75
-        jsr LF74B
+        jsr GetEnemy8BValue
         sta $00
         jsr $80B0
         and #$20
@@ -4548,7 +4551,8 @@ LDD75:  jsr PowerUpMusic
         jsr AddToMaxMissiles
         bne LDD5B
 
-LDD8B:  ldx PageIndex
+ClrObjCntrlIfFrameIsF7:
+        ldx PageIndex
         lda EnAnimFrame,x
         cmp #$F7
         bne +++
@@ -5602,7 +5606,7 @@ LE3E5:  lda SamusHorzSpeedMax
         lda #$00
         sbc ObjHorzSpeed
         tay
-        jsr LE449
+        jsr SubtractFromZero00And01
 
 *       cpx $02
         tya
@@ -5621,13 +5625,14 @@ LE3E5:  lda SamusHorzSpeedMax
         sta $00                         ;$00 stores temp copy of current horizontal speed.
         rts                             ;
 
-LE449:  lda #$00
-        sec
+SubtractFromZero00And01:
+        lda #$00
+        sec                             ; C set
         sbc $00
-        sta $00
+        sta $00                         ; M[$00] = 0 - M[$00], C clear
         lda #$00
         sbc $01
-        sta $01
+        sta $01                         ; M[$01] = 0 - M[$01] - 1
         rts
 
 ;----------------------------------------------------------------------------------------------------
@@ -6111,16 +6116,18 @@ LE76F:* rts                             ;
 
 ;-----------------------------------------------------------------------------------------------------
 
+CheckYPlus8:
 LE770:  ldx PageIndex
         lda EnRadY,x
         clc
-        adc #$08
+        adc #$08        ; A = EnRadY + 8
         jmp LE783
 
+CheckNegativeYPlus8:
 LE77B:  ldx PageIndex
         lda #$00
         sec
-        sbc EnRadY,x
+        sbc EnRadY,x    ; A = (0 - EnRadY) + 8
 LE783:  sta $02
         lda #$08
         sta $04
@@ -6276,13 +6283,13 @@ CheckMoveRight:
 *       sta $03
         jsr LE8BE
         ldy ObjRadY,x
-LE89B:  bne +
+CheckYIntercept:
+LE89B:  bne +           ; if RadY (En or Obj) == 0, sec and return.
         sec
-        rts
-
-*       sty $02
-        ldx #$00
-        lda $08
+        rts             ; else...
+*       sty $02         ; M[$02] = RadY
+        ldx #$00        ; X = 0
+        lda $08         ; A = EnXRoomPos
         sec
         sbc $02
         and #$07
@@ -6329,19 +6336,21 @@ LE8CE:  eor #$FF
         adc $04
         rts
 
+UnknownE8F1:
 LE8F1:  ldx PageIndex
         lda EnRadX,x
         clc
         adc #$08
         jmp LE904
 
-LE8FC:  ldx PageIndex
-        lda #$00
-        sec
-        sbc EnRadX,x
-LE904:  sta $03
-        jsr LE792
-        ldy EnRadY,x
+UnknownE8FC:
+LE8FC:  ldx PageIndex   ; X = Object Index
+        lda #$00        ; M[$03] = #$00 - EnRadX
+        sec             ; M[$09] = EnXRoomPos
+        sbc EnRadX,x    ; M[$08] = EnYRoomPos
+LE904:  sta $03         ; M[$0B] = EnNameTable
+        jsr LE792       ; Y = EnRadY
+        ldy EnRadY,x    
         jmp LE89B
 
 LE90F:  lda $02
@@ -6403,7 +6412,7 @@ LE95F:  lda $08
 ; In: $02 = ObjectY, $03 = ObjectX, $0B = ObjectHi
 ; Out: $04 = WRAM pointer
 
-        MakeWRAMPtr:
+MakeWRAMPtr:
         lda #$18
         sta $05
         lda $02  ; ObjectY
@@ -6734,10 +6743,11 @@ LEB4D:  tay                             ;Save enemy position data in Y.
         sta $0404,x
         jsr GetNameTable                ;($EB85)Get name table to place enemy on.
         sta EnNameTable,x               ;Store name table.
+UnknownEB6E:
         ldy EnDataIndex,x               ;Load A with index to enemy data.
         asl EnData05,x                     ;*2
         jsr LFB7B
-        jmp LF85A
+        jmp UnknownF85A
 
 IsSlotTaken:
 LEB7A:  lda EnStatus,x
@@ -7826,7 +7836,7 @@ LF262:  lda $0B
         sbc $0A
 LF266:  sta $01
         bpl +
-        jsr LE449
+        jsr SubtractFromZero00And01
         inc $10
 *       rts
 
@@ -7853,7 +7863,7 @@ LF282:  bcs Exit17
 *       sta $010F
         tay
         bmi +
-        lda $968B,y
+        lda EnemyDataTable8B,y
         and #$10
         bne Exit17
 *       ldy #$00
@@ -8047,9 +8057,12 @@ LF3E6:  lda EnData05,x
 LF40A:* jsr LF536
         jmp $95E5                       ; Area Enemy update
 
-LF410:  jsr UpdateEnemyAnim
+UpdateEnemyAnim0:
+        jsr UpdateEnemyAnim
         jsr $8058
-LF416:  ldx PageIndex
+
+CheckObjectAttribs:
+        ldx PageIndex
         lda EnSpecialAttribs,x
         bpl +
         lda ObjectCntrl
@@ -8058,20 +8071,21 @@ LF416:  ldx PageIndex
 LF423:  sta ObjectCntrl
 *       lda EnStatus,x
         beq LF42D
-        jsr LDD8B
+        jsr ClrObjCntrlIfFrameIsF7
 LF42D:  ldx PageIndex
         lda #$00
         sta $0404,x
         sta $040E,x
         rts
 
-LF438:  jsr UpdateEnemyAnim
-LF43B:  jmp LF416
+UpdateEnemyAnim1:
+        jsr UpdateEnemyAnim
+        jmp CheckObjectAttribs
 
 LF43E:  jsr LF536
         lda EnStatus,x
         cmp #$03
-        beq LF410
+        beq UpdateEnemyAnim0
         bit ObjectCntrl
         bmi +
         lda #$A1
@@ -8096,7 +8110,7 @@ LF43E:  jsr LF536
         and #$02
         beq +
         asl ObjectCntrl
-*       jmp LF416
+*       jmp CheckObjectAttribs
 
 LF483:  lda $0404,x
         and #$24
@@ -8151,7 +8165,7 @@ PickupMissile:
         lsr
         ora #$A0
         sta ObjectCntrl
-        jmp LF416
+        jmp CheckObjectAttribs
 
 LF4EE:  dec EnSpecialAttribs,x
         bne ++
@@ -8227,7 +8241,7 @@ LF536:  lda EnSpecialAttribs,x
         bvc +
         jsr SFX_BossHit
         bne ++
-*       jsr LF74B
+*       jsr GetEnemy8BValue
         and #$0C
         beq PlaySnd1
         cmp #$04
@@ -8301,7 +8315,7 @@ PlaySnd3:
         ldx PageIndex
 *       jsr LF844
         lda $960B,y
-        jsr LF68D
+        jsr ResetAnimIndex
         sta EnCounter,x
         ldx #$C0
 *       lda EnStatus,x
@@ -8314,7 +8328,7 @@ PlaySnd3:
         bne -
         beq GetPageIndex
 *       lda $95DD
-        jsr LF68D
+        jsr ResetAnimIndex
         lda #$0A
         sta EnCounter,x
         inc EnStatus,x
@@ -8346,7 +8360,8 @@ LF682:  jsr LF844
         lda $963B,y
         cmp EnResetAnimIndex,x
         beq +
-LF68D:  sta EnResetAnimIndex,x
+ResetAnimIndex:
+        sta EnResetAnimIndex,x
 LF690:  sta EnAnimIndex,x
 LF693:  lda #$00
         sta EnAnimDelay,x
@@ -8356,7 +8371,7 @@ LF699:  jsr LF844
         lda $965B,y
         cmp EnResetAnimIndex,x
         beq Exit12
-        jsr LF68D
+        jsr ResetAnimIndex
         ldy EnDataIndex,x
         lda $967B,y
         and #$7F
@@ -8369,7 +8384,7 @@ Exit12: rts
 
 LF6B9:  lda #$00
         sta $82
-        jsr LF74B
+        jsr GetEnemy8BValue
         tay
         lda EnStatus,x
         cmp #$02
@@ -8402,7 +8417,7 @@ LF6B9:  lda #$00
         inc $82
 *       rol
 *       and #$01
-        jsr LF744
+        jsr AddFlagToEnData05
         lsr
         ror
         eor $0403,x
@@ -8427,7 +8442,7 @@ LF6B9:  lda #$00
 *       and #$01
         asl
         asl
-        jsr LF744
+        jsr AddFlagToEnData05
         lsr
         lsr
         lsr
@@ -8436,12 +8451,15 @@ LF6B9:  lda #$00
         bpl +
         jmp $820F
 
-LF744:  ora EnData05,x
+AddFlagToEnData05:
+        ora EnData05,x
         sta EnData05,x
 *       rts
 
-LF74B:  ldy EnDataIndex,x
-        lda $968B,y
+
+GetEnemy8BValue:
+        ldy EnDataIndex,x
+        lda EnemyDataTable8B,y
         rts
 
 LF752:  lda EnNameTable,x
@@ -8453,7 +8471,7 @@ LF752:  lda EnNameTable,x
 LF75B:  lda #$E7
         sta $06
         lda #$18
-        jsr LF744
+        jsr AddFlagToEnData05
         ldy EnDataIndex,x
         lda $96AB,y
         beq +++++
@@ -8556,6 +8574,7 @@ LF7BA:  dec EnDelay,x
 *       lda #$DF
         jmp LF7B3
 
+UnusedF83E:
 LF83E:  lda EnData05,x
 LF841:  jmp +
 
@@ -8569,15 +8588,17 @@ LF844:  lda EnData05,x
         tay
         rts
 
-LF852:  txa
+GetRandom_EnIdxFrCnt:
+        txa
         lsr
         lsr
         lsr
         adc FrameCount
         lsr
         rts
-
-LF85A:  ldy EnDataIndex,x
+        
+UnknownF85A:
+        ldy EnDataIndex,x
         lda $969B,y
         sta $040D,x
         lda EnemyHitPointTbl,y          ;($962B)
@@ -8587,6 +8608,7 @@ LF85A:  ldy EnDataIndex,x
 *       sta EnHitPoints,x
 *       rts
 
+UnknownF870:
 LF870:  lda EnData05,x
         and #$10
         beq -
@@ -8612,7 +8634,7 @@ LF870:  lda EnData05,x
         tya
         tax
         pla
-        jsr LF68D
+        jsr ResetAnimIndex
         ldx PageIndex
         lda #$01
         sta EnStatus,y
@@ -8727,7 +8749,7 @@ LF96A:  jsr LFA5B
         jsr LFA60
 LF97C:  lda #$01
 LF97E:  jsr UpdateEnemyAnim
-        jmp LDD8B
+        jmp ClrObjCntrlIfFrameIsF7
 
 *       inc $0408,x
 LF987:  inc $0408,x
@@ -8788,7 +8810,7 @@ LF991:  jsr LFA5B
         beq +
         iny
 *       lda $95E2,y
-        jsr LF68D
+        jsr ResetAnimIndex
         jsr LF518
         lda #$0A
         sta EnDelay,x
@@ -8800,7 +8822,7 @@ LFA1A:  sta EnStatus,x                  ;Store #$00 as enemy status(enemy slot i
 LFA1D:  rts                             ;
 
 ; enemy<-->background crash detection
-
+EnemyBGCrashDetection:
 LFA1E:  lda InArea
         cmp #$11
         bne +
@@ -8856,7 +8878,7 @@ LFA7D:  ldx PageIndex
 
 LFA91:  jsr KillObject                  ;($FA18)Free enemy data slot.
         lda $95DC
-        jsr LF68D
+        jsr ResetAnimIndex
         jmp LF97C
 
 LFA9D:  ldx #$C0
@@ -8959,7 +8981,7 @@ LFAFF:  sty PageIndex
         sta EnData05,x
         ldy EnDataIndex,x
         jsr LFB7B
-        jmp LF85A
+        jmp UnknownF85A
 
 *       sta EnDataIndex,x
         lda #$01
@@ -8974,7 +8996,8 @@ LFB7B:  jsr $80B0                       ;
 Exit13: 
         rts                             ;Exit from multiple routines.
 
-LFB88:  ldx PageIndex
+UnknownFB88:
+        ldx PageIndex
         jsr LF844
         lda $6B01,x
         inc $6B03,x
@@ -8996,15 +9019,17 @@ LFB88:  ldx PageIndex
         beq Exit13
         sta EnAnimIndex,x
         dec EnAnimIndex,x
+UnknownFBB9:
         sta EnResetAnimIndex,x
         jmp LF693
 
 *       lda $963B,y
         cmp EnResetAnimIndex,x
         beq Exit13
-        jmp LF68D
-
-LFBCA:  ldx PageIndex
+        jmp ResetAnimIndex
+        
+UnknownFBCA:
+        ldx PageIndex
         jsr LF844
         lda $965B,y
         cmp EnResetAnimIndex,x
@@ -9131,11 +9156,11 @@ LFC98:  lda $B0,x
 LFCA5:  jsr LFD84
         jsr LFD08
         jsr LFD25
-        jmp LDD8B
+        jmp ClrObjCntrlIfFrameIsF7
 
 LFCB1:  jsr LFD84
         jsr LFCC1
-        jmp LDD8B
+        jmp ClrObjCntrlIfFrameIsF7
 
 LFCBA:  lda #$00
         sta $B0,x
@@ -9219,7 +9244,7 @@ LFD25:  txa
         cpy #$80
         bcc ++
 *       sta $04
-*      jsr LFD8F
+*       jsr LFD8F
         jmp LFD6C
 
 ; Table used by above subroutine
@@ -9276,7 +9301,7 @@ LFD8F:  lda ScrollDir
 *       sta $08
         jmp LFDBF
 
-*      adc $08
+*       adc $08
         bcs +
         sbc #$0F
         ldy $02

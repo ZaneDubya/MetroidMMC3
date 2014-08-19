@@ -14,47 +14,47 @@
 ; The CommonJump table. Area code will JMP/JSR directly to this table.
 ; Name / Address JMP/JSR to.        ; JMP/JSR?  Area?   Description      
 CommonJump_UnknownUpdateAnim0:      ; JMP       All     UpdateEnemyAnim, followed 
-    JMP $F410                       ;                   by call to $8058
+    JMP UpdateEnemyAnim0            ;                   by call to $8058
 CommonJump_UnknownUpdateAnim1:      ; JMP       All     UpdateEnemyAnim, followed 
-    JMP $F438                       ;                   by call to $F416
+    JMP UpdateEnemyAnim1            ;                   by call to $*F416
 CommonJump_Unknown06:               ; JMP       All     ??????
-    JMP $F416                       ; 
+    JMP CheckObjectAttribs          ; 
 CommonJump_Unknown09:               ; JSR       BKNR    Get a random value, using EnIndex (X)
-    JMP $F852                       ;                   and current NES frame (0-255)
+    JMP GetRandom_EnIdxFrCnt        ;                   and current NES frame (0-255)
 CommonJump_UpdateEnemyAnim:         ; JSR       BKNR    Advance to next frame 
     JMP UpdateEnemyAnim             ;                   of enemy's animation.
 CommonJump_ResetAnimIndex:          ; Both      BKNR    ??????
-    JMP $F68D                       ;
+    JMP ResetAnimIndex              ;
 CommonJump_Unused12:                ; N/A       None    Not used by any Area code.
-    JMP $F83E                       ;
+    JMP UnusedF83E                  ;
 CommonJump_Unused15:                ; N/A       None    Not used by any Area code.
-    JMP $F85A                       ;
+    JMP UnknownF85A                  ;
 CommonJump_Unused18:                ; N/A       None    Not used by any Area code.
-    JMP $FBB9                       ;
+    JMP UnknownFBB9                 ;
 CommonJump_Unknown1B:               ; JSR       BKNR    ??????
-    JMP $FB88                       ;
+    JMP UnknownFB88                 ;
 CommonJump_Unknown1E:               ; JSR       BKNR    ??????
-    JMP $FBCA                       ;
+    JMP UnknownFBCA                 ;
 CommonJump_Unknown21:               ; Both      NR      ??????
-    JMP $F870                       ;
+    JMP UnknownF870                 ;
 CommonJump_ChooseRoutine:           ; JSR       All     Calls ChooseRoutine in GameEngine
     JMP ChooseRoutine               ; 
 CommonJump_Unknown27:               ; JSR       All     ??????
     JMP $FD8F                       ;
 CommonJump_Unknown2A:               ; Both      All     ??????    
-    JMP $EB6E                       ;
+    JMP UnknownEB6E                 ;
 CommonJump_Unknown2D:               ; JSR       BK      ??????
     JMP $8244                       ;
 CommonJump_Unknown30:               ; JSR       BK      ??????
     JMP $8318                       ;
 CommonJump_EnemyBGCollision:        ; JSR       BK      ??????
-    JMP $FA1E                       ;
+    JMP EnemyBGCrashDetection       ;
 CommonJump_Unknown36:               ; JSR       BKNR    ??????    
     JMP $833F                       ;
 CommonJump_Unknown39:               ; JSR       BKNR    ??????    
     JMP $8395                       ;
-CommonJump_Unknown3C:               ; JSR       T       ??????
-    JMP $DD8B                       ;
+CommonJump_Unknown3C:               ; JSR       T       Clears object control byte if
+    JMP ClrObjCntrlIfFrameIsF7      ;                   AnimFrame == $F7
 CommonJump_DrawTileBlast:           ; JSR       T       Calls DrawTileBlast
     JMP DrawTileBlast               ; 
 CommonJump_SubtractHealth:          ; JSR       T       Calls SubtractHealth
@@ -248,7 +248,7 @@ L81B4:  STA $6AFE,X
 L81B7:  RTS
 
 L81B8:  LDA #$20
-L81BA:  JSR $F744
+L81BA:  JSR AddFlagToEnData05
 L81BD:  LDA #$00
 L81BF:  RTS
 
@@ -261,7 +261,7 @@ L81CA:  BNE $81F5
 L81CC:  LDA #$01
 L81CE:  JSR $856B
 L81D1:  LDA $6AFF,X
-L81D4:  JSR $C3D4
+L81D4:  JSR TwosCompliment
 L81D7:  STA $6AFF,X
 
 L81DA:  JSR $81F6
@@ -277,7 +277,7 @@ L81EF:  SBC $0403,X
 L81F2:  STA $0403,X
 L81F5:  RTS
 
-L81F6:  JSR $F74B
+L81F6:  JSR GetEnemy8BValue
 L81F9:  AND #$20
 L81FB:  RTS
 
@@ -286,7 +286,7 @@ L81FF:  BNE $81F5
 L8201:  LDA #$04
 L8203:  JSR $856B
 L8206:  LDA $6AFE,X
-L8209:  JSR $C3D4
+L8209:  JSR TwosCompliment
 L820C:  STA $6AFE,X
 
 L820F:  JSR $81F6
@@ -358,7 +358,7 @@ L8293:  INY
 L8294:  LDA ($81),Y
 L8296:  ASL 
 L8297:  PHP 
-L8298:  JSR Adiv32                      ;($C2BE)Divide by 32.
+L8298:  JSR Adiv32
 L829B:  PLP 
 L829C:  BCC $82A2
 L829E:  EOR #$FF
@@ -377,10 +377,10 @@ L82B2:  RTS
 
 L82B3:  LDA $6B03,X
 L82B6:  BPL $82BE
-L82B8:  JSR $E770
+L82B8:  JSR CheckYPlus8
 L82BB:  JMP $82C3
 L82BE:  BEQ $82D2
-L82C0:  JSR $E77B
+L82C0:  JSR CheckNegativeYPlus8
 L82C3:  LDX PageIndex
 L82C5:  BCS $82D2
 L82C7:  LDY EnCounter,X
@@ -400,10 +400,10 @@ L82E0:  TYA
 L82E1:  STA EnCounter,X
 L82E4:  LDA $6B03,X
 L82E7:  BPL $82EF
-L82E9:  JSR $E770
+L82E9:  JSR CheckYPlus8
 L82EC:  JMP $82F4
 L82EF:  BEQ $82FB
-L82F1:  JSR $E77B
+L82F1:  JSR CheckNegativeYPlus8
 L82F4:  LDX PageIndex
 L82F6:  BCC $82FB
 L82F8:  JMP $8258
@@ -435,7 +435,7 @@ L8333:  TXA
 L8334:  AND #$07
 L8336:  PLP 
 L8337:  BEQ $833C
-L8339:  JSR $C3D4
+L8339:  JSR TwosCompliment
 L833C:  STA $00
 L833E:  RTS
 
@@ -449,10 +449,10 @@ L834D:  LDA $0402,X
 L8350:  ADC #$00
 L8352:  STA $0402,X
 L8355:  BPL $8376
-L8357:  JSR $C3D4
+L8357:  JSR TwosCompliment
 L835A:  LDY #$F2
 L835C:  BNE $8376
-L835E:  JSR $C3D4
+L835E:  JSR TwosCompliment
 L8361:  SEC 
 L8362:  STA $00
 L8364:  LDA EnCounter,X
@@ -503,7 +503,7 @@ L83C5:  STA $04
 L83C7:  LDA #$00
 L83C9:  SBC $0403,X
 L83CC:  TAY 
-L83CD:  JSR $E449
+L83CD:  JSR SubtractFromZero00And01
 L83D0:  LDA $04
 L83D2:  CMP $02
 L83D4:  TYA 
@@ -529,7 +529,7 @@ L83FB:  SBC EnRadY,X
 L83FE:  AND #$07
 L8400:  SEC 
 L8401:  BNE $8406
-L8403:  JSR $E770
+L8403:  JSR CheckYPlus8
 L8406:  LDY #$00
 L8408:  STY $00
 L840A:  LDX PageIndex
@@ -572,7 +572,7 @@ L8451:  ADC EnRadY,X
 L8454:  AND #$07
 L8456:  SEC 
 L8457:  BNE $845C
-L8459:  JSR $E77B
+L8459:  JSR CheckNegativeYPlus8
 L845C:  LDY #$00
 L845E:  STY $00
 L8460:  LDX PageIndex
@@ -617,7 +617,7 @@ L84AD:  SBC EnRadX,X
 L84B0:  AND #$07
 L84B2:  SEC 
 L84B3:  BNE $84B8
-L84B5:  JSR $E8F1
+L84B5:  JSR UnknownE8F1
 L84B8:  LDY #$00
 L84BA:  STY $00
 L84BC:  LDX PageIndex
@@ -658,7 +658,7 @@ L8504:  ADC EnRadX,X
 L8507:  AND #$07
 L8509:  SEC 
 L850A:  BNE $850F
-L850C:  JSR $E8FC
+L850C:  JSR UnknownE8FC
 L850F:  LDY #$00
 L8511:  STY $00
 L8513:  LDX PageIndex
@@ -1457,15 +1457,15 @@ L8B56:  JSR SamusInDoor                 ;($8B74)Indicate Samus just entered a do
 L8B59:  LDA #$12                        ;
 L8B5B:  STA DoorDelay                   ;Set DoorDelay to 18 frames(going into door).
 L8B5D:  LDA SamusDoorData               ;
-L8B5F:  JSR Amul16                      ;($C2C5)*16. Move scroll toggle data to upper 4 bits.
+L8B5F:  JSR Amul16                      ;*16. Move scroll toggle data to upper 4 bits.
 L8B62:  ORA ObjAction                   ;Keep Samus action so she will appear the same comming-->
 L8B65:  STA SamusDoorData               ;out of the door as she did going in.
 L8B67:  LDA #$05                        ;
 L8B69:  STA ObjAction                   ;Indicate Samus is in a door.
 L8B6C:* RTS                             ;
 
-L8B6D:* JSR SetDoorEntryInfo            ;($8B53)Save Samus action and set door entry timer.
-L8B70:  JSR VerticalRoomCentered        ;($E21B)Room is centered. Toggle scroll.
+L8B6D:* JSR SetDoorEntryInfo            ;Save Samus action and set door entry timer.
+L8B70:  JSR VerticalRoomCentered        ;Room is centered. Toggle scroll.
 
 L8B73:  TXA                             ;X=#$01 or #$02(depending on which door Samus is in).
 
@@ -1487,9 +1487,9 @@ L8B86:  RTS
 
 L8B87:  STX PageIndex
 L8B89:  LDA ObjAction,X
-L8B8C:  JSR ChooseRoutine               ;($C27C)
+L8B8C:  JSR ChooseRoutine
 
-L8B8F:  .word $C45C
+L8B8F:  .word ExitSub
 L8B91:  .word $8B9D
 L8B93:  .word $8BD5
 L8B95:  .word $8C01
@@ -1499,7 +1499,7 @@ L8B9B:  .word $8CF0
 
 L8B9D:  INC $0300,X
 L8BA0:  LDA #$30
-L8BA2:  JSR SetProjectileAnim           ;($D2FA)
+L8BA2:  JSR SetProjectileAnim
 L8BA5:  JSR $8CFB
 L8BA8:  LDY $0307,X
 L8BAB:  LDA $8BD1,Y
@@ -1518,7 +1518,7 @@ L8BC6:  EOR #$10
 L8BC8:  ORA $6B
 L8BCA:  STA $6B
 L8BCC:  LDA #$06
-L8BCE:  JMP $DE47
+L8BCE:  JMP AnimDrawObject
 
 L8BD1:  .byte $05, $01, $0A, $01
 
@@ -1571,11 +1571,11 @@ L8C3E:  LDA $030C,X
 L8C41:  STA $08
 L8C43:  LDY $50
 L8C45:  TXA 
-L8C46:  JSR $C2C5
+L8C46:  JSR Amul16
 L8C49:  BCC $8C4C
 L8C4B:  DEY 
 L8C4C:  TYA 
-L8C4D:  JSR $DC1E
+L8C4D:  JSR MapScrollRoutine
 L8C50:  LDA #$00
 L8C52:  STA $0300,X
 L8C55:  BEQ $8C73
@@ -1596,8 +1596,8 @@ L8C76:  LDA #$30
 L8C78:  STA $0305,X
 L8C7B:  SEC 
 L8C7C:  SBC #$02
-L8C7E:  JSR $D2FD
-L8C81:  JMP $CBDA
+L8C7E:  JSR SetProjectileAnim2
+L8C81:  JMP SFX_Door
 L8C84:  LDA DoorStatus
 L8C86:  CMP #$05
 L8C88:  BCS $8CC3
@@ -1607,7 +1607,7 @@ L8C90:  LDX PageIndex
 L8C92:  LDA $91
 L8C94:  BEQ $8CA7
 L8C96:  TXA 
-L8C97:  JSR $C2BF
+L8C97:  JSR Adiv16
 L8C9A:  EOR $91
 L8C9C:  LSR 
 L8C9D:  BCC $8CA7
@@ -1622,11 +1622,11 @@ L8CAE:  LDA $0307,X
 L8CB1:  CMP #$03
 L8CB3:  BNE $8CC3
 L8CB5:  TXA 
-L8CB6:  JSR $C2C5
+L8CB6:  JSR Amul16
 L8CB9:  BCS $8CC0
-L8CBB:  JSR $CC07
+L8CBB:  JSR TourianMusic
 L8CBE:  BNE $8CC3
-L8CC0:  JSR $CC03
+L8CC0:  JSR MotherBrainMusic
 L8CC3:  JMP $8C71
 L8CC6:  LDA DoorStatus
 L8CC8:  CMP #$05
@@ -1640,9 +1640,9 @@ L8CD5:  LDA #$2C
 L8CD7:  STA $0305,X
 L8CDA:  SEC 
 L8CDB:  SBC #$03
-L8CDD:  JSR $D2FD
-L8CE0:  JSR $CBDA
-L8CE3:  JSR $CB73
+L8CDD:  JSR SetProjectileAnim2
+L8CE0:  JSR SFX_Door
+L8CE3:  JSR SelectSamusPal
 L8CE6:  LDX PageIndex
 L8CE8:  LDA #$02
 L8CEA:  STA $0300,X
@@ -1657,14 +1657,14 @@ L8CFD:  PHA
 L8CFE:  LDA #$50
 L8D00:  STA $02
 L8D02:  TXA 
-L8D03:  JSR $C2BF
+L8D03:  JSR Adiv16
 L8D06:  AND #$01
 L8D08:  TAY 
 L8D09:  LDA $8D3A,Y
 L8D0C:  STA $03
 L8D0E:  LDA $030C,X
 L8D11:  STA $0B
-L8D13:  JSR $E96A
+L8D13:  JSR MakeWRAMPtr
 L8D16:  LDY #$00
 L8D18:  PLA 
 L8D19:  STA ($04),Y
@@ -1678,7 +1678,7 @@ L8D22:  CPY #$C0
 L8D24:  BNE $8D19
 L8D26:  LDX PageIndex
 L8D28:  TXA 
-L8D29:  JSR $C2C0
+L8D29:  JSR Adiv8
 L8D2C:  AND #$06
 L8D2E:  TAY 
 L8D2F:  LDA $04
