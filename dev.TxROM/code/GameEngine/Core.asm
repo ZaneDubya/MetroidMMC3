@@ -109,7 +109,7 @@ Startup:
 
     iny                             ;Y = 1
     sty SwitchPending               ;Prepare to switch page 0 into lower PRGROM.
-    jsr CheckSwitch                 ;
+    jsr CheckBankSwitch             ;
     bne WaitNMIEnd                  ;Branch always
     
 ;--------------------------------[ WaitNMIEnd ]---------------------------------
