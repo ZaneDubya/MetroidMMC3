@@ -29,178 +29,56 @@
 .alias CopyMap                  $A93E
 .alias SoundEngine              $B3B4
 
-;----------------------------------------[ Start of code ]------------------------------------------
 
+
+;------------------------------[ Start of code ]--------------------------------
+.include "GameEngine/Core.asm"
+
+;------------------------------[ Random Numbers ]-------------------------------
 ;This routine generates pseudo random numbers and updates those numbers
 ;every frame. The random numbers are used for several purposes including
 ;password scrambling and determinig what items, if any, an enemy leaves
 ;behind after it is killed.
 
 RandomNumbers:
-LC000:  txa                             ;               
-LC001:  pha                             ;
-LC002:  ldx #$05                        ;
-LC004:* lda RandomNumber1               ;
-LC006:  clc                             ;
-LC007:  adc #$05                        ;
-LC009:  sta RandomNumber1               ;2E is increased by #$19 every frame and-->
-LC00B:  lda RandomNumber2               ;2F is increased by #$5F every frame.                   
-LC00D:  clc                             ;
-LC00E:  adc #$13                        ;
-LC010:  sta RandomNumber2               ;
-LC012:  dex                             ;
-LC013:  bne -                           ;
-LC015:  pla                             ;
-LC016:  tax                             ;
-LC017:  lda RandomNumber1               ;
-LC019:  rts                             ;
-
-;------------------------------------------[ Startup ]----------------------------------------------
-Startup:
-    lda #$00                            ; A = $00
-    jsr MMCWriteReg3                    ;Swap to PRG bank #0 at $8000
-    tax                                 ; X = $00
-    dex                                 ; X = $FF
-    txs                                 ; S points to end of stack page
-;Clear RAM at $000-$7FF.
-    ldy #$07                            ;High byte of start address.
-    sty $01                             ;
-    ldy #$00                            ;Low byte of start address.
-    sty $00                             ;$0000 = #$0700
-    tya                                 ;A = 0
-*       sta ($00),y                     ;clear address
-    iny                                 ;
-    bne -                               ;Repeat for entire page.
-    dec $01                             ;Decrement high byte of address.
-    bmi +                               ;If $01 < 0, all pages are cleared.
-    ldx $01                             ;
-    cpx #$01                            ;Keep looping until ram is cleared.
-    bne -                               ;
-
-;Clear cartridge RAM at $6000-$7FFF.
-LC057:* ldy #$7F                        ;High byte of start address.
-LC059:  sty $01                         ;
-LC05B:  ldy #$00                        ;Low byte of start address.
-LC05D:  sty $00                         ;$0000 points to $7F00
-LC05F:  tya                             ;A = 0
-LC060:* sta ($00),y                     ;
-LC062:  iny                             ;Clears 256 bytes of memory before decrementing to next-->
-LC063:  bne -                           ;256 bytes.
-LC065:  dec $01                         ;
-LC067:  ldx $01                         ;Is address < $6000?-->
-LC069:  cpx #$60                        ;If not, do another page.
-LC06B:  bcs -                           ; 
-LC071:  lda #$00                        ;Clear bits 3 and 4 of MMC1 register 3.
-LC073:  sta SwitchUpperBits             ;
-LC075:  ldy #$00                        ;
-LC077:  sty ScrollX                     ;ScrollX = 0
-LC079:  sty ScrollY                     ;ScrollY = 0
-LC07B:  sty PPUScroll                   ;Clear hardware scroll x
-LC07E:  sty PPUScroll                   ;Clear hardware scroll y
-LC081:  iny                             ;Y = #$01
-LC082:  sty GameMode                    ;Title screen mode
-LC084:  jsr ClearNameTables             ;
-LC087:  jsr EraseAllSprites             ;
-
-LC08A:  lda #%10010000                  ;NMI = enabled
-                                        ;Sprite size = 8x8
-                                        ;BG pattern table address = $1000
-                                        ;SPR pattern table address = $0000
-                                        ;PPU address increment = 1
-                                        ;Name table address = $2000
-LC08C:  sta PPUControl0                 ;
-LC08F:  sta PPUCNT0ZP                   ;
-
-LC091:  lda #%00000010                  ;Sprites visible = no
-                                        ;Background visible = no
-                                        ;Sprite clipping = yes
-                                        ;Background clipping = no
-                                        ;Display type = color
-LC093:  sta PPUCNT1ZP                   ;
-
-LC095:  lda #$47                        ;
-LC097:  sta MirrorCntrl                 ;Prepare to set PPU to vertical mirroring.
-LC099:  jsr PrepVertMirror              ;
-
-LC09C:  lda #$00                        ;
-LC09E:  sta DMCCntrl1                   ;PCM volume = 0 - disables DMC channel
-LC0A1:  lda #$0F                        ;
-LC0A3:  sta APUCommonCntrl0             ;Enable sound channel 0,1,2,3
-
-LC0A6:  ldy #$00                        ;
-LC0A8:  sty TitleRoutine                ;Set title routine and and main routine function-->
-LC0AA:  sty MainRoutine                 ;pointers equal to 0.
-LC0AC:  lda #$11                        ;
-LC0AE:  sta RandomNumber1               ;Initialize RandomNumber1 to #$11
-LC0B0:  lda #$FF                        ;
-LC0B2:  sta RandomNumber2               ;Initialize RandomNumber2 to #$FF
-
-LC0B4:  iny                             ;Y = 1
-LC0B5:  sty SwitchPending               ;Prepare to switch page 0 into lower PRGROM.
-LC0B7:  jsr CheckSwitch                 ;
-LC0BA:  bne WaitNMIEnd                  ;Branch always
-
+    txa                             ;               
+    pha                             ;
+    ldx #$05                        ;
+*   lda RandomNumber1               ;
+    clc                             ;
+    adc #$05                        ;
+    sta RandomNumber1               ;2E is increased by #$19 every frame and-->
+    lda RandomNumber2               ;2F is increased by #$5F every frame.                   
+    clc                             ;
+    adc #$13                        ;
+    sta RandomNumber2               ;
+    dex                             ;
+    bne -                           ;
+    pla                             ;
+    tax                             ;
+    lda RandomNumber1               ;
+    rts                             ;
+    
 ;-----------------------------------------[ Main loop ]----------------------------------------------
 
 ;The main loop runs all the routines that take place outside of the NMI.
 
 MainLoop:
-LC0BC:  jsr CheckSwitch                 ;Check to see if memory page needs to be switched.
-LC0BF:  jsr UpdateTimer                 ;Update Timers 1, 2 and 3.
-LC0C2:  jsr GoMainRoutine               ;Go to main routine for updating game.
-LC0C5:  inc FrameCount                  ;Increment frame counter.
-LC0C7:  lda #$00                        ;
-LC0C9:  sta NMIStatus                   ;Wait for next NMI to end.
+    jsr CheckSwitch                 ;Check to see if memory page needs to be switched.
+    jsr UpdateTimer                 ;Update Timers 1, 2 and 3.
+    jsr GoMainRoutine               ;Go to main routine for updating game.
+    inc FrameCount                  ;Increment frame counter.
+    lda #$00                        ;
+    sta NMIStatus                   ;Wait for next NMI to end.
 
 WaitNMIEnd:
-LC0CB:  tay                             ;
-LC0CC:  lda NMIStatus                   ;
-LC0CE:  bne +                           ;If nonzero, NMI has ended. Else keep waiting.
-LC0D0:  jmp WaitNMIEnd                  ;
+    tay                             ;
+    lda NMIStatus                   ;
+    bne +                           ;If nonzero, NMI has ended. Else keep waiting.
+    jmp WaitNMIEnd                  ;
 
-LC0D3:* jsr RandomNumbers               ;Update pseudo random numbers.
-LC0D6:  jmp MainLoop                    ;Jump to top of subroutine.
-
-;-------------------------------------[ Non-Maskable Interrupt ]-------------------------------------
-
-;The NMI is called 60 times a second by the VBlank signal from the PPU. When the
-;NMI routine is called, the game should already be waiting for it in the main 
-;loop routine in the WaitNMIEnd loop.  It is possible that the main loop routine
-;will not be waiting as it is bogged down with excess calculations. This causes
-;the game to slow down.
-
-NMI:
-LC0D9:  php                             ;Save processor status, A, X and Y on stack.
-LC0DA:  pha                             ;Save A.
-LC0DB:  txa                             ;
-LC0DC:  pha                             ;Save X.
-LC0DD:  tya                             ;
-LC0DE:  pha                             ;Save Y.
-LC0DF:  lda #$00                        ;
-LC0E1:  sta SPRAddress                  ;Sprite RAM address = 0.
-LC0E4:  lda #$02                        ;
-LC0E6:  sta SPRDMAReg                   ;Transfer page 2 ($200-$2FF) to Sprite RAM.
-LC0E9:  lda NMIStatus                   ;
-LC0EB:  bne ++                          ;Skip if the frame couldn't finish in time.
-LC0ED:  lda GameMode                    ;
-LC0EF:  beq +                           ;Branch if mode=Play.
-LC0F1:  jsr NMIScreenWrite              ;Write end message on screen(If appropriate).
-LC0F4:* jsr CheckPalWrite               ;Check if palette data pending.
-LC0F7:  jsr CheckPPUWrite               ;check if data needs to be written to PPU.
-LC0FA:  jsr WritePPUCtrl                ;Update $2000 & $2001.
-LC0FD:  jsr WriteScroll                 ;Update h/v scroll reg.
-LC100:  jsr ReadJoyPads                 ;Read both joypads.
-LC103:* jsr SoundEngine                 ;Update music and SFX.
-LC106:  jsr UpdateAge                   ;Update Samus' age.
-LC109:  ldy #$01                        ; NMI = finished.
-LC10B:  sty NMIStatus                   ;
-LC10D:  pla                             ;Restore Y.
-LC10E:  tay                             ;
-LC10F:  pla                             ;Restore X.
-LC110:  tax                             ;
-LC111:  pla                             ;restore A.
-LC112:  plp                             ;Restore processor status flags.
-LC113:  rti                             ;Return from NMI.
+*   jsr RandomNumbers               ;Update pseudo random numbers.
+    jmp MainLoop                    ;Jump to top of subroutine. 
 
 ;----------------------------------------[ GoMainRoutine ]-------------------------------------------
 
@@ -210,48 +88,48 @@ LC113:  rti                             ;Return from NMI.
 ;is executed.
 
 GoMainRoutine:
-LC114:  lda GameMode                    ;0 if game is running, 1 if at intro screen.
-LC116:  beq +                           ;Branch if mode=Play.
-LC118:  jmp $8000                       ;Jump to $8000, where a routine similar to the one-->
+    lda GameMode                    ;0 if game is running, 1 if at intro screen.
+    beq +                           ;Branch if mode=Play.
+    jmp $8000                       ;Jump to $8000, where a routine similar to the one-->
                                         ;below is executed, only using TitleRoutine instead
                                         ;of MainRoutine as index into a jump table.
-LC11B:* lda Joy1Change                  ;
-LC11D:  and #$10                        ;Has START been pressed?-->
-LC11F:  beq +++                         ;if not, execute current routine as normal.
+*   lda Joy1Change                  ;
+    and #$10                        ;Has START been pressed?-->
+    beq +++                         ;if not, execute current routine as normal.
 
-LC121:  lda MainRoutine                 ;
-LC123:  cmp #$03                        ;Is game engine running?-->
-LC125:  beq +                           ;If yes, check for routine #5 (pause game).
-LC127:  cmp #$05                        ;Is game paused?-->
-LC129:  bne +++                         ;If not routine #5 either, don't care about START being pressed.
-LC12B:  lda #$03                        ;Otherwise, switch to routine #3 (game engine).
-LC12D:  bne ++                          ;Branch always.
-LC12F:* lda #$05                        ;Switch to pause routine.
-LC131:* sta MainRoutine                 ;(MainRoutine = 5 if game paused, 3 if game engine running).
-LC133:  lda GamePaused                  ;
-LC135:  eor #$01                        ;Toggle game paused.
-LC137:  sta GamePaused                  ;
-LC139:  jsr PauseMusic                  ;Silences music while game paused.
+    lda MainRoutine                 ;
+    cmp #$03                        ;Is game engine running?-->
+    beq +                           ;If yes, check for routine #5 (pause game).
+    cmp #$05                        ;Is game paused?-->
+    bne +++                         ;If not routine #5 either, don't care about START being pressed.
+    lda #$03                        ;Otherwise, switch to routine #3 (game engine).
+    bne ++                          ;Branch always.
+*   lda #$05                        ;Switch to pause routine.
+*   sta MainRoutine                 ;(MainRoutine = 5 if game paused, 3 if game engine running).
+    lda GamePaused                  ;
+    eor #$01                        ;Toggle game paused.
+    sta GamePaused                  ;
+    jsr PauseMusic                  ;Silences music while game paused.
 
-LC13c:* lda MainRoutine                 ;
-LC13E:  jsr ChooseRoutine               ;Use MainRoutine as index into routine table below.
+*   lda MainRoutine                 ;
+    jsr ChooseRoutine               ;Use MainRoutine as index into routine table below.
 
 ;Pointer table to code.
 
-LC141:  .word AreaInit                  ;Area init.
-LC143:  .word MoreInit                  ;More area init.
-LC145:  .word SamusInit                 ;Samus init.
-LC147:  .word GameEngine                ;Game engine.
-LC149:  .word GameOver                  ;Display GAME OVER.
-LC14B:  .word PauseMode                 ;Pause game.
-LC14D:  .word GoPassword                ;Display password.
-LC14F:  .word IncrementRoutine          ;Just advances to next routine in table.
-LC151:  .word SamusIntro                ;Intro.
-LC153:  .word WaitTimer                 ;Delay.
+    .word AreaInit                  ;Area init.
+    .word MoreInit                  ;More area init.
+    .word SamusInit                 ;Samus init.
+    .word GameEngine                ;Game engine.
+    .word GameOver                  ;Display GAME OVER.
+    .word PauseMode                 ;Pause game.
+    .word GoPassword                ;Display password.
+    .word IncrementRoutine          ;Just advances to next routine in table.
+    .word SamusIntro                ;Intro.
+    .word WaitTimer                 ;Delay.
 
 IncrementRoutine:
-LC155:  inc MainRoutine                 ;Increment to next routine in above table.
-LC157:  rts                             ;
+    inc MainRoutine                 ;Increment to next routine in above table.
+    rts                             ;
 
 ;-------------------------------------[ Clear name tables ]------------------------------------------
 
@@ -1692,129 +1570,6 @@ LCA31:  .byte $03                       ;Norfair.
 LCA32:  .byte $05                       ;Kraid hideout.
 LCA33:  .byte $04                       ;Tourian.
 LCA34:  .byte $06                       ;Ridley hideout.
-
-;----------------------------------[ Saved game routines (not used) ]--------------------------------
-
-AccessSavedGame:
-LCA35:  pha                             ;Save two copies of A. Why? Who knows. This code is-->
-LCA36:  pha                             ;Never implemented. A contains data slot to work on.
-LCA37:  jsr GetGameDataIndex            ;Get index to this save game Samus data info.
-LCA3A:  lda EraseGame                   ;
-LCA3D:  bpl +                           ;Is MSB set? If so, erase saved game data. Else branch.
-LCA3F:  and #$01                        ;
-LCA41:  sta EraseGame                   ;Clear MSB so saved game data is not erased again.
-LCA44:  jsr EraseAllGameData            ;Erase selected saved game data.
-LCA47:  lda #$01                        ;Indicate this saved game has been erased.-->
-LCA49:  sta $7800,y                     ;Saved game 0=$780C, saved game 1=$781C, saved game 2=$782C. 
-LCA4C:* lda MainRoutine                 ;
-LCA4E:  cmp #$01                        ;If initializing the area at the start of the game, branch-->
-LCA50:  beq +++                         ;to load Samus' saved game info.
-
-SaveGameData:
-LCA52:  lda InArea                      ;Save game based on current area Samus is in. Don't know why.
-LCA54:  jsr SavedDataBaseAddr           ;Find index to unique item history for this saved game.
-LCA57:  ldy #$3F                        ;Prepare to save unique item history which is 64 bytes in length.
-LCA59:* lda NumberOfUniqueItems,y       ;
-LCA5C:  sta ($00),y                     ;Save unique item history in appropriate saved game slot.
-LCA5E:  dey                             ;
-LCA5F:  bpl -                           ;Loop until unique item history transfer complete.
-LCA61:  ldy SamusDataIndex              ;Prepare to save Samus' data.
-LCA64:  ldx #$00                        ;
-LCA66:* lda SamusStat00,x               ;
-LCA69:  sta SamusData,y                 ;Save Samus' data in appropriate saved game slot.
-LCA6C:  iny                             ;
-LCA6D:  inx                             ;
-LCA6E:  cpx #$10                        ;
-LCA70:  bne -                           ;Loop until Samus' data transfer complete.
-
-LoadGameData:
-LCA72:* pla                             ;Restore A to find appropriate saved game to load.
-LCA73:  jsr SavedDataBaseAddr           ;Find index to unique item history for this saved game.
-LCA76:  ldy #$3F                        ;Prepare to load unique item history which is 64 bytes in length.
-LCA78:* lda ($00),y                     ;
-LCA7A:  sta NumberOfUniqueItems,y       ;Loop until unique item history is loaded.
-LCA7D:  dey                             ;
-LCA7E:  bpl -                           ;
-LCA80:  bmi +                           ;Branch always.
-LCA82:  pha                             ;
-LCA83:* ldy SamusDataIndex              ;Prepare to load Samus' data.
-LCA86:  ldx #$00                        ;
-LCA88:* lda SamusData,y                 ;
-LCA8B:  sta SamusStat00,x               ;Load Samus' data from appropriate saved game slot.
-LCA8E:  iny                             ;
-LCA8F:  inx                             ;
-LCA90:  cpx #$10                        ;
-LCA92:  bne -                           ;Loop until Samus' data transfer complete.
-LCA94:  pla                             ;
-LCA95:  rts                             ;
-
-GetGameDataIndex:
-LCA96:  lda DataSlot                    ;
-LCA99:  asl                             ;A contains the save game slot to work on (0 1 or 2).-->
-LCA9A:  asl                             ;This number is transferred to the upper four bits to-->
-LCA9B:  asl                             ;find the offset for Samus' data for this particular-->
-LCA9C:  asl                             ;saved game (#$00, #$10 or #$20).
-LCA9D:  sta SamusDataIndex              ;
-LCAA0:  rts                             ;
-
-EraseAllGameData:
-LCAA1:  lda #$00                        ;Always start at saved game 0. Erase all 3 saved games.
-LCAA3:  jsr SavedDataBaseAddr           ;Find index to unique item history for this saved game.
-LCAA6:  inc $03                         ;Prepare to erase saved game info at $6A00 and above.                                           
-LCAA8:  ldy #$00                        ;Fill saved game data with #$00.
-LCAAA:  tya                             ;
-LCAAB:* sta ($00),y                     ;Erase unique item histories from $69B4 to $69FF. 
-LCAAD:  cpy #$40                        ;
-LCAAF:  bcs +                           ;IF 64 bytes alrady erased, no need to erase any more-->
-LCAB1:  sta ($02),y                     ;in the $6A00 and above range.
-LCAB3:* iny                             ;
-LCAB4:  bne --                          ;Lop until all saved game data is erased.
-LCAB6:  ldy SamusDataIndex              ;Load proper index to desired Samus data to erase.
-LCAB9:  ldx #$00                        ;
-LCABB:  txa                             ;
-LCABC:* sta SamusData,y                 ;Erase Samus' data.
-LCABF:  iny                             ;
-LCAC0:  inx                             ;
-LCAC1:  cpx #$0C                        ;
-LCAC3:  bne -                           ;Loop until all data is erased.
-LCAC5:  rts                             ;
-
-;This routine finds the base address of the unique item history for the desired saved game (0, 1 or 2).
-;The memory set aside for each unique item history is 64 bytes and occupies memory addresses $69B4 thru
-;$6A73.
-
-SavedDataBaseAddr:
-LCAC6:  pha                             ;Save contents of A.
-LCAC7:  lda DataSlot                    ;Load saved game data slot to load.
-LCACA:  asl                             ;*2. Table values below are two bytes.
-LCACB:  tax                             ;
-LCACC:  lda SavedDataTable,x            ;
-LCACF:  sta $00                         ;Load $0000 and $0002 with base addresses from-->
-LCAD1:  sta $02                         ;table below($69B4).
-LCAD3:  lda SavedDataTable+1,x          ;
-LCAD6:  sta $01                         ;
-LCAD8:  sta $03                         ;
-LCADA:  pla                             ;Restore A.
-LCADB:  and #$0F                        ;Discard upper four bits in A.
-LCADD:  tax                             ;X used for counting loop.
-LCADE:  beq +++                         ;Exit if at saved game 0.  No further calculations required.
-LCAE0:* lda $00                         ;
-LCAE2:  clc                             ;
-LCAE3:  adc #$40                        ;
-LCAE5:  sta $00                         ;Loop to add #$40 to base address of $69B4 in order to find-->
-LCAE7:  bcc +                           ;the proper base address for this saved game data. (save-->
-LCAE9:  inc $01                         ;slot 0 = $69B4, save slot 1 = $69F4, save slot 2 = $6A34).
-LCAEB:* dex                             ;
-LCAEC:  bne --                          ;
-LCAEE:* rts                             ;
-
-;Table used by above subroutine to find base address to load saved game data from. The slot 0
-;starts at $69B4, slot 1 starts at $69F4 and slot 2 starts at $6A34.
-
-SavedDataTable:
-LCAEF:  .word ItmeHistory               ;($69B4)Base for save game slot 0.
-LCAF1:  .word ItmeHistory               ;($69B4)Base for save game slot 1.
-LCAF3:  .word ItmeHistory               ;($69B4)Base for save game slot 2.
 
 ;----------------------------------------[ Choose ending ]-------------------------------------------
 
@@ -9546,31 +9301,8 @@ UpdateTileAnim:
         .byte $00
         .byte $00
 
-;-----------------------------------------------[ RESET ]--------------------------------------------
-
-RESET:
-LFFB0:  SEI                             ; Disables interrupt
-LFFB1:  CLD                             ; Sets processor to binary mode
-LFFB2:  LDX #$00                        ; 
-LFFB4:  STX PPUControl0                 ; Clear PPU control registers
-LFFB7:  STX PPUControl1                 ; 
-LFFBA:* LDA PPUStatus                   ; 
-LFFBD:  BPL -                           ; Wait for VBlank
-LFFBF:* LDA PPUStatus                   ; 
-LFFC2:  BPL -                           ; 
-    lda #$06                    ; 
-    sta $8000
-    stx $8001
-    inx
-    lda #$07
-    sta MMC3BankSelect
-    stx MMC3BankData
-    jmp Startup                 ; Do preliminary housekeeping.
-
+;-------------------------------[ Interrupt vectors ]---------------------------
 .advance $FFFA, $00
-
-;-----------------------------------------[ Interrupt vectors ]--------------------------------------
-
 .word NMI                       ;NMI vector.
 .word RESET                     ;Reset vector.
 .word RESET                     ;IRQ vector.
