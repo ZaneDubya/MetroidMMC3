@@ -112,8 +112,19 @@ Startup:
     jsr CheckSwitch                 ;
     bne WaitNMIEnd                  ;Branch always
     
-;-------------------------------------[ Non-Maskable Interrupt ]-------------------------------------
+;--------------------------------[ WaitNMIEnd ]---------------------------------
+; This routine will wait until NMIStatus is nonzero.
 
+WaitNMIEnd:
+    tay                             ;
+    lda NMIStatus                   ;
+    bne +                           ;If nonzero, NMI has ended. Else keep waiting.
+    jmp WaitNMIEnd                  ;
+
+*   jsr RandomNumbers               ;Update pseudo random numbers.
+    jmp MainLoop                    ;Jump to top of subroutine. 
+    
+;-------------------------------------[ Non-Maskable Interrupt ]-------------------------------------
 ;The NMI is called 60 times a second by the VBlank signal from the PPU. When the
 ;NMI routine is called, the game should already be waiting for it in the main 
 ;loop routine in the WaitNMIEnd loop.  It is possible that the main loop routine
