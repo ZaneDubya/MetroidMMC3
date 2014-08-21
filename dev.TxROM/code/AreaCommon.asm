@@ -40,7 +40,7 @@ CommonJump_Unknown21:               ; Both      NR      ??????
 CommonJump_ChooseRoutine:           ; JSR       All     Calls ChooseRoutine in GameEngine
     JMP ChooseRoutine               ; 
 CommonJump_Unknown27:               ; JSR       All     ??????
-    JMP $FD8F                       ;
+    JMP UnknownFD8F                 ;
 CommonJump_Unknown2A:               ; Both      All     ??????    
     JMP UnknownEB6E                 ;
 CommonJump_Unknown2D:               ; JSR       BK      ??????

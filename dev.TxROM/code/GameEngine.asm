@@ -140,9 +140,6 @@ LC0B5:  sty SwitchPending               ;Prepare to switch page 0 into lower PRG
 LC0B7:  jsr CheckSwitch                 ;
 LC0BA:  bne WaitNMIEnd                  ;Branch always
 
-.byte $EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA
-.byte $EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA
-.byte $EA
 ;-----------------------------------------[ Main loop ]----------------------------------------------
 
 ;The main loop runs all the routines that take place outside of the NMI.
@@ -923,21 +920,7 @@ LC4B7:  lsr                             ;Move bit 3 to bit 0 position.
 LC4B8:  lsr                             ;
 LC4B9:  and #$01                        ;Remove all other bits.
     sta MMC3Mirroring
-    .advance $C4D8, $EA
-;LC4BB: sta $00                         ;Store at address $00.
-;LC4BD: lda MMCReg0Cntrl                ;
-;LC4BF: and #$FE                        ;Load MMCReg0Cntrl and remove bit 0.
-;LC4C1: ora $00                         ;Replace bit 0 with stored bit at $00.
-;LC4C3: sta MMCReg0Cntrl                ;
-;LC4C5: sta MMC1Reg0                    ;
-;LC4C8: lsr                             ;
-;LC4C9: sta MMC1Reg0                    ;
-;LC4Cc: lsr                             ;
-;LC4CD: sta MMC1Reg0                    ;
-;LC4D0: lsr                             ;Load new configuration data serially-->
-;LC4D1: sta MMC1Reg0                    ;into MMC1Reg0.
-;LC4D4: lsr                             ;
-;LC4D5: sta MMC1Reg0                    ;
+    
 LC4D8:  rts                             ;
 
 PrepPPUMirror:
@@ -983,16 +966,6 @@ MMCWriteReg3:
     lda #$07
     sta $8000
     sty $8001
-    .advance $C50D, $EA
-;LC4FA: sta MMC1Reg3                    ;Write bit 0 of ROM bank #.
-;LC4FD: lsr                             ;
-;LC4FE: sta MMC1Reg3                    ;Write bit 1 of ROM bank #.
-;LC501: lsr                             ;
-;LC502: sta MMC1Reg3                    ;Write bit 2 of ROM bank #.
-;LC505: lsr                             ;
-;LC506: sta MMC1Reg3                    ;Write bit 3 of ROM bank #.
-;LC509: lsr                             ;
-;LC50A: sta MMC1Reg3                    ;Write bit 4 of ROM bank #.
 LC50D:  lda $00                         ;Restore A with current bank number before exiting.
 LC50F:* rts                             ;
 
@@ -2964,7 +2937,7 @@ LD210:  lda MetroidOnSamus
         jsr LD306
         lda SamusGear
         and #gr_LONGBEAM
-        lsr
+        lsr 
         lsr
         lsr
         ror
@@ -9282,6 +9255,7 @@ LFD84:  lda $B6,x
         sta $B0,x
 *       rts
 
+UnknownFD8F:
 LFD8F:  lda ScrollDir
         and #$02
         sta $02
