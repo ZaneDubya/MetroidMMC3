@@ -54,10 +54,10 @@ REM compile each of the banks in make.txt, and add each to the make.asm file.
 for /f "tokens=1-3 delims=," %%G in (%workdir%/make.txt) do (
     if %%G==map (
         echo Mapping %%H:
-        util\ophis.exe -m "map.txt" "%workdir%/%%H"
+        util\ophis.exe -m "%workdir%/map.txt" "%workdir%/%%H"
         del "ophis.bin"
-        util\getlabels.exe "map.txt" "%workdir%/%%I"
-        del "map.txt"
+        util\getlabels.exe "%workdir%/map.txt" "%workdir%/%%I"
+        REM del "%workdir%\map.txt"     -- NOT necessary, as it is in obj folder.
     )
     if %%G==prg (
         echo Assembling %%H:

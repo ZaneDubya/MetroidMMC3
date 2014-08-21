@@ -37,23 +37,23 @@
 ;behind after it is killed.
 
 RandomNumbers:
-    txa                             ;               
-    pha                             ;
-    ldx #$05                        ;
-*   lda RandomNumber1               ;
-    clc                             ;
-    adc #$05                        ;
-    sta RandomNumber1               ;2E is increased by #$19 every frame and-->
-    lda RandomNumber2               ;2F is increased by #$5F every frame.                   
-    clc                             ;
-    adc #$13                        ;
-    sta RandomNumber2               ;
-    dex                             ;
-    bne -                           ;
-    pla                             ;
-    tax                             ;
-    lda RandomNumber1               ;
-    rts                             ;
+LC000:  txa                             ;               
+LC001:  pha                             ;
+LC002:  ldx #$05                        ;
+LC004:* lda RandomNumber1               ;
+LC006:  clc                             ;
+LC007:  adc #$05                        ;
+LC009:  sta RandomNumber1               ;2E is increased by #$19 every frame and-->
+LC00B:  lda RandomNumber2               ;2F is increased by #$5F every frame.                   
+LC00D:  clc                             ;
+LC00E:  adc #$13                        ;
+LC010:  sta RandomNumber2               ;
+LC012:  dex                             ;
+LC013:  bne -                           ;
+LC015:  pla                             ;
+LC016:  tax                             ;
+LC017:  lda RandomNumber1               ;
+LC019:  rts                             ;
 
 ;------------------------------------------[ Startup ]----------------------------------------------
 Startup:
@@ -78,88 +78,91 @@ Startup:
     bne -                               ;
 
 ;Clear cartridge RAM at $6000-$7FFF.
-*   ldy #$7F                        ;High byte of start address.
-    sty $01                         ;
-    ldy #$00                        ;Low byte of start address.
-    sty $00                         ;$0000 points to $7F00
-    tya                             ;A = 0
-*   sta ($00),y                     ;
-    iny                             ;Clears 256 bytes of memory before decrementing to next-->
-    bne -                           ;256 bytes.
-    dec $01                         ;
-    ldx $01                         ;Is address < $6000?-->
-    cpx #$60                        ;If not, do another page.
-    bcs -                           ; 
-    lda #$00                        ;Clear bits 3 and 4 of MMC1 register 3.
-    sta SwitchUpperBits             ;
-    ldy #$00                        ;
-    sty ScrollX                     ;ScrollX = 0
-    sty ScrollY                     ;ScrollY = 0
-    sty PPUScroll                   ;Clear hardware scroll x
-    sty PPUScroll                   ;Clear hardware scroll y
-    iny                             ;Y = #$01
-    sty GameMode                    ;Title screen mode
-    jsr ClearNameTables             ;
-    jsr EraseAllSprites             ;
+LC057:* ldy #$7F                        ;High byte of start address.
+LC059:  sty $01                         ;
+LC05B:  ldy #$00                        ;Low byte of start address.
+LC05D:  sty $00                         ;$0000 points to $7F00
+LC05F:  tya                             ;A = 0
+LC060:* sta ($00),y                     ;
+LC062:  iny                             ;Clears 256 bytes of memory before decrementing to next-->
+LC063:  bne -                           ;256 bytes.
+LC065:  dec $01                         ;
+LC067:  ldx $01                         ;Is address < $6000?-->
+LC069:  cpx #$60                        ;If not, do another page.
+LC06B:  bcs -                           ; 
+LC071:  lda #$00                        ;Clear bits 3 and 4 of MMC1 register 3.
+LC073:  sta SwitchUpperBits             ;
+LC075:  ldy #$00                        ;
+LC077:  sty ScrollX                     ;ScrollX = 0
+LC079:  sty ScrollY                     ;ScrollY = 0
+LC07B:  sty PPUScroll                   ;Clear hardware scroll x
+LC07E:  sty PPUScroll                   ;Clear hardware scroll y
+LC081:  iny                             ;Y = #$01
+LC082:  sty GameMode                    ;Title screen mode
+LC084:  jsr ClearNameTables             ;
+LC087:  jsr EraseAllSprites             ;
 
-    lda #%10010000                  ;NMI = enabled
+LC08A:  lda #%10010000                  ;NMI = enabled
                                         ;Sprite size = 8x8
                                         ;BG pattern table address = $1000
                                         ;SPR pattern table address = $0000
                                         ;PPU address increment = 1
                                         ;Name table address = $2000
-    sta PPUControl0                 ;
-    sta PPUCNT0ZP                   ;
+LC08C:  sta PPUControl0                 ;
+LC08F:  sta PPUCNT0ZP                   ;
 
-    lda #%00000010                  ;Sprites visible = no
+LC091:  lda #%00000010                  ;Sprites visible = no
                                         ;Background visible = no
                                         ;Sprite clipping = yes
                                         ;Background clipping = no
                                         ;Display type = color
-    sta PPUCNT1ZP                   ;
+LC093:  sta PPUCNT1ZP                   ;
 
-    lda #$47                        ;
-    sta MirrorCntrl                 ;Prepare to set PPU to vertical mirroring.
-    jsr PrepVertMirror              ;
+LC095:  lda #$47                        ;
+LC097:  sta MirrorCntrl                 ;Prepare to set PPU to vertical mirroring.
+LC099:  jsr PrepVertMirror              ;
 
-    lda #$00                        ;
-    sta DMCCntrl1                   ;PCM volume = 0 - disables DMC channel
-    lda #$0F                        ;
-    sta APUCommonCntrl0             ;Enable sound channel 0,1,2,3
+LC09C:  lda #$00                        ;
+LC09E:  sta DMCCntrl1                   ;PCM volume = 0 - disables DMC channel
+LC0A1:  lda #$0F                        ;
+LC0A3:  sta APUCommonCntrl0             ;Enable sound channel 0,1,2,3
 
-    ldy #$00                        ;
-    sty TitleRoutine                ;Set title routine and and main routine function-->
-    sty MainRoutine                 ;pointers equal to 0.
-    lda #$11                        ;
-    sta RandomNumber1               ;Initialize RandomNumber1 to #$11
-    lda #$FF                        ;
-    sta RandomNumber2               ;Initialize RandomNumber2 to #$FF
+LC0A6:  ldy #$00                        ;
+LC0A8:  sty TitleRoutine                ;Set title routine and and main routine function-->
+LC0AA:  sty MainRoutine                 ;pointers equal to 0.
+LC0AC:  lda #$11                        ;
+LC0AE:  sta RandomNumber1               ;Initialize RandomNumber1 to #$11
+LC0B0:  lda #$FF                        ;
+LC0B2:  sta RandomNumber2               ;Initialize RandomNumber2 to #$FF
 
-    iny                             ;Y = 1
-    sty SwitchPending               ;Prepare to switch page 0 into lower PRGROM.
-    jsr CheckSwitch                 ;
-    bne WaitNMIEnd                  ;Branch always
-    
+LC0B4:  iny                             ;Y = 1
+LC0B5:  sty SwitchPending               ;Prepare to switch page 0 into lower PRGROM.
+LC0B7:  jsr CheckSwitch                 ;
+LC0BA:  bne WaitNMIEnd                  ;Branch always
+
+.byte $EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA
+.byte $EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA,$EA
+.byte $EA
 ;-----------------------------------------[ Main loop ]----------------------------------------------
 
 ;The main loop runs all the routines that take place outside of the NMI.
 
 MainLoop:
-    jsr CheckSwitch                 ;Check to see if memory page needs to be switched.
-    jsr UpdateTimer                 ;Update Timers 1, 2 and 3.
-    jsr GoMainRoutine               ;Go to main routine for updating game.
-    inc FrameCount                  ;Increment frame counter.
-    lda #$00                        ;
-    sta NMIStatus                   ;Wait for next NMI to end.
+LC0BC:  jsr CheckSwitch                 ;Check to see if memory page needs to be switched.
+LC0BF:  jsr UpdateTimer                 ;Update Timers 1, 2 and 3.
+LC0C2:  jsr GoMainRoutine               ;Go to main routine for updating game.
+LC0C5:  inc FrameCount                  ;Increment frame counter.
+LC0C7:  lda #$00                        ;
+LC0C9:  sta NMIStatus                   ;Wait for next NMI to end.
 
 WaitNMIEnd:
-    tay                             ;
-    lda NMIStatus                   ;
-    bne +                           ;If nonzero, NMI has ended. Else keep waiting.
-    jmp WaitNMIEnd                  ;
+LC0CB:  tay                             ;
+LC0CC:  lda NMIStatus                   ;
+LC0CE:  bne +                           ;If nonzero, NMI has ended. Else keep waiting.
+LC0D0:  jmp WaitNMIEnd                  ;
 
-*   jsr RandomNumbers               ;Update pseudo random numbers.
-    jmp MainLoop                    ;Jump to top of subroutine.
+LC0D3:* jsr RandomNumbers               ;Update pseudo random numbers.
+LC0D6:  jmp MainLoop                    ;Jump to top of subroutine.
 
 ;-------------------------------------[ Non-Maskable Interrupt ]-------------------------------------
 
@@ -170,37 +173,37 @@ WaitNMIEnd:
 ;the game to slow down.
 
 NMI:
-    php                             ;Save processor status, A, X and Y on stack.
-    pha                             ;Save A.
-    txa                             ;
-    pha                             ;Save X.
-    tya                             ;
-    pha                             ;Save Y.
-    lda #$00                        ;
-    sta SPRAddress                  ;Sprite RAM address = 0.
-    lda #$02                        ;
-    sta SPRDMAReg                   ;Transfer page 2 ($200-$2FF) to Sprite RAM.
-    lda NMIStatus                   ;
-    bne ++                          ;Skip if the frame couldn't finish in time.
-    lda GameMode                    ;
-    beq +                           ;Branch if mode=Play.
-    jsr NMIScreenWrite              ;Write end message on screen(If appropriate).
-*   jsr CheckPalWrite               ;Check if palette data pending.
-    jsr CheckPPUWrite               ;check if data needs to be written to PPU.
-    jsr WritePPUCtrl                ;Update $2000 & $2001.
-    jsr WriteScroll                 ;Update h/v scroll reg.
-    jsr ReadJoyPads                 ;Read both joypads.
-*   jsr SoundEngine                 ;Update music and SFX.
-    jsr UpdateAge                   ;Update Samus' age.
-    ldy #$01                        ; NMI = finished.
-    sty NMIStatus                   ;
-    pla                             ;Restore Y.
-    tay                             ;
-    pla                             ;Restore X.
-    tax                             ;
-    pla                             ;restore A.
-    plp                             ;Restore processor status flags.
-    rti                             ;Return from NMI.
+LC0D9:  php                             ;Save processor status, A, X and Y on stack.
+LC0DA:  pha                             ;Save A.
+LC0DB:  txa                             ;
+LC0DC:  pha                             ;Save X.
+LC0DD:  tya                             ;
+LC0DE:  pha                             ;Save Y.
+LC0DF:  lda #$00                        ;
+LC0E1:  sta SPRAddress                  ;Sprite RAM address = 0.
+LC0E4:  lda #$02                        ;
+LC0E6:  sta SPRDMAReg                   ;Transfer page 2 ($200-$2FF) to Sprite RAM.
+LC0E9:  lda NMIStatus                   ;
+LC0EB:  bne ++                          ;Skip if the frame couldn't finish in time.
+LC0ED:  lda GameMode                    ;
+LC0EF:  beq +                           ;Branch if mode=Play.
+LC0F1:  jsr NMIScreenWrite              ;Write end message on screen(If appropriate).
+LC0F4:* jsr CheckPalWrite               ;Check if palette data pending.
+LC0F7:  jsr CheckPPUWrite               ;check if data needs to be written to PPU.
+LC0FA:  jsr WritePPUCtrl                ;Update $2000 & $2001.
+LC0FD:  jsr WriteScroll                 ;Update h/v scroll reg.
+LC100:  jsr ReadJoyPads                 ;Read both joypads.
+LC103:* jsr SoundEngine                 ;Update music and SFX.
+LC106:  jsr UpdateAge                   ;Update Samus' age.
+LC109:  ldy #$01                        ; NMI = finished.
+LC10B:  sty NMIStatus                   ;
+LC10D:  pla                             ;Restore Y.
+LC10E:  tay                             ;
+LC10F:  pla                             ;Restore X.
+LC110:  tax                             ;
+LC111:  pla                             ;restore A.
+LC112:  plp                             ;Restore processor status flags.
+LC113:  rti                             ;Return from NMI.
 
 ;----------------------------------------[ GoMainRoutine ]-------------------------------------------
 
@@ -210,48 +213,48 @@ NMI:
 ;is executed.
 
 GoMainRoutine:
-    lda GameMode                    ;0 if game is running, 1 if at intro screen.
-    beq +                           ;Branch if mode=Play.
-    jmp $8000                       ;Jump to $8000, where a routine similar to the one-->
+LC114:  lda GameMode                    ;0 if game is running, 1 if at intro screen.
+LC116:  beq +                           ;Branch if mode=Play.
+LC118:  jmp $8000                       ;Jump to $8000, where a routine similar to the one-->
                                         ;below is executed, only using TitleRoutine instead
                                         ;of MainRoutine as index into a jump table.
-*   lda Joy1Change                  ;
-    and #$10                        ;Has START been pressed?-->
-    beq +++                         ;if not, execute current routine as normal.
+LC11B:* lda Joy1Change                  ;
+LC11D:  and #$10                        ;Has START been pressed?-->
+LC11F:  beq +++                         ;if not, execute current routine as normal.
 
-    lda MainRoutine                 ;
-    cmp #$03                        ;Is game engine running?-->
-    beq +                           ;If yes, check for routine #5 (pause game).
-    cmp #$05                        ;Is game paused?-->
-    bne +++                         ;If not routine #5 either, don't care about START being pressed.
-    lda #$03                        ;Otherwise, switch to routine #3 (game engine).
-    bne ++                          ;Branch always.
-*   lda #$05                        ;Switch to pause routine.
-*   sta MainRoutine                 ;(MainRoutine = 5 if game paused, 3 if game engine running).
-    lda GamePaused                  ;
-    eor #$01                        ;Toggle game paused.
-    sta GamePaused                  ;
-    jsr PauseMusic                  ;Silences music while game paused.
+LC121:  lda MainRoutine                 ;
+LC123:  cmp #$03                        ;Is game engine running?-->
+LC125:  beq +                           ;If yes, check for routine #5 (pause game).
+LC127:  cmp #$05                        ;Is game paused?-->
+LC129:  bne +++                         ;If not routine #5 either, don't care about START being pressed.
+LC12B:  lda #$03                        ;Otherwise, switch to routine #3 (game engine).
+LC12D:  bne ++                          ;Branch always.
+LC12F:* lda #$05                        ;Switch to pause routine.
+LC131:* sta MainRoutine                 ;(MainRoutine = 5 if game paused, 3 if game engine running).
+LC133:  lda GamePaused                  ;
+LC135:  eor #$01                        ;Toggle game paused.
+LC137:  sta GamePaused                  ;
+LC139:  jsr PauseMusic                  ;Silences music while game paused.
 
-*   lda MainRoutine                 ;
-    jsr ChooseRoutine               ;Use MainRoutine as index into routine table below.
+LC13c:* lda MainRoutine                 ;
+LC13E:  jsr ChooseRoutine               ;Use MainRoutine as index into routine table below.
 
 ;Pointer table to code.
 
-    .word AreaInit                  ;Area init.
-    .word MoreInit                  ;More area init.
-    .word SamusInit                 ;Samus init.
-    .word GameEngine                ;Game engine.
-    .word GameOver                  ;Display GAME OVER.
-    .word PauseMode                 ;Pause game.
-    .word GoPassword                ;Display password.
-    .word IncrementRoutine          ;Just advances to next routine in table.
-    .word SamusIntro                ;Intro.
-    .word WaitTimer                 ;Delay.
+LC141:  .word AreaInit                  ;Area init.
+LC143:  .word MoreInit                  ;More area init.
+LC145:  .word SamusInit                 ;Samus init.
+LC147:  .word GameEngine                ;Game engine.
+LC149:  .word GameOver                  ;Display GAME OVER.
+LC14B:  .word PauseMode                 ;Pause game.
+LC14D:  .word GoPassword                ;Display password.
+LC14F:  .word IncrementRoutine          ;Just advances to next routine in table.
+LC151:  .word SamusIntro                ;Intro.
+LC153:  .word WaitTimer                 ;Delay.
 
 IncrementRoutine:
-    inc MainRoutine                 ;Increment to next routine in above table.
-    rts                             ;
+LC155:  inc MainRoutine                 ;Increment to next routine in above table.
+LC157:  rts                             ;
 
 ;-------------------------------------[ Clear name tables ]------------------------------------------
 
@@ -281,7 +284,7 @@ LC17C:  sta PPUCNT0ZP                   ;
 LC17E:  sta PPUControl0                 ;Store control bits in PPU.
 LC181:  ldx $01                         ;
 LC183:  dex                             ;Name table = X - 1.
-LC184:  lda HiPPUTable,x                ;get high PPU address.
+LC184:  lda HiPPUTable,x                ;get high PPU address.  pointer table at HiPPUTable.
 LC187:  sta PPUAddress                  ;
 LC18A:  lda #$00                        ;Set PPU start address (High byte first).
 LC18C:  sta PPUAddress                  ;
@@ -381,9 +384,9 @@ LC1FF:* dey                             ;Palette # = PalDataPending - 1.
 LC200:  tya                             ;
 LC201:  asl                             ;* 2, each pal data ptr is 2 bytes (16-bit).
 LC202:  tay                             ;
-LC203:  ldx $9560,y                     ;X = low byte of PPU data pointer. !!!
+LC203:  ldx $9560,y                     ;X = low byte of PPU data pointer.
 LC206:  lda $9561,y                     ;
-LC209:  tay                             ;Y = high byte of PPU data pointer. !!!
+LC209:  tay                             ;Y = high byte of PPU data pointer.
 LC20A:  lda #$00                        ;Clear A.
 LC20C:  sta PalDataPending              ;Reset palette data pending byte.
 
@@ -910,19 +913,36 @@ LC4B0:  bne SetMainRoutine              ;Branch always.
 ;-----------------------------------[ PPU mirroring routines ]---------------------------------------
 
 PrepVertMirror:
-    lda #$47                        ;Prepare to set PPU for vertical mirroring.
+LC4B2:  nop                             ;
+LC4B3:  nop                             ;Prepare to set PPU for vertical mirroring (again).
+LC4B4:  lda #$47                        ;
 
 SetPPUMirror:
-    lsr                             ;
-    lsr                             ;Move bit 3 to bit 0 position.
-    lsr                             ;
-    and #$01                        ;Remove all other bits.
+LC4B6:  lsr                             ;
+LC4B7:  lsr                             ;Move bit 3 to bit 0 position.
+LC4B8:  lsr                             ;
+LC4B9:  and #$01                        ;Remove all other bits.
     sta MMC3Mirroring
-    rts                             ;
+    .advance $C4D8, $EA
+;LC4BB: sta $00                         ;Store at address $00.
+;LC4BD: lda MMCReg0Cntrl                ;
+;LC4BF: and #$FE                        ;Load MMCReg0Cntrl and remove bit 0.
+;LC4C1: ora $00                         ;Replace bit 0 with stored bit at $00.
+;LC4C3: sta MMCReg0Cntrl                ;
+;LC4C5: sta MMC1Reg0                    ;
+;LC4C8: lsr                             ;
+;LC4C9: sta MMC1Reg0                    ;
+;LC4Cc: lsr                             ;
+;LC4CD: sta MMC1Reg0                    ;
+;LC4D0: lsr                             ;Load new configuration data serially-->
+;LC4D1: sta MMC1Reg0                    ;into MMC1Reg0.
+;LC4D4: lsr                             ;
+;LC4D5: sta MMC1Reg0                    ;
+LC4D8:  rts                             ;
 
 PrepPPUMirror:
-    lda MirrorCntrl                 ;Load MirrorCntrl into A.
-    jmp SetPPUMirror                ;Set mirroring through MMC1 chip.
+LC4D9:  lda MirrorCntrl                 ;Load MirrorCntrl into A.
+LC4DB:  jmp SetPPUMirror                ;Set mirroring through MMC1 chip.
 
 ;-----------------------------[ Switch bank and init bank routines ]---------------------------------
 
@@ -963,8 +983,18 @@ MMCWriteReg3:
     lda #$07
     sta $8000
     sty $8001
-    lda $00                         ;Restore A with current bank number before exiting.
-*   rts                             ;
+    .advance $C50D, $EA
+;LC4FA: sta MMC1Reg3                    ;Write bit 0 of ROM bank #.
+;LC4FD: lsr                             ;
+;LC4FE: sta MMC1Reg3                    ;Write bit 1 of ROM bank #.
+;LC501: lsr                             ;
+;LC502: sta MMC1Reg3                    ;Write bit 2 of ROM bank #.
+;LC505: lsr                             ;
+;LC506: sta MMC1Reg3                    ;Write bit 3 of ROM bank #.
+;LC509: lsr                             ;
+;LC50A: sta MMC1Reg3                    ;Write bit 4 of ROM bank #.
+LC50D:  lda $00                         ;Restore A with current bank number before exiting.
+LC50F:* rts                             ;
 
 ;Calls the proper routine according to the bank number in A.
 
@@ -1676,7 +1706,7 @@ SwitchBank:
 LCA23:* sta InArea                      ;Save current area Samus is in.
 LCA25:  and #$0F                        ;
 LCA27:  tay                             ;Use 4 LSB to load switch pending offset from BankTable table.
-LCA28:  lda BankTable,y                 ;
+LCA28:  lda BankTable,y                 ;Base is BankTable.
 LCA2B:  sta SwitchPending               ;Store switch data.
 LCA2D:  jmp CheckSwitch                 ;Switch lower 16KB to appropriate memory page.
 
@@ -1809,9 +1839,9 @@ LCAEE:* rts                             ;
 ;starts at $69B4, slot 1 starts at $69F4 and slot 2 starts at $6A34.
 
 SavedDataTable:
-LCAEF:  .word ItmeHistory               ;Base for save game slot 0.
-LCAF1:  .word ItmeHistory               ;Base for save game slot 1.
-LCAF3:  .word ItmeHistory               ;Base for save game slot 2.
+LCAEF:  .word ItmeHistory               ;($69B4)Base for save game slot 0.
+LCAF1:  .word ItmeHistory               ;($69B4)Base for save game slot 1.
+LCAF3:  .word ItmeHistory               ;($69B4)Base for save game slot 2.
 
 ;----------------------------------------[ Choose ending ]-------------------------------------------
 
@@ -1864,18 +1894,18 @@ LCB33:  jsr UpdateSamus                 ;Display/movement of Samus.
 LCB36:  jsr AreaRoutine                 ;Area specific routine.
 LCB39:  jsr UpdateElevator              ;Display of elevators.
 LCB3C:  jsr UpdateStatues               ;Display of Ridley & Kraid statues.
-LCB3F:  jsr LFA9D       ; destruction of enemies
-LCB42:  jsr LFC65       ; update of Mellow/Memu enemies
-LCB45:  jsr LF93B
-LCB48:  jsr LFBDD       ; destruction of green spinners
+LCB3F:  jsr LFA9D                       ; destruction of enemies
+LCB42:  jsr LFC65                       ; update of Mellow/Memu enemies
+LCB45:  jsr LF93B                       ;
+LCB48:  jsr LFBDD                       ; destruction of green spinners
 LCB4B:  jsr SamusEnterDoor              ;Check if Samus entered a door.
-LCB4E:  jsr $8B79       ; display of doors
-LCB51:  jsr UpdateTiles ; tile de/regeneration
-LCB54:  jsr LF034       ; Samus <--> enemies crash detection
+LCB4E:  jsr $8B79                       ; display of doors
+LCB51:  jsr UpdateTiles                 ; tile de/regeneration
+LCB54:  jsr LF034                       ; Samus <--> enemies crash detection
 LCB57:  jsr DisplayBar                  ;Display of status bar.
-        jsr LFAF2
-        jsr CheckMissileToggle
-        jsr UpdateItems ; display of special items
+        jsr LFAF2                       ;
+        jsr CheckMissileToggle          ;
+        jsr UpdateItems                 ; display of special items
         jsr LFDE3
 
 ;Clear remaining sprite RAM
@@ -2237,7 +2267,7 @@ LCD40:  jsr LCFC3
 *       lda Joy1Status
         and #$03
         bne +
-        jsr LCF55
+        jsr StopHorzMovement
         jmp LCD6B
 
 *       jsr BitScan                     ;
@@ -2652,7 +2682,7 @@ SamusJump:
         bne +
         jsr LCF77
         bne ++
-*       jsr LCF55
+*       jsr StopHorzMovement
 *       lda #$03
         jmp SetSamusData                ;Set Samus control data and animation.
 
@@ -2761,7 +2791,7 @@ LD0B5:  lda SamusGear
         sta $04
         jsr LFD8F
         jsr LD638
-        jsr LCF55
+        jsr StopHorzMovement
         dec AnimIndex
         jsr StopVertMovement            ;
         lda #$04
@@ -2867,10 +2897,10 @@ LD147:  ldy #$00
 
 ; Pointer table to code
 
-        .word LCF55
+        .word StopHorzMovement
         .word LCC98
         .word ExitSub       ;rts
-        .word LD0B5
+        .word SetSamusRoll
         .word ExitSub       ;rts
         .word ExitSub       ;rts
         .word LCFBE
@@ -3278,18 +3308,18 @@ DoOneProjectile:
         lda ObjAction,x
 LD4D0:  jsr ChooseRoutine
 
-LD4D3:  .word ExitSub     ; rts
-LD4D5:  .word UpdateBullet ; regular beam
+LD4D3:  .word ExitSub               ; rts
+LD4D5:  .word UpdateBullet          ; regular beam
         .word UpdateWaveBullet      ; wave beam
         .word UpdateIceBullet       ; ice beam
-        .word BulletExplode    ; bullet/missile explode
-        .word LD65E       ; lay bomb
-        .word LD670       ; lay bomb
-        .word LD691       ; lay bomb
-        .word LD65E       ; lay bomb
-        .word LD670       ; bomb countdown
-        .word LD691       ; bomb explode
-        .word UpdateBullet  ; missile
+        .word BulletExplode         ; bullet/missile explode
+        .word LD65E                 ; lay bomb
+        .word LD670                 ; lay bomb
+        .word LD691                 ; lay bomb
+        .word LD65E                 ; lay bomb
+        .word LD670                 ; bomb countdown
+        .word LD691                 ; bomb explode
+        .word UpdateBullet          ; missile
 
 UpdateBullet:
         lda #$01
@@ -3906,7 +3936,7 @@ ElevatorStop:
         bne ++    ; scroll until ScrollY = 0
         lda #sa_Stand
         sta ObjAction
-        jsr LCF55
+        jsr StopHorzMovement
         ldx PageIndex   ; #$20
         lda #$01        ; ElevatorIdle
         sta ObjAction,x
@@ -8705,7 +8735,7 @@ LF949:  stx PageIndex
         .word LF991       ; spit dragon's fireball
         .word ExitSub     ; rts
         .word LFA6B
-        .word LF991
+        .word LFA91
 
 Exit19: rts
 
@@ -9545,26 +9575,28 @@ UpdateTileAnim:
 ;-----------------------------------------------[ RESET ]--------------------------------------------
 
 RESET:
-    SEI                             ; Disables interrupt
-    CLD                             ; Sets processor to binary mode
-    LDX #$00                        ; 
-    STX PPUControl0                 ; Clear PPU control registers
-    STX PPUControl1                 ; 
-*   LDA PPUStatus                   ; 
-    BPL -                           ; Wait for VBlank
-*   LDA PPUStatus                   ; 
-    BPL -                           ; 
-    lda #$06                        ; 
+LFFB0:  SEI                             ; Disables interrupt
+LFFB1:  CLD                             ; Sets processor to binary mode
+LFFB2:  LDX #$00                        ; 
+LFFB4:  STX PPUControl0                 ; Clear PPU control registers
+LFFB7:  STX PPUControl1                 ; 
+LFFBA:* LDA PPUStatus                   ; 
+LFFBD:  BPL -                           ; Wait for VBlank
+LFFBF:* LDA PPUStatus                   ; 
+LFFC2:  BPL -                           ; 
+    lda #$06                    ; 
     sta $8000
     stx $8001
     inx
     lda #$07
     sta MMC3BankSelect
     stx MMC3BankData
-    jmp Startup                     ; Do preliminary housekeeping.
+    jmp Startup                 ; Do preliminary housekeeping.
+
+.advance $FFFA, $00
 
 ;-----------------------------------------[ Interrupt vectors ]--------------------------------------
-.advance $FFFA, $00
+
 .word NMI                       ;NMI vector.
 .word RESET                     ;Reset vector.
 .word RESET                     ;IRQ vector.
