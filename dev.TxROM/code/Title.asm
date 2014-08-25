@@ -38,36 +38,36 @@ L8022:* jsr RemoveIntroSprites          ;Remove sparkle and crosshair sprites fr
 L8025:  lda TitleRoutine                ;
 L8027:* jsr ChooseRoutine               ;Jump to proper routine below.
 
-L802A:  .word InitializeAfterReset      ;($8071)First routine after reset.
-L802C:  .word DrawIntroBackground       ;($80D0)Draws ground on intro screen.
-L802E:  .word FadeInDelay               ;($80F9)Sets up METROID fade in delay.
-L8030:  .word METROIDFadeIn             ;($812C)Fade METROID onto screen.
-L8032:  .word LoadFlashTimer            ;($8142)Load timer for METROID flash.
-L8034:  .word FlashEffect               ;($8109)Makes METROID flash.
-L8036:  .word METROIDSparkle            ;($814D)Top and bottom "sparkles" on METROID.
-L8038:  .word METROIDFadeOut            ;($8163)Fades METROID off the screen.
-L803A:  .word Crosshairs                ;($8182)Displays "crosshairs" effect on screen.
-L803C:  .word MoreCrosshairs            ;($81D1)Continue "crosshairs" effect.
-L803E:  .word IncTitleRoutine           ;($806E)Increment TitleRoutine.
-L8040:  .word IncTitleRoutine           ;($806E)Increment TitleRoutine.
-L8042:  .word ChangeIntroNameTable      ;($822E)Change from name table 0 to name table 1.
-L8044:  .word MessageFadeIn             ;($8243)Fade in intro sequence message.
-L8046:  .word MessageFadeOut            ;($8263)Fade out intro sequence message.
-L8048:  .word DelayIntroReplay          ;($8283)Set Delay time before intro sequence restarts.
-L804A:  .word ClearSpareMem             ;($8068)clears some memory addresses not used by game.
-L804C:  .word PrepIntroRestart          ;($82A3)Prepare to restart intro routines.
-L804E:  .word TitleScreenOff            ;($82ED)Turn screen off.
-L8050:  .word TitleRoutineReturn        ;($82F3)Rts.
-L8052:  .word TitleRoutineReturn        ;($82F3)Rts.
-L8054:  .word StartContinueScreen       ;($90BA)Displays START/Continue screen.
-L8056:  .word ChooseStartContinue       ;($90D7)player chooses between START and CONTINUE.
-L8058:  .word LoadPasswordScreen        ;($911A)Loads password entry screen.
-L805A:  .word EnterPassword             ;($9147)User enters password.
-L805C:  .word DisplayPassword           ;($9359)After game over, display password on screen.
-L805E:  .word WaitForSTART              ;($9394)Wait for START when showing password.
-L8060:  .word StartContinueScreen       ;($90BA)Displays START/Continue screen.
-L8062:  .word GameOverTitle             ;($939E)Displays "GAME OVER".
-L8064:  .word EndGame                   ;($9AA7)Show ending of the game.
+L802A:  .word InitializeAfterReset      ;First routine after reset.
+L802C:  .word DrawIntroBackground       ;Draws ground on intro screen.
+L802E:  .word FadeInDelay               ;Sets up METROID fade in delay.
+L8030:  .word METROIDFadeIn             ;Fade METROID onto screen.
+L8032:  .word LoadFlashTimer            ;Load timer for METROID flash.
+L8034:  .word FlashEffect               ;Makes METROID flash.
+L8036:  .word METROIDSparkle            ;Top and bottom "sparkles" on METROID.
+L8038:  .word METROIDFadeOut            ;Fades METROID off the screen.
+L803A:  .word Crosshairs                ;Displays "crosshairs" effect on screen.
+L803C:  .word MoreCrosshairs            ;Continue "crosshairs" effect.
+L803E:  .word IncTitleRoutine           ;Increment TitleRoutine.
+L8040:  .word IncTitleRoutine           ;Increment TitleRoutine.
+L8042:  .word ChangeIntroNameTable      ;Change from name table 0 to name table 1.
+L8044:  .word MessageFadeIn             ;Fade in intro sequence message.
+L8046:  .word MessageFadeOut            ;Fade out intro sequence message.
+L8048:  .word DelayIntroReplay          ;Set Delay time before intro sequence restarts.
+L804A:  .word ClearSpareMem             ;clears some memory addresses not used by game.
+L804C:  .word PrepIntroRestart          ;Prepare to restart intro routines.
+L804E:  .word TitleScreenOff            ;Turn screen off.
+L8050:  .word TitleRoutineReturn        ;Rts.
+L8052:  .word TitleRoutineReturn        ;Rts.
+L8054:  .word StartContinueScreen       ;Displays START/Continue screen.
+L8056:  .word ChooseStartContinue       ;player chooses between START and CONTINUE.
+L8058:  .word LoadPasswordScreen        ;Loads password entry screen.
+L805A:  .word EnterPassword             ;User enters password.
+L805C:  .word DisplayPassword           ;After game over, display password on screen.
+L805E:  .word WaitForSTART              ;Wait for START when showing password.
+L8060:  .word StartContinueScreen       ;Displays START/Continue screen.
+L8062:  .word GameOverTitle             ;Displays "GAME OVER".
+L8064:  .word EndGame                   ;Show ending of the game.
 L8066:  .word SetTimer                  ;Set delay timer.
 
 ;----------------------------------------[ Intro routines ]------------------------------------------
@@ -130,7 +130,7 @@ L80BF:  cpx #$68                        ;
 L80C1:  bne ---                         ;
 
 L80C3:  inc TitleRoutine                ;Draw intro background next.                    
-L80C5:  jmp LoadStarSprites             ;($98AE)Loads stars on intro screen.            
+L80C5:  jmp LoadStarSprites             ;Loads stars on intro screen.            
 
 ;The following table is used by the code above for writing values to RAM.
 
@@ -183,7 +183,7 @@ L811C:  LDA PalDataIndex                ;
 L811E:  CMP #$04                        ;Ensures the palette index is back at 0.
 L8120:  BNE +                           ;
 L8122:  INC TitleRoutine                ;Increment to next routine.
-L8124:  JSR LoadSparkleData             ;($87AB) Loads data for next routine.
+L8124:  JSR LoadSparkleData             ; Loads data for next routine.
 L8127:  LDA #$18                        ;Sets Timer 3 for a delay of 240 frames-->
 L8129:  STA Timer3                      ;(4 seconds).
 L812B:* RTS                             ;
@@ -194,7 +194,7 @@ L812E:  BNE +                           ;
 L8130:  LDA FrameCount                  ;Every 16th FrameCount, Change palette.-->
 L8132:  AND #$0F                        ;Causes the fade in effect.
 L8134:  BNE +                           ;
-L8136:  JSR LoadPalData                 ;($8A8C)Load data into Palettes.
+L8136:  JSR LoadPalData                 ;Load data into Palettes.
 L8139:  BNE +                           ;
 L813B:  LDA #$20                        ;Set timer delay for METROID flash effect.-->
 L813D:  STA Timer3                      ;Delays flash by 320 frames (5.3 seconds).
@@ -218,7 +218,7 @@ L8157:  CMP #$01                        ;Is sparkle routine finished? If so,-->
 L8159:  BNE +                           ;go to next title routine, else continue-->
 L815B:  INC TitleRoutine                ;with sparkle routine.
 L815D:  BNE ++                          ;
-L815F:* JSR UpdateSparkleSprites        ;($87CF)Update sparkle sprites on the screen.
+L815F:* JSR UpdateSparkleSprites        ;Update sparkle sprites on the screen.
 L8162:* RTS                             ;
 
 METROIDFadeOut:
@@ -228,20 +228,20 @@ L8167:  BNE ++                          ;
 L8169:  LDA FadeDataIndex               ;If FadeDataIndex is less than #$04, keep-->
 L816B:  CMP #$04                        ;doing the palette changing routine.
 L816D:  BNE +                           ;
-L816F:  JSR LoadInitialSpriteData       ;($8897)Load initial sprite values for crosshair routine.
+L816F:  JSR LoadInitialSpriteData       ;Load initial sprite values for crosshair routine.
 L8172:  LDA #$08                        ;
 L8174:  STA Timer3                      ;Load Timer3 with a delay of 80 frames(1.3 seconds).
 L8176:  STA First4SlowCntr              ;Set counter for slow sprite movement for 8 frames,
 L8178:  LDA #$00                        ;
 L817A:  STA SecondCrosshairSprites      ;Set SecondCrosshairSprites = #$00
 L817C:  INC TitleRoutine                ;Move to next routine
-L817E:* JSR DoFadeOut                   ;($8B5F)Fades METROID off the screen.
+L817E:* JSR DoFadeOut                   ;Fades METROID off the screen.
 L8181:* RTS                             ;
 
 Crosshairs:
 L8182:  LDA FlashScreen                 ;Is it time to flash the screen white?-->
 L8184:  BEQ +                           ;If not, branch.
-L8186:  JSR FlashIntroScreen            ;($8AA7)Flash screen white.
+L8186:  JSR FlashIntroScreen            ;Flash screen white.
 L8189:* LDA Timer3                      ;Wait 80 frames from last routine-->
 L818B:  BNE ++++                        ;before running this one.
 L818D:  LDA IntroSpr0Complete           ;
@@ -265,20 +265,20 @@ L81B7:  BEQ +                           ;
 L81B9:  LDA #$01                        ;Prepare to flash screen and draw cross.
 L81BB:  STA DrawCross                   ;Draw cross animation on screen.
 L81BD:  STA FlashScreen                 ;Flash screen white.
-L81BF:  JSR LoadStarSprites             ;($98AE)Loads stars on intro screen.
+L81BF:  JSR LoadStarSprites             ;Loads stars on intro screen.
 L81C2:  LDA #$00                        ;
 L81C4:  STA CrossDataIndex              ;Reset index to cross sprite data.
 L81C6:  INC TitleRoutine                ;Do MoreCrosshairs next frame.
 L81C8:  BNE ++                          ;Branch always.
-L81CA:* JSR DrawCrosshairsSprites       ;($88FE)Draw sprites that converge in center of screen.
-L81CD:* JSR DrawCrossSprites            ;($8976)Draw cross sprites in middle of the screen.
+L81CA:* JSR DrawCrosshairsSprites       ;Draw sprites that converge in center of screen.
+L81CD:* JSR DrawCrossSprites            ;Draw cross sprites in middle of the screen.
 L81D0:* RTS                             ;
 
 MoreCrosshairs:
 L81D1:  LDA FlashScreen                 ;Is it time to flash the screen white?-->
 L81D3:  BEQ +                           ;If not, branch.
-L81D5:  JSR DrawCrossSprites            ;($8976)Draw cross sprites in middle of the screen.
-L81D8:  JMP FlashIntroScreen            ;($8AA7)Flash screen white.
+L81D5:  JSR DrawCrossSprites            ;Draw cross sprites in middle of the screen.
+L81D8:  JMP FlashIntroScreen            ;Flash screen white.
 L81DB:* INC TitleRoutine                ;ChangeIntroNameTable is next routine to run.
 L81DD:  LDA #$60                        ;
 L81DF:  STA ObjectY                     ;
@@ -318,7 +318,7 @@ L8257:  LDA #$30                        ;
 L8259:  STA Timer3                      ;Set Timer3 to 480 frames(8 seconds).
 L825B:  INC TitleRoutine                ;Next routine is MessageFadeOut.
 L825D:  BNE ++                          ;Branch always.
-L825F:* JSR DoFadeOut                   ;($8B5F)Fade message onto screen.
+L825F:* JSR DoFadeOut                   ;Fade message onto screen.
 L8262:* RTS                             ;
 
 MessageFadeOut:
@@ -336,7 +336,7 @@ L8277:  LDA #$00                        ;
 L8279:  STA SpareMemCB                  ;Not accessed by game.
 L827B:  INC TitleRoutine                ;Next routine is DelayIntroReplay.
 L827D:  BNE ++                          ;Branch always.
-L827F:* JSR DoFadeOut                   ;($8B5F)Fade message off of screen.
+L827F:* JSR DoFadeOut                   ;Fade message off of screen.
 L8282:* RTS                             ;
 
 DelayIntroReplay:
@@ -706,16 +706,16 @@ L87C4:  .byte $3C, $C6, $01, $18, $00, $00, $00, $00, $20, $00, $00
 
 UpdateSparkleSprites:
 L87CF:  LDX #$00                        ;
-L87D1:  JSR DoOneSparkleUpdate          ;($87D6)Performs calculations on top sparkle sprite.
+L87D1:  JSR DoOneSparkleUpdate          ;Performs calculations on top sparkle sprite.
 L87D4:  LDX #$10                        ;Performs calculations on bottom sparkle sprite.
 
 DoOneSparkleUpdate:
-L87D6:  JSR SparkleUpdate               ;($87D9)Update sparkle sprite data.
+L87D6:  JSR SparkleUpdate               ;Update sparkle sprite data.
 
 SparkleUpdate:
 L87D9:  LDA IntroSpr0NextCntr,X         ;If $6EA5 has not reached #$00, skip next routine.
 L87DC:  BNE +                           ;
-L87DE:  JSR DoSparkleSpriteCoord        ;($881A)Update sparkle sprite screen position.
+L87DE:  JSR DoSparkleSpriteCoord        ;Update sparkle sprite screen position.
 L87E1:* LDA IntroSpr0Complete,X         ;
 L87E4:  BNE ++                          ;If sprite is already done, skip routine.
 L87E6:  DEC IntroSpr0NextCntr,X         ;
@@ -740,16 +740,16 @@ L880C:  STA IntroSpr0ChngCntr,X         ;
 L880F:  ASL                             ;
 L8810:  EOR IntroSpr0Cntrl,X            ;Flips pattern at $C5 in pattern table--> 
 L8813:  STA IntroSpr0Cntrl,X            ;horizontally when displayed.
-L8816:* JMP WriteIntroSprite            ;($887B)Transfer sprite info into sprite RAM.
+L8816:* JMP WriteIntroSprite            ;Transfer sprite info into sprite RAM.
 L8819:* RTS                             ;
 
 DoSparkleSpriteCoord:
 L881A:  TXA                             ;
-L881B:  JSR Adiv8                       ;Y=0 when working with top sparkle sprite-->
-L881E:  TAY                             ;and y=2 when working with bottom sparkle sprite.
-L881F:  LDA SparkleAddressTbl,Y         ;Base is $89AF.
-L8822:  STA $00                         ;When working with top sparkle sprite, E1,E0=$89B3-->
-L8824:  LDA SparkleAddressTbl+1,Y       ;and when botton sparkle sprite, E1,E0=$89E9.
+L881B:  JSR Adiv8                       ;Y=0 when addressing top sparkle sprite,
+L881E:  TAY                             ;and Y=2 when addressing bottom sparkle
+L881F:  LDA SparkleAddressTbl,Y         ;sprite. The addresses are at
+L8822:  STA $00                         ;SparkleAddressTbl.
+L8824:  LDA SparkleAddressTbl+1,Y       ;
 L8827:  STA $01                         ;
 L8829:  LDY IntroSpr0Index,X            ;Loads index for finding sparkle data (x=$00 or $10).
 L882C:  LDA ($00),Y                     ;
@@ -774,11 +774,11 @@ L8852:  LDA #$00                        ;
 L8854:  STA IntroSpr0ByteType,X         ;Set IntroSpr0ByteType to #$00 after processing.
 L8857:  PLA                             ;
 L8858:  JSR Adiv16                      ;Move upper 4 bits to lower 4 bits.
-L885B:  JSR NibbleSubtract              ;($8871)Check if nibble to be converted to twos compliment.
+L885B:  JSR NibbleSubtract              ;Check if nibble to be converted to twos compliment.
 L885E:  STA SparkleSpr0YChange,X        ;Twos compliment stored if Y coord decreasing.
 L8861:  PLA                             ;
 L8862:  AND #$0F                        ;Discard upper 4 bits.
-L8864:  JSR NibbleSubtract              ;($8871)Check if nibble to be converted to twos compliment.
+L8864:  JSR NibbleSubtract              ;Check if nibble to be converted to twos compliment.
 L8867:* STA SparkleSpr0XChange,X        ;Store amount to move spite in x direction.
 L886A:  INC IntroSpr0Index,X            ;
 L886D:  INC IntroSpr0Index,X            ;Add two to find index for next data byte.
@@ -921,33 +921,33 @@ L892D:  ASL IntroSpr6YRise              ;
 L8930:  ASL IntroSpr7XRun               ;
 L8933:  ASL IntroSpr7YRise              ;
 L8936:* LDX #$00                        ;
-L8938:  JSR DoSpriteMovement            ;($8963)Move sprite 0.
+L8938:  JSR DoSpriteMovement            ;Move sprite 0.
 L893B:  LDX #$10                        ;
-L893D:  JSR DoSpriteMovement            ;($8963)Move sprite 1.
+L893D:  JSR DoSpriteMovement            ;Move sprite 1.
 L8940:  LDX #$20                        ;
-L8942:  JSR DoSpriteMovement            ;($8963)Move sprite 2.
+L8942:  JSR DoSpriteMovement            ;Move sprite 2.
 L8945:  LDX #$30                        ;
 L8947:  LDA Second4Delay                ;Check to see if the delay to start movement of the second-->
 L8949:  BEQ +                           ;4 sprites has ended.  If so, start drawing those sprites.
 L894B:  DEC Second4Delay                ;
 L894D:  BNE ++                          ;
-L894F:* JSR DoSpriteMovement            ;($8963)Move sprite 3.
+L894F:* JSR DoSpriteMovement            ;Move sprite 3.
 L8952:  LDX #$40                        ;
-L8954:  JSR DoSpriteMovement            ;($8963)Move sprite 4.
+L8954:  JSR DoSpriteMovement            ;Move sprite 4.
 L8957:  LDX #$50                        ;
-L8959:  JSR DoSpriteMovement            ;($8963)Move sprite 5.
+L8959:  JSR DoSpriteMovement            ;Move sprite 5.
 L895C:  LDX #$60                        ;
-L895E:  JSR DoSpriteMovement            ;($8963)Move sprite 6.
-L8961:  LDX #$70                        ;($8963)Move sprite 7.
+L895E:  JSR DoSpriteMovement            ;Move sprite 6.
+L8961:  LDX #$70                        ;Move sprite 7.
 
 DoSpriteMovement:
 L8963:* LDA IntroSpr0Complete,X         ;If the current sprite has finished-->
 L8966:  BNE ++                          ;its movements, exit this routine.
-L8968:  JSR UpdateSpriteCoords          ;($981E)Calculate new sprite position.
+L8968:  JSR UpdateSpriteCoords          ;Calculate new sprite position.
 L896B:  BCS +                           ;If sprite not at final position, branch to move next frame.
 L896D:  LDA #$01                        ;Sprite movement complete.
 L896F:  STA IntroSpr0Complete,X         ;
-L8972:* JMP WriteIntroSprite            ;($887B)Write sprite data to sprite RAM.
+L8972:* JMP WriteIntroSprite            ;Write sprite data to sprite RAM.
 L8975:* RTS                             ;
 
 DrawCrossSprites:
@@ -991,8 +991,8 @@ L89AA: .byte $05, $19, $41, $19, $05
 ;The following table is used to find the data for the sparkle routine in the table below:
 
 SparkleAddressTbl:
-L89AF:  .word TopSparkleDataTbl         ;($89B3)Table for top sparkle data.
-L89B1:  .word BottomSparkleDataTbl      ;($89E9)Table for bottom sparkle data.
+L89AF:  .word TopSparkleDataTbl         ;Table for top sparkle data.
+L89B1:  .word BottomSparkleDataTbl      ;Table for bottom sparkle data.
 
 ;The following two tables are the data tables for controlling the movement of the sparkle sprites
 ;in the title routine.  Here's how thw data in the tables work: The first byte is a counter byte.
@@ -1188,23 +1188,29 @@ L8AFC:  JMP PrepPPUPaletteString        ;Prepare and write new palette data.
 ;The following table is a list of pointers into the table below. It contains
 ;the palette data for the twinkling stars in the intro scene.  The palette data
 ;is changed every 16 frames by the above routine.
-
 IntroStarPntr:
-L8AFF:  .word $8B0F, $8B19, $8B23, $8B2D, $8B37, $8B41, $8B4B, $8B55
+    .word IntroStarPal0, IntroStarPal1, IntroStarPal2, IntroStarPal3
+    .word IntroStarPal4, IntroStarPal5, IntroStarPal6, IntroStarPal7
 
 ;The following table contains the platette data that is changed in the intro
 ;scene to give the stars a twinkling effect. All entries in the table are
 ;non-repeating. 
-
-IntroStarPal:
-L8B0F:  .byte $03, $0F, $02, $13, $00, $03, $00, $34, $0F, $00
-L8B10:  .byte $03, $06, $01, $23, $00, $03, $0F, $34, $09, $00
-L8B23:  .byte $03, $16, $0F, $23, $00, $03, $0F, $24, $1A, $00
-L8B2D:  .byte $03, $17, $0F, $13, $00, $03, $00, $04, $28, $00
-L8B37:  .byte $03, $17, $01, $14, $00, $03, $10, $0F, $28, $00
-L8B41:  .byte $03, $16, $02, $0F, $00, $03, $30, $0F, $1A, $00
-L8B4B:  .byte $03, $06, $12, $0F, $00, $03, $30, $04, $09, $00
-L8B55:  .byte $03, $0F, $12, $14, $00, $03, $10, $24, $0F, $00
+IntroStarPal0:
+    .byte $03, $0F, $02, $13, $00, $03, $00, $34, $0F, $00
+IntroStarPal1:
+    .byte $03, $06, $01, $23, $00, $03, $0F, $34, $09, $00
+IntroStarPal2:
+    .byte $03, $16, $0F, $23, $00, $03, $0F, $24, $1A, $00
+IntroStarPal3:
+    .byte $03, $17, $0F, $13, $00, $03, $00, $04, $28, $00
+IntroStarPal4:
+    .byte $03, $17, $01, $14, $00, $03, $10, $0F, $28, $00
+IntroStarPal5:
+    .byte $03, $16, $02, $0F, $00, $03, $30, $0F, $1A, $00
+IntroStarPal6:
+    .byte $03, $06, $12, $0F, $00, $03, $30, $04, $09, $00
+IntroStarPal7:
+    .byte $03, $0F, $12, $14, $00, $03, $10, $24, $0F, $00
 
 ;----------------------------------------------------------------------------------------------------
 
@@ -1238,7 +1244,7 @@ L8B8A:  INY                             ;Unique item and store them in $00 and $
 L8B8B:  LDA UniqueItemHistory-1,Y       ;
 L8B8E:  STA $01                         ;
 L8B90:  STY $04                         ;Increment $04 by two (load unique item complete).
-L8B92:  JSR UniqueItemSearch            ;($8B9C)Find unique item.
+L8B92:  JSR UniqueItemSearch            ;Find unique item.
 L8B95:  LDY $04                         ;
 L8B97:  CPY $03                         ;If all unique items processed, return, else-->
 L8B99:  BCC -                           ;branch to process next unique item.
@@ -1249,7 +1255,7 @@ L8B9C:  LDX #$00                        ;
 L8B9E:* TXA                             ;Transfer X to A(Item number).
 L8B9F:  ASL                             ;Multiply by 2.
 L8BA0:  TAY                             ;Store multiplied value in y.
-L8BA1:  LDA ItemData,Y                  ;Load unique item reference starting at $9029(2 bytes).
+L8BA1:  LDA ItemData,Y                  ;Load unique item reference (2 bytes).
 L8BA4:  CMP $00                         ;
 L8BA6:  BNE +                           ;
 L8BA8:  LDA ItemData+1,Y                ;Get next byte of unique item.
@@ -1316,7 +1322,7 @@ L8C0A:* LDA $08                         ;
 L8C0C:  ROR                             ;Rotates next bit to be processed to the carry flag.
 L8C0D:  STA $08                         ;
 L8C0F:  BCC +                           ;
-L8C11:  JSR SamusHasItem                ;($8C39)Store item in unique item history.
+L8C11:  JSR SamusHasItem                ;Store item in unique item history.
 L8C14:* LDY $06                         ;If last bit of item byte has been--> 
 L8C16:  CPY #$07                        ;checked, move to next byte.
 L8C18:  BCS +                           ;
@@ -1325,7 +1331,7 @@ L8C1C:  INC $09                         ;
 L8C1E:  LDX $09                         ;If all 59 unique items have been--> 
 L8C20:  CPX $07                         ;searched through, exit.
 L8C22:  BCS ++                          ;
-L8C24:  JMP ProcessNewItemByte          ;($8C0A)Repeat routine for next item byte.
+L8C24:  JMP ProcessNewItemByte          ;Repeat routine for next item byte.
 L8C27:* LDY #$00                        ;
 L8C29:  STY $06                         ;
 L8C2B:  INC $05                         ;
@@ -1333,7 +1339,7 @@ L8C2D:  INC $09                         ;
 L8C2F:  LDX $09                         ;If all 59 unique items have been--> 
 L8C31:  CPX $07                         ;searched through, exit.
 L8C33:  BCS +                           ;
-L8C35:  JMP ProcessNextItem             ;($8C03)Process next item.
+L8C35:  JMP ProcessNextItem             ;Process next item.
 L8C38:* RTS                             ;
  
 SamusHasItem:
@@ -1357,10 +1363,10 @@ L8C5A:  STY NumberOfUniqueItems         ;Keeps a running total of unique items.
 L8C5D:  RTS                             ;
 
 CheckPassword:
-L8C5E:  JSR ConsolidatePassword         ;($8F60)Convert password characters to password bytes.
-L8C61:  JSR ValidatePassword            ;($8DDE)Verify password is correct.
+L8C5E:  JSR ConsolidatePassword         ;Convert password characters to password bytes.
+L8C61:  JSR ValidatePassword            ;Verify password is correct.
 L8C64:  BCS +                           ;Branch if incorrect password.
-L8C66:  JMP InitializeGame              ;($92D4)Preliminary housekeeping before game starts.
+L8C66:  JMP InitializeGame              ;Preliminary housekeeping before game starts.
 L8C69:* LDA MultiSFXFlag                ;
 L8C6C:  ORA #$01                        ;Set IncorrectPassword SFX flag.
 L8C6E:  STA MultiSFXFlag                ;
@@ -1377,7 +1383,7 @@ L8C7E:* STA PasswordByte00,Y            ;$6988 thru $6997 and -->
 L8C81:  STA PasswordChar00,Y            ;$699A thru $69A9.
 L8C84:  DEY                             ;
 L8C85:  BPL -                           ;
-L8C87:  JSR ProcessUniqueItems          ;($8B79)Determine what items Samus has collected.
+L8C87:  JSR ProcessUniqueItems          ;Determine what items Samus has collected.
 L8C8A:  LDA PasswordByte07              ;
 L8C8D:  AND #$04                        ;Check to see if mother brain has been defeated,-->
 L8C8F:  BEQ +                           ;If so, restore mother brain, zeebetites and-->
@@ -1434,14 +1440,14 @@ L8D03:  LDA RandomNumber1               ;
 L8D05:  AND #$0F                        ;Store the value of $2E at $6998-->
 L8D07:  BEQ -                           ;When any of the 4 LSB are set. (Does not-->
 L8D09:  STA PasswordByte10              ;allow RandomNumber1 to be a multiple of 16).
-L8D0C:  JSR PasswordChecksumAndScramble ;($8E17)Calculate checksum and scramble password.
-L8D0F:  JMP LoadPasswordChar            ;($8E6C)Calculate password characters.
+L8D0C:  JSR PasswordChecksumAndScramble ;Calculate checksum and scramble password.
+L8D0F:  JMP LoadPasswordChar            ;Calculate password characters.
 
 LoadPasswordData:
 L8D12:  LDA NARPASSWORD                 ;If invincible Samus active, skip-->
 L8D15:  BNE +++                         ;further password processing.
-L8D17:  JSR LoadUniqueItems             ;($8BD4)Load unique items from password.
-L8D1A:  JSR LoadTanksAndMissiles        ;($8D3D)Calculate number of missiles from password.
+L8D17:  JSR LoadUniqueItems             ;Load unique items from password.
+L8D1A:  JSR LoadTanksAndMissiles        ;Calculate number of missiles from password.
 L8D1D:  LDY #$00                        ;
 L8D1F:  LDA PasswordByte08              ;If MSB in PasswordByte08 is set,-->
 L8D22:  AND #$80                        ;Samus is not wearing her suit.
@@ -1549,8 +1555,8 @@ L8DEE:  BPL -                           ;
 L8DF0:  LDA #$01                        ;
 L8DF2:  STA NARPASSWORD                 ;
 L8DF5:  BNE ++                          ;
-L8DF7:* JSR UnscramblePassword          ;($8E4E)Unscramble password.
-L8DFA:  JSR PasswordChecksum            ;($8E21)Calculate password checksum.
+L8DF7:* JSR UnscramblePassword          ;Unscramble password.
+L8DFA:  JSR PasswordChecksum            ;Calculate password checksum.
 L8DFD:  CMP PasswordByte11              ;Verify proper checksum.
 L8E00:  BEQ +                           ;
 L8E02:  SEC                             ;If password is invalid, sets carry flag.
@@ -1581,9 +1587,9 @@ L8E15:  .byte $00                       ;0(or no entry).
 L8E16:  .byte $00                       ;0(or no entry).
 
 PasswordChecksumAndScramble:
-L8E17:  JSR PasswordChecksum            ;($8E21)Store the combined added value of-->
+L8E17:  JSR PasswordChecksum            ;Store the combined added value of-->
 L8E1A:  STA PasswordByte11              ;addresses $6988 thu $6998 in $6999.
-L8E1D:  JSR PasswordScramble            ;($8E2D)Scramble password.
+L8E1D:  JSR PasswordScramble            ;Scramble password.
 L8E20:  RTS                             ;
  
 PasswordChecksum:
@@ -1634,76 +1640,76 @@ L8E6B:  RTS                             ;number in $6998 to properly unscramble 
 
 LoadPasswordChar:
 L8E6C:  LDY #$00                        ;Password byte #$00.
-L8E6E:  JSR SixUpperBits                ;($8F2D)
+L8E6E:  JSR SixUpperBits                ;
 L8E71:  STA PasswordChar00              ;Store results.
 L8E74:  LDY #$00                        ;Password bytes #$00 and #$01.
-L8E76:  JSR TwoLowerAndFourUpper        ;($8F33)
+L8E76:  JSR TwoLowerAndFourUpper        ;
 L8E79:  STA PasswordChar01              ;Store results.
 L8E7C:  LDY #$01                        ;Password bytes #$01 and #$02.
-L8E7E:  JSR FourLowerAndTwoUpper        ;($8F46)
+L8E7E:  JSR FourLowerAndTwoUpper        ;
 L8E81:  STA PasswordChar02              ;Store results.
 L8E84:  LDY #$02                        ;Password byte #$02.
-L8E86:  JSR SixLowerBits                ;($8F5A)
+L8E86:  JSR SixLowerBits                ;
 L8E89:  STA PasswordChar03              ;Store results.
 L8E8C:  LDY #$03                        ;Password byte #$03.
-L8E8E:  JSR SixUpperBits                ;($8F2D)
+L8E8E:  JSR SixUpperBits                ;
 L8E91:  STA PasswordChar04              ;Store results.
 L8E94:  LDY #$03                        ;Password bytes #$03 and #$04.
-L8E96:  JSR TwoLowerAndFourUpper        ;($8F33)
+L8E96:  JSR TwoLowerAndFourUpper        ;
 L8E99:  STA PasswordChar05              ;Store results.
 L8E9C:  LDY #$04                        ;Password bytes #$04 and #$05.
-L8E9E:  JSR FourLowerAndTwoUpper        ;($8F46)
+L8E9E:  JSR FourLowerAndTwoUpper        ;
 L8EA1:  STA PasswordChar06              ;Store results.
 L8EA4:  LDY #$05                        ;Password byte #$05.
-L8EA6:  JSR SixLowerBits                ;($8F5A)
+L8EA6:  JSR SixLowerBits                ;
 L8EA9:  STA PasswordChar07              ;Store results.
 L8EAC:  LDY #$06                        ;Password byte #$06.
-L8EAE:  JSR SixUpperBits                ;($8F2D)
+L8EAE:  JSR SixUpperBits                ;
 L8EB1:  STA PasswordChar08              ;Store results.
 L8EB4:  LDY #$06                        ;Password bytes #$06 and #$07.
-L8EB6:  JSR TwoLowerAndFourUpper        ;($8F33)
+L8EB6:  JSR TwoLowerAndFourUpper        ;
 L8EB9:  STA PasswordChar09              ;Store results.
 L8EBC:  LDY #$07                        ;Password bytes #$07 and #$08.
-L8EBE:  JSR FourLowerAndTwoUpper        ;($8F46)
+L8EBE:  JSR FourLowerAndTwoUpper        ;
 L8EC1:  STA PasswordChar0A              ;Store results.
 L8EC4:  LDY #$08                        ;Password byte #$08.
-L8EC6:  JSR SixLowerBits                ;($8F5A)
+L8EC6:  JSR SixLowerBits                ;
 L8EC9:  STA PasswordChar0B              ;Store results.
 L8ECC:  LDY #$09                        ;Password byte #$09.
-L8ECE:  JSR SixUpperBits                ;($8F2D)
+L8ECE:  JSR SixUpperBits                ;
 L8ED1:  STA PasswordChar0C              ;Store results.
 L8ED4:  LDY #$09                        ;Password bytes #$09 and #$0A.
-L8ED6:  JSR TwoLowerAndFourUpper        ;($8F33)
+L8ED6:  JSR TwoLowerAndFourUpper        ;
 L8ED9:  STA PasswordChar0D              ;Store results.
 L8EDC:  LDY #$0A                        ;Password bytes #$0A and #$0B.
-L8EDE:  JSR FourLowerAndTwoUpper        ;($8F46)
+L8EDE:  JSR FourLowerAndTwoUpper        ;
 L8EE1:  STA PasswordChar0E              ;Store results.
 L8EE4:  LDY #$0B                        ;Password byte #$0B.
-L8EE6:  JSR SixLowerBits                ;($8F5A)
+L8EE6:  JSR SixLowerBits                ;
 L8EE9:  STA PasswordChar0F              ;Store results.
 L8EEC:  LDY #$0C                        ;Password byte #$0C.
-L8EEE:  JSR SixUpperBits                ;($8F2D)
+L8EEE:  JSR SixUpperBits                ;
 L8EF1:  STA PasswordChar10              ;Store results.
 L8EF4:  LDY #$0C                        ;Password bytes #$0C and #$0D.
-L8EF6:  JSR TwoLowerAndFourUpper        ;($8F33)
+L8EF6:  JSR TwoLowerAndFourUpper        ;
 L8EF9:  STA PasswordChar11              ;Store results.
 L8EFC:  LDY #$0D                        ;Password bytes #$0D and #$0E.
-L8EFE:  JSR FourLowerAndTwoUpper        ;($8F46)
+L8EFE:  JSR FourLowerAndTwoUpper        ;
 L8F01:  STA PasswordChar12              ;Store results.
 L8F04:  LDY #$0E                        ;Password byte #$0E.
-L8F06:  JSR SixLowerBits                ;($8F5A)
+L8F06:  JSR SixLowerBits                ;
 L8F09:  STA PasswordChar13              ;Store results.
 L8F0C:  LDY #$0F                        ;Password byte #$0F.
-L8F0E:  JSR SixUpperBits                ;($8F2D)
+L8F0E:  JSR SixUpperBits                ;
 L8F11:  STA PasswordChar14              ;Store results.
 L8F14:  LDY #$0F                        ;Password bytes #$0F and #$10.
-L8F16:  JSR TwoLowerAndFourUpper        ;($8F33)
+L8F16:  JSR TwoLowerAndFourUpper        ;
 L8F19:  STA PasswordChar15              ;Store results.
 L8F1C:  LDY #$10                        ;Password bytes #$10 and #$11.
-L8F1E:  JSR FourLowerAndTwoUpper        ;($8F46)
+L8F1E:  JSR FourLowerAndTwoUpper        ;
 L8F21:  STA PasswordChar16              ;Store results.
 L8F24:  LDY #$11                        ;Password byte #$11.
-L8F26:  JSR SixLowerBits                ;($8F5A)
+L8F26:  JSR SixLowerBits                ;
 L8F29:  STA PasswordChar17              ;Store results.
 L8F2C:  RTS                             ;
 
@@ -1747,58 +1753,58 @@ L8F5F:  RTS
 
 ConsolidatePassword:
 L8F60:  LDY #$00                        ;Password characters #$00 and #$01.
-L8F62:  JSR SixLowerAndTwoUpper         ;($8FF1)
+L8F62:  JSR SixLowerAndTwoUpper         ;
 L8F65:  STA PasswordByte00              ;Store results.
 L8F68:  LDY #$01                        ;Password characters #$01 and #$02.
-L8F6A:  JSR FourLowerAndFiveThruTwo     ;($9001)
+L8F6A:  JSR FourLowerAndFiveThruTwo     ;
 L8F6D:  STA PasswordByte01              ;Store results.
 L8F70:  LDY #$02                        ;Password characters #$02 and #$03.
-L8F72:  JSR TwoLowerAndSixLower         ;($9011)
+L8F72:  JSR TwoLowerAndSixLower         ;
 L8F75:  STA PasswordByte02              ;Store results.
 L8F78:  LDY #$04                        ;Password characters #$04 and #$05.
-L8F7A:  JSR SixLowerAndTwoUpper         ;($8FF1)
+L8F7A:  JSR SixLowerAndTwoUpper         ;
 L8F7D:  STA PasswordByte03              ;Store results.
 L8F80:  LDY #$05                        ;Password characters #$05 and #$05.
-L8F82:  JSR FourLowerAndFiveThruTwo     ;($9001)
+L8F82:  JSR FourLowerAndFiveThruTwo     ;
 L8F85:  STA PasswordByte04              ;Store results.
 L8F88:  LDY #$06                        ;Password characters #$06 and #$07.
-L8F8A:  JSR TwoLowerAndSixLower         ;($9011)
+L8F8A:  JSR TwoLowerAndSixLower         ;
 L8F8D:  STA PasswordByte05              ;Store results.
 L8F90:  LDY #$08                        ;Password characters #$08 and #$09.
-L8F92:  JSR SixLowerAndTwoUpper         ;($8FF1)
+L8F92:  JSR SixLowerAndTwoUpper         ;
 L8F95:  STA PasswordByte06              ;Store results.
 L8F98:  LDY #$09                        ;Password characters #$09 and #$0A.
-L8F9A:  JSR FourLowerAndFiveThruTwo     ;($9001)
+L8F9A:  JSR FourLowerAndFiveThruTwo     ;
 L8F9D:  STA PasswordByte07              ;Store results.
 L8FA0:  LDY #$0A                        ;Password characters #$0A and #$0B.
-L8FA2:  JSR TwoLowerAndSixLower         ;($9011)
+L8FA2:  JSR TwoLowerAndSixLower         ;
 L8FA5:  STA PasswordByte08              ;Store results.
 L8FA8:  LDY #$0C                        ;Password characters #$0C and #$0D.
-L8FAA:  JSR SixLowerAndTwoUpper         ;($8FF1)
+L8FAA:  JSR SixLowerAndTwoUpper         ;
 L8FAD:  STA PasswordByte09              ;Store results.
 L8FB0:  LDY #$0D                        ;Password characters #$0D and #$0E.
-L8FB2:  JSR FourLowerAndFiveThruTwo     ;($9001)
+L8FB2:  JSR FourLowerAndFiveThruTwo     ;
 L8FB5:  STA PasswordByte0A              ;Store results.
 L8FB8:  LDY #$0E                        ;Password characters #$0E and #$0F.
-L8FBA:  JSR TwoLowerAndSixLower         ;($9011)
+L8FBA:  JSR TwoLowerAndSixLower         ;
 L8FBD:  STA PasswordByte0B              ;Store results.
 L8FC0:  LDY #$10                        ;Password characters #$10 and #$11.
-L8FC2:  JSR SixLowerAndTwoUpper         ;($8FF1)
+L8FC2:  JSR SixLowerAndTwoUpper         ;
 L8FC5:  STA PasswordByte0C              ;Store results.
 L8FC8:  LDY #$11                        ;Password characters #$11 and #$12.
-L8FCA:  JSR FourLowerAndFiveThruTwo     ;($9001)
+L8FCA:  JSR FourLowerAndFiveThruTwo     ;
 L8FCD:  STA PasswordByte0D              ;Store results.
 L8FD0:  LDY #$12                        ;Password characters #$12 and #$13.
-L8FD2:  JSR TwoLowerAndSixLower         ;($9011)
+L8FD2:  JSR TwoLowerAndSixLower         ;
 L8FD5:  STA PasswordByte0E              ;Store results.
 L8FD8:  LDY #$14                        ;Password characters #$15 and #$15.
-L8FDA:  JSR SixLowerAndTwoUpper         ;($8FF1)
+L8FDA:  JSR SixLowerAndTwoUpper         ;
 L8FDD:  STA PasswordByte0F              ;Store results.
 L8FE0:  LDY #$15                        ;Password characters #$15 and #$16.
-L8FE2:  JSR FourLowerAndFiveThruTwo     ;($9001)
+L8FE2:  JSR FourLowerAndFiveThruTwo     ;
 L8FE5:  STA PasswordByte10              ;Store results.
 L8FE8:  LDY #$16                        ;Password characters #$16 and #$17.
-L8FEA:  JSR TwoLowerAndSixLower         ;($9011)
+L8FEA:  JSR TwoLowerAndSixLower         ;
 L8FED:  STA PasswordByte11              ;Store results.
 L8FF0:  RTS                             ;
 
@@ -1932,10 +1938,10 @@ L90B4:  jsr WaitNMIPass                 ;Wait for NMI to end.
 L90B7:  jmp VBOffAndHorzWrite           ;Set PPU for horizontal write and turn off VBlank.
 
 StartContinueScreen:
-L90BA:  jsr ClearAll                    ;($909F)Turn off screen, erase sprites and nametables.
+L90BA:  jsr ClearAll                    ;Turn off screen, erase sprites and nametables.
 L90BD:  ldx #$84                        ;Low address for PPU write.
 L90BF:  ldy #$99                        ;High address for PPU write.
-L90C1:  jsr PreparePPUProcess           ;($9449)Clears screen and writes "START CONTINUE".
+L90C1:  jsr PreparePPUProcess           ;Clears screen and writes "START CONTINUE".
 L90C4:  LDY #$00                        ;
 L90C6:  STY StartContinue               ;Set selection sprite at START.
 L90C9:  LDA #$0D                        ;
@@ -1954,7 +1960,7 @@ L90DB:  CMP #$10                        ;Check if START has been pressed.
 L90DD:  BNE ++                          ;Branch if START not pressed.
 L90DF:  LDY StartContinue               ;
 L90E2:  BNE +                           ;if CONTINUE selected, branch.
-L90E4:  JMP InitializeStats             ;($932B)Zero out all stats.
+L90E4:  JMP InitializeStats             ;Zero out all stats.
 L90E7:* LDY #$17                        ;Next routine is LoadPasswordScreen.
 L90E9:  STY TitleRoutine                ;
 L90EB:* CMP #$20                        ;check if SELECT has been pressed.
@@ -1981,12 +1987,12 @@ L9118:  .byte $60                       ;Y sprite position for START.
 L9119:  .byte $78                       ;Y sprite position for CONTINUE.
 
 LoadPasswordScreen:
-L911A:  JSR ClearAll                    ;($909F)Turn off screen, erase sprites and nametables.
+L911A:  JSR ClearAll                    ;Turn off screen, erase sprites and nametables.
 L911D:  LDX #$E3                        ;Loads PPU with info to display-->
 L911F:  LDY #$99                        ;PASS WORD PLEASE.
-L9121:  JSR PreparePPUProcess           ;($9449)Load "PASSWORD PLEASE" on screen.
+L9121:  JSR PreparePPUProcess           ;Load "PASSWORD PLEASE" on screen.
 L9124:  JSR InitGFX7                    ;Loads the font for the password.
-L9127:  JSR DisplayInputCharacters      ;($940B)Write password character to screen.
+L9127:  JSR DisplayInputCharacters      ;Write password character to screen.
 L912A:  LDA #$13                        ;
 L912C:  STA PalDataPending              ;Change palette.
 L912E:  LDA #$00                        ;
@@ -1998,14 +2004,14 @@ L913A:  STA PasswordCursor              ;Sets password cursor to password charac
 L913D:  LDY #$00                        ;
 L913F:  STY PasswordStat00              ;Appears to have no function.
 L9142:  INC TitleRoutine                ;
-L9144:  JMP TurnOnDisplay               ;($90D1)Turn on screen and NMI.
+L9144:  JMP TurnOnDisplay               ;Turn on screen and NMI.
 
 EnterPassword:
 L9147:  JSR EraseAllSprites             ;Remove sprites from screen.
 L914A:  LDA Joy1Change                  ;
 L914C:  AND #$10                        ;Check to see if START has been pressed.
 L914E:  BEQ +                           ;If not, branch.
-L9150:  JMP CheckPassword               ;($8C5E)Check if password is correct.
+L9150:  JMP CheckPassword               ;Check if password is correct.
 L9153:* LDX #$01                        ;
 L9155:  STX PPUDataPending              ;Prepare to write the password screen data to PPU.
 L9157:  LDX PPUStrIndex                 ;
@@ -2034,7 +2040,7 @@ L9188:  CPY #$0F                        ;
 L918A:  BNE -                           ;
 L918C:  LDA Joy1Change                  ;If button A pressed, branch.
 L918E:  BMI +                           ;
-L9190:  JMP CheckBackspace              ;($91FB)Check if backspace pressed.
+L9190:  JMP CheckBackspace              ;Check if backspace pressed.
 L9193:* LDA TriangleSFXFlag             ;Initiate BombLaunch SFX if a character-->
 L9196:  ORA #$01                        ;has been written to the screen.
 L9198:  STA TriangleSFXFlag             ;
@@ -2043,17 +2049,17 @@ L919E:  CMP #$12                        ;Check to see if password cursor is on--
 L91A0:  BCC +                           ;character 19 thru 24.  If not, branch.
 L91A2:  CLC                             ;
 L91A3:  ADC #$3E                        ;Will equal #$50 thru #$55.
-L91A5:  JMP LoadRowAndColumn            ;($91BF)
+L91A5:  JMP LoadRowAndColumn            ;
 L91A8:* CMP #$0C                        ;Check to see if password cursor is on-->
 L91AA:  BCC +                           ;character 13 thru 18.  If not, branch.
 L91AC:  CLC                             ;
 L91AD:  ADC #$3D                        ;Will equal #$49 thru #$4E.
-L91AF:  JMP LoadRowAndColumn            ;($91BF)
+L91AF:  JMP LoadRowAndColumn            ;
 L91B2:* CMP #$06                        ;Check to see if password cursor is on-->
 L91B4:  BCC +                           ;character 7 thru 12.  If not, branch.
 L91B6:  CLC                             ;
 L91B7:  ADC #$0A                        ;Will equal #$10 thru #$15.
-L91B9:  JMP LoadRowAndColumn            ;($91BF)
+L91B9:  JMP LoadRowAndColumn            ;
 L91BC:* CLC                             ;
 L91BD:  ADC #$09                        ;Will equal #$09 thru #$0E.
 
@@ -2074,7 +2080,7 @@ L91D9:  LDA #$11                        ;
 L91DB:  STA TileSize                    ;
 L91DE:  LDX $06                         ;Replace password character tile with-->
 L91E0:  LDY #$21                        ;the one selected by the player.
-L91E2:  JSR PrepareEraseTiles           ;($9450)
+L91E2:  JSR PrepareEraseTiles           ;
 L91E5:  LDX PasswordCursor              ;
 L91E8:  PLA                             ;Store the currently selected password character-->
 L91E9:  STA PasswordChar00,X            ;in the proper PasswordChar RAM location.
@@ -2199,7 +2205,7 @@ L92C8:  .byte $48, $50, $58, $60, $68, $70, $80, $88, $90, $98, $A0, $A8
 InitializeGame:
 L92D4:  JSR ClearRAM_33_DF              ;Clear RAM.
 L92D7:  JSR ClearSamusStats             ;Reset Samus stats for a new game.
-L92DA:  JSR LoadPasswordData            ;($8D12)Load data from password.
+L92DA:  JSR LoadPasswordData            ;Load data from password.
 L92DD:  LDY #$00                        ;
 L92DF:  STY SpritePagePos               ;
 L92E1:  STY PageIndex                   ;Clear object data.
@@ -2262,19 +2268,19 @@ L934E:  STA AtEnding                    ;
 L9351:  STA JustInBailey                ;
 L9354:  LDA #$02                        ;
 L9356:  STA SwitchPending               ;Prepare to switch to Brinstar memory page.
-L9358:  RTS                             ;
+L9358:* RTS                             ;
 
 DisplayPassword:
 L9359:  LDA Timer3                      ;Wait for "GAME OVER" to be displayed-->
-L935B:  BNE $9324                       ;for 160 frames (2.6 seconds).
-L935D:  JSR ClearAll                    ;($909F)Turn off screen, erase sprites and nametables.
+L935B:  BNE -                           ;for 160 frames (2.6 seconds).
+L935D:  JSR ClearAll                    ;Turn off screen, erase sprites and nametables.
 L9360:  LDX #$7F                        ;Low byte of start of PPU data.
 L9362:  LDY #$93                        ;High byte of start of PPU data.
-L9364:  JSR PreparePPUProcess           ;($9449)Clears screen and writes "PASS WORD".
+L9364:  JSR PreparePPUProcess           ;Clears screen and writes "PASS WORD".
 L9367:  JSR InitGFX7                    ;Loads the font for the password.
-L936A:  JSR CalculatePassword           ;($8C7A)Calculates the password.
+L936A:  JSR CalculatePassword           ;Calculates the password.
 L936D:  JSR NmiOn                       ;Turn on the nonmaskable interrupt.
-L9370:  JSR PasswordToScreen            ;($93C6)Displays password on screen.
+L9370:  JSR PasswordToScreen            ;Displays password on screen.
 L9373:  JSR WaitNMIPass                 ;Wait for NMI to end.
 L9376:  LDA #$13                        ;
 L9378:  STA PalDataPending              ;Change palette.
@@ -2305,14 +2311,14 @@ WaitForSTART:
 L9394:  LDA Joy1Change                  ;Waits for START to be ressed proceed-->
 L9396:  AND #$10                        ;past the GAME OVER screen.
 L9398:  BEQ +                           ;If start not pressed, branch.
-L939A:  JMP CheckPassword               ;($8C5E)Check if password is correct.
+L939A:  JMP CheckPassword               ;Check if password is correct.
 L939D:* RTS                             ;
 
 GameOverTitle:
-L939E:  JSR ClearAll                    ;($909F)Turn off screen, erase sprites and nametables.
+L939E:  JSR ClearAll                    ;Turn off screen, erase sprites and nametables.
 L93A1:  LDX #$B9                        ;Low byte of start of PPU data.
 L93A3:  LDY #$93                        ;High byte of start of PPU data.
-L93A5:  JSR PreparePPUProcess           ;($9449)Clears screen and writes "GAME OVER".
+L93A5:  JSR PreparePPUProcess           ;Clears screen and writes "GAME OVER".
 L93A8:  JSR InitGFX7                    ;Loads the font for the password.
 L93AB:  JSR NmiOn                       ;Turn on the nonmaskable interrupt.
 L93AE:  LDA #$10                        ;Load Timer3 with a delay of 160 frames-->
@@ -2333,25 +2339,25 @@ L93C4:  .byte $00                       ;End PPU string write.
 PasswordToScreen:
 L93C6:  JSR WaitNMIPass                 ;Wait for NMI to end.
 L93C9:  LDY #$05                        ;Index to find password characters(base=$699A).
-L93CB:  JSR LoadPasswordTiles           ;($93F9)Load tiles on screen.
+L93CB:  JSR LoadPasswordTiles           ;Load tiles on screen.
 L93CE:  LDX #$A9                        ;PPU low address byte.
 L93D0:  LDY #$21                        ;PPU high address byte.
-L93D2:  JSR PrepareEraseTiles           ;($9450)Erase tiles on screen.
+L93D2:  JSR PrepareEraseTiles           ;Erase tiles on screen.
 L93D5:  LDY #$0B                        ;Index to find password characters(base=$699A).
-L93D7:  JSR LoadPasswordTiles           ;($93F9)Load tiles on screen.
+L93D7:  JSR LoadPasswordTiles           ;Load tiles on screen.
 L93DA:  LDX #$B0                        ;PPU low address byte.
 L93DC:  LDY #$21                        ;PPU high address byte.
-L93DE:  JSR PrepareEraseTiles           ;($9450)Erase tiles on screen.
+L93DE:  JSR PrepareEraseTiles           ;Erase tiles on screen.
 L93E1:  LDY #$11                        ;Index to find password characters(base=$699A).
-L93E3:  JSR LoadPasswordTiles           ;($93F9)Load tiles on screen.
+L93E3:  JSR LoadPasswordTiles           ;Load tiles on screen.
 L93E6:  LDX #$E9                        ;PPU low address byte.
 L93E8:  LDY #$21                        ;PPU high address byte.
-L93EA:  JSR PrepareEraseTiles           ;($9450)Erase tiles on screen.
+L93EA:  JSR PrepareEraseTiles           ;Erase tiles on screen.
 L93ED:  LDY #$17                        ;Index to find password characters(base=$699A).
-L93EF:  JSR LoadPasswordTiles           ;($93F9)Load tiles on screen.
+L93EF:  JSR LoadPasswordTiles           ;Load tiles on screen.
 L93F2:  LDX #$F0                        ;PPU low address byte.
 L93F4:  LDY #$21                        ;PPU high address byte.
-L93F6:  JMP PrepareEraseTiles           ;($9450)Erase tiles on screen.
+L93F6:  JMP PrepareEraseTiles           ;Erase tiles on screen.
 
 LoadPasswordTiles:
 L93F9:  LDA #$16                        ;Tiles to replace are one block-->
@@ -2377,7 +2383,7 @@ L941A:  STA PPUAddress                  ;
 L941D:  LDA PasswordRowsTbl+1,X         ;Displays the list of characters -->
 L9420:  sTA PPUAddress                  ;to choose from on the password--> 
 L9423:  LDX #$00                        ;entry screen.
-L9425:* LDA PasswordRow0,Y              ;Base is $99A2.
+L9425:* LDA PasswordRow0,Y              ;
 L9428:  STA PPUIOReg                    ;
 L942B:  LDA #$FF                        ;Blank tile.
 L942D:  STA PPUIOReg                    ;
@@ -2424,25 +2430,25 @@ L945C:  JMP EraseTile                   ;Erase the selected tiles.
 ;used in the intro and ending portions of the game.
 
 PaletteColorsPointerTable:
-L9560:  .word Palette00                 ;($9586)
-L9562:  .word Palette01                 ;($95AA)
-L9564:  .word Palette02                 ;($95CE)
-L9566:  .word Palette03                 ;($95F2)
-L9568:  .word Palette04                 ;($9616)
-L956A:  .word Palette05                 ;($963A)
-L956C:  .word Palette06                 ;($965E)
-L956E:  .word Palette07                 ;($9682)
-L9570:  .word Palette08                 ;($96A6)
-L9572:  .word Palette09                 ;($96CA)
-L9574:  .word Palette0A                 ;($96EE)
-L9576:  .word Palette0B                 ;($9712)
-L9578:  .word Palette0C                 ;($9736)
-L957A:  .word Palette0D                 ;($975A)
-L957C:  .word Palette0E                 ;($977E)
-L957E:  .word Palette0F                 ;($97A2)
-L9580:  .word Palette10                 ;($97C6)
-L9582:  .word Palette11                 ;($97EA)
-L9584:  .word Palette12                 ;($97F2)
+L9560:  .word Palette00                 ;
+L9562:  .word Palette01                 ;
+L9564:  .word Palette02                 ;
+L9566:  .word Palette03                 ;
+L9568:  .word Palette04                 ;
+L956A:  .word Palette05                 ;
+L956C:  .word Palette06                 ;
+L956E:  .word Palette07                 ;
+L9570:  .word Palette08                 ;
+L9572:  .word Palette09                 ;
+L9574:  .word Palette0A                 ;
+L9576:  .word Palette0B                 ;
+L9578:  .word Palette0C                 ;
+L957A:  .word Palette0D                 ;
+L957C:  .word Palette0E                 ;
+L957E:  .word Palette0F                 ;
+L9580:  .word Palette10                 ;
+L9582:  .word Palette11                 ;
+L9584:  .word Palette12                 ;
 
 Palette00:
 L9586:  .byte $3F                       ;Upper byte of PPU palette adress.
@@ -2666,7 +2672,7 @@ L981D:  .byte $00                       ;End EndGamePal0C data.
 
 UpdateSpriteCoords:
 L981E:  LDA IntroSpr0XRun,X             ;Load sprite run(sprite x component).
-L9821:  JSR CalcDisplacement            ;($9871)Calculate sprite displacement in x direction.
+L9821:  JSR CalcDisplacement            ;Calculate sprite displacement in x direction.
 L9824:  LDY IntroSpr0XDir,X             ;Get byte describing if sprite increasing or decreasing pos.
 L9827:  BPL +                           ;
 
@@ -2686,7 +2692,7 @@ L983E:  LSR                             ;reached its end point.
 L983F:  BCC++                           ;Branch if sprite has reached the end of x movement.
 
 L9841:  LDA IntroSpr0YRise,X            ;Load sprite rise(sprite y component).
-L9844:  JSR CalcDisplacement            ;($9871)Calculate sprite displacement in y direction.
+L9844:  JSR CalcDisplacement            ;Calculate sprite displacement in y direction.
 L9847:  LDY IntroSpr0YDir,X             ;Get byte describing if sprite increasing or decreasing pos.
 L984A:  BPL +                           ;
 
@@ -2800,11 +2806,11 @@ L9997:  .byte $00               ;End PPU string write
 ;of each row on the password screen in the data below.
 
 PasswordRowTbl:
-L9998:  .word PasswordRow0              ;($99A2)
-L999A:  .word PasswordRow1              ;($99AF)
-L999C:  .word PasswordRow2              ;($99BC)
-L999E:  .word PasswordRow3              ;($99C9)
-L99A0:  .word PasswordRow4              ;($99D6)
+L9998:  .word PasswordRow0              ;
+L999A:  .word PasswordRow1              ;
+L999C:  .word PasswordRow2              ;
+L999E:  .word PasswordRow3              ;
+L99A0:  .word PasswordRow4              ;
 
 ;The following data is used to load the name table With the password characters:
 PasswordRow0:
@@ -2922,7 +2928,7 @@ NMIScreenWrite:
 L9A07:  LDA TitleRoutine                ;
 L9A09:  CMP #$1D                        ;If titleRoutine not at end game, exit.
 L9A0B:  BCC Exit100                     ;
-L9A0D:  JSR LoadCredits                 ;($9C45)Display end credits on screen.
+L9A0D:  JSR LoadCredits                 ;Display end credits on screen.
 L9A10:  LDA EndMsgWrite                 ;
 L9A12:  BEQ +                           ;If not time to write end message, branch
 L9A14:  CMP #$05                        ;
@@ -2994,10 +3000,10 @@ L9A9A:  LDY JustInBailey                ;
 L9A9D:  BEQ +                           ;If Samus is wearing suit, branch.  Else-->
 L9A9F:  LDA #$80                        ;load suitless Samus data into PasswordByte08.
 L9AA1:* STA PasswordByte08              ;
-L9AA4:  JMP InitializeGame              ;($92D4)Clear RAM to restart game at beginning.
+L9AA4:  JMP InitializeGame              ;Clear RAM to restart game at beginning.
 
 EndGame:
-L9AA7:  JSR LoadEndStarSprites          ;($9EAA)Load stars in end scene onto screen.
+L9AA7:  JSR LoadEndStarSprites          ;Load stars in end scene onto screen.
 L9AAA:  LDA IsCredits                   ;Skips palette change when rolling credits.
 L9AAC:  BNE +                           ;
 L9AAE:  LDA FrameCount                  ;
@@ -3012,17 +3018,17 @@ L9ABE:  STA PalDataPending              ;
 L9AC0:* LDA RoomPtr                     ;RoomPtr used in end of game to determine-->
 L9AC2:  JSR ChooseRoutine               ;Which subroutine to run below.
 
-L9AC5:  .word LoadEndGFX                ;($9AD5)Load end GFX to pattern tables.
-L9AC7:  .word ShowEndSamus              ;($9B1C)Show Samus and end message.
-L9AC9:  .word EndSamusFlash             ;($9B34)Samus flashes and changes.
-L9ACB:  .word SamusWave                 ;($9B93)Samus waving in ending if suitless.
-L9ACD:  .word EndFadeOut                ;($9BCD)Fade out Samus in ending.
-L9ACF:  .word RollCredits               ;($9BFC)Rolls ending credits.
-L9AD1:  .word Restart                   ;($9A39)Starts at beginning after game completed.
+L9AC5:  .word LoadEndGFX                ;Load end GFX to pattern tables.
+L9AC7:  .word ShowEndSamus              ;Show Samus and end message.
+L9AC9:  .word EndSamusFlash             ;Samus flashes and changes.
+L9ACB:  .word SamusWave                 ;Samus waving in ending if suitless.
+L9ACD:  .word EndFadeOut                ;Fade out Samus in ending.
+L9ACF:  .word RollCredits               ;Rolls ending credits.
+L9AD1:  .word Restart                   ;Starts at beginning after game completed.
 L9AD3:  .word ExitSub                   ;Rts.
 
 LoadEndGFX:
-L9AD5:  JSR ClearAll                    ;($909F)Turn off screen, erase sprites and nametables.
+L9AD5:  JSR ClearAll                    ;Turn off screen, erase sprites and nametables.
 L9AD8:  JSR InitEndGFX                  ;Prepare to load end GFX.
 L9ADB:  LDA #$04                        ;
 L9ADD:  LDY JustInBailey                ;Checks if game was played as suitless-->
@@ -3056,7 +3062,7 @@ L9B17:  INC RoomPtr                     ;
 L9B19:  JMP ScreenOn                    ;Turn screen on.
 
 ShowEndSamus:
-L9B1C:  JSR LoadEndSamusSprites         ;($9C9A)Load end image of Samus.
+L9B1C:  JSR LoadEndSamusSprites         ;Load end image of Samus.
 L9B1F:  LDA Timer3                      ;Once 960 frames (16 seconds) have expired,-->
 L9B21:  BNE +                           ;Move to EndSamusFlash routine.
 L9B23:  INC RoomPtr                     ;
@@ -3080,7 +3086,7 @@ L9B3C:  LDA ColorCntIndex               ;value.  Flashing Samus lasts for 512-->
 L9B3E:  CMP #$08                        ;frames (8.5 seconds).
 L9B40:  BNE +                           ;
 L9B42:  JSR ChooseEnding                ;Choose which Samus ending to show.
-L9B45:  JSR CalculatePassword           ;($8C7A)Calculate game password.
+L9B45:  JSR CalculatePassword           ;Calculate game password.
 L9B48:  LDA EndingType                  ;
 L9B4B:  ASL                             ;When EndSamusFlash routine is half way-->
 L9B4C:  STA SpritePointerIndex          ;done, this code will calculate the-->
@@ -3108,7 +3114,7 @@ L9B78:  CMP #$03                        ;
 L9B7A:  BNE +                           ;       
 L9B7C:  LDA #$00                        ;If sprite color=#$03, set sprite-->
 L9B7E:  STA SpriteAttribByte            ;color to #$00.
-L9B80:* JMP LoadEndSamusSprites         ;($9C9A)Load end image of Samus.
+L9B80:* JMP LoadEndSamusSprites         ;Load end image of Samus.
 
 ;The following table is used by the above routine to load ClrChangeCounter.  ClrChangeCounter
 ;decrements every frame, When ClrChangeCounter reaches zero, the sprite colors for Samus
@@ -3130,7 +3136,7 @@ L9BA1:  RTS                             ;
 L9BA2:* LDA EndingType                  ;If suitless Samus-->
 L9BA5:  CMP #$04                        ;ending, branch.
 L9BA7:  BCS +                           ;
-L9BA9:  JMP LoadEndSamusSprites         ;($9C9A)
+L9BA9:  JMP LoadEndSamusSprites         ;
 L9BAC:* SBC #$04                        ;If jumpsuit Samus ending,-->
 L9BAE:  ASL                             ;WaveSpritePointer=#$00, if bikini-->
 L9BAF:  ASL                             ;Samus ending, WaveSpritePointer=#$04.
@@ -3147,7 +3153,7 @@ L9BC2:  LDY #$10                        ;Samus' waving hand is down.
 L9BC4:  STY WaveSpriteCounter           ;
 L9BC6:* LDA #$2D                        ;Load SpriteByteCounter in preparation for-->
 L9BC8:  STA SpriteByteCounter           ;refreshing Samus sprite bytes.
-L9BCA:  JMP LoadWaveSprites             ;($9C7F)Load sprites for waving Samus.
+L9BCA:  JMP LoadWaveSprites             ;Load sprites for waving Samus.
 
 EndFadeOut:
 L9BCD:  LDA Timer3                      ;If 160 frame delay from last routine has not-->
@@ -3172,8 +3178,8 @@ L9BED:  INC RoomPtr                     ;
 L9BEF:* LDA EndingType                  ;
 L9BF2:  CMP #$04                        ;If suitless Samus ending, load hand wave sprites,-->
 L9BF4:  BCS +                           ;else just load regular Samus sprites
-L9BF6:  JMP LoadEndSamusSprites         ;($9C9A)Load end image of Samus.
-L9BF9:* JMP LoadWaveSprites             ;($9C7F)Load sprites for waving Samus.
+L9BF6:  JMP LoadEndSamusSprites         ;Load end image of Samus.
+L9BF9:* JMP LoadWaveSprites             ;Load sprites for waving Samus.
 
 RollCredits:
 L9BFC:  LDA Timer3                      ;If 160 frame timer delay from previous-->
@@ -3254,7 +3260,7 @@ L9C6F:  ASL                             ;This formula is used when ScrollY = 128
 L9C70:* ADC $01                         ;129, 130 and 131.
 L9C72:  ASL                             ;Result is index to find proper credits to load.
 L9C73:  TAY                             ;
-L9C74:  LDX CreditsPointerTbl,Y         ;Base is $A291. Lower byte of pointer to PPU string.
+L9C74:  LDX CreditsPointerTbl,Y         ; Lower byte of pointer to PPU string.
 L9C77:  LDA CreditsPointerTbl+1,Y       ;Upper byte of pointer to PPU string.
 L9C7A:  TAY                             ;
 L9C7B:  JMP PreparePPUProcess_          ;Prepare to write to PPU.
@@ -3278,7 +3284,7 @@ L9C98:  BNE -                           ;If not, branch and load another byte.
 LoadEndSamusSprites:
 L9C9A:  LDX #$30                        ;Index for loading Samus sprite data into sprite RAM.
 L9C9C:  LDY SpritePointerIndex          ;
-L9C9E:  LDA EndSamusAddrTbl,Y           ;Base is $9D5A.
+L9C9E:  LDA EndSamusAddrTbl,Y           ;
 L9CA1:  STA $00                         ;Load $00 and $01 with pointer to the sprite-->
 L9CA3:  LDA EndSamusAddrTbl+1,Y         ;data that shows Samus at the end of the game.
 L9CA6:  STA $01                         ;
@@ -3339,36 +3345,36 @@ L9D0E:  .byte $9B, $48, $01, $80        ;Sprite05RAM
 ;The following table is a pointer table to the sprites that makes Samus wave in the end
 ;of the game when she is suitless.  The top two pointers are for when she is in the jumpsuit
 ;and the bottom two pointers are for when she is in the bikini.
-
 WavePointerTable:
-L9D12:  .word $9D1A                     ;Jumpsuit Samus hand up.
-L9D14:  .word $9D2A                     ;Jumpsuit Samus hand down.
-L9D16:  .word $9D3A                     ;Bikini Samus hand up.
-L9D18:  .word $9D4A                     ;Bikini Samus hand down.
+    .word JsHandUpTable, JsHandDownTable, BkHandUpTable, BkHandDownTable
 
 ;Sprite data table used when Samus is in jumpsuit and her waving hand is up.
 JsHandUpTable:
-L9D1A:  .byte $9B, $1F, $01, $80, $A3, $2F, $01, $80, $AB, $3F, $01, $80, $F4, $3F, $01, $80
+    .byte $9B, $1F, $01, $80, $A3, $2F, $01, $80
+    .byte $AB, $3F, $01, $80, $F4, $3F, $01, $80
 
 ;Sprite data table used when Samus is in jumpsuit and her waving hand is down.
 JsHandDownTable:
-L9D2A:  .byte $9B, $2A, $01, $80, $9B, $2B, $01, $88, $A3, $3A, $01, $80, $AB, $3F, $01, $80
+    .byte $9B, $2A, $01, $80, $9B, $2B, $01, $88
+    .byte $A3, $3A, $01, $80, $AB, $3F, $01, $80
 
 ;Sprite data table used when Samus is in bikini and her waving hand is up.
 BkHandUpTable:
-L9D3A:  .byte $9B, $0C, $01, $80, $A3, $1C, $01, $80, $AB, $3F, $01, $80, $F4, $3F, $01, $80
+    .byte $9B, $0C, $01, $80, $A3, $1C, $01, $80
+    .byte $AB, $3F, $01, $80, $F4, $3F, $01, $80
 
 ;Sprite data table used when Samus is in bikini and her waving hand is down.
 BkHandDownTable:
-L9D4A:  .byte $9B, $4A, $01, $80, $9B, $4B, $01, $88, $A3, $4D, $01, $80, $AB, $3F, $01, $80
+    .byte $9B, $4A, $01, $80, $9B, $4B, $01, $88
+    .byte $A3, $4D, $01, $80, $AB, $3F, $01, $80
 
 EndSamusAddrTbl:
-L9D5A:  .word NormalSamus               ;($9D66)Pointer to end graphic of Samus wearing suit.
-L9D5C:  .word BackTurnedSamus           ;($9D9C)Pointer to end graphic of back turned Samus.
-L9D5E:  .word FistRaisedSamus           ;($9DD2)Pointer to end graphic of fist raised Samus.
-L9D60:  .word HelmetOffSamus            ;($9E08)Pointer to end graphic of helmet off Samus.
-L9D62:  .word JumpsuitSamus             ;($9E3E)Pointer to end graphic of jumpsuit Samus.
-L9D64:  .word BikiniSamus               ;($9E74)Pointer to end graphic of bikini Samus.
+L9D5A:  .word NormalSamus               ;Pointer to end graphic of Samus wearing suit.
+L9D5C:  .word BackTurnedSamus           ;Pointer to end graphic of back turned Samus.
+L9D5E:  .word FistRaisedSamus           ;Pointer to end graphic of fist raised Samus.
+L9D60:  .word HelmetOffSamus            ;Pointer to end graphic of helmet off Samus.
+L9D62:  .word JumpsuitSamus             ;Pointer to end graphic of jumpsuit Samus.
+L9D64:  .word BikiniSamus               ;Pointer to end graphic of bikini Samus.
 
 ;The following three bytes are loaded into sprite RAM.  The third byte (attribute byte) is
 ;not included.  Instead, if the MSB of the second byte (pattern byte) is set, the pattern
@@ -3575,19 +3581,19 @@ L9F80:* RTS                             ;
 ;find the proper palette data during the EndGame routine.
 
 EndGamePalPntrTbl:
-L9F81:  .word EndGamePal00              ;($9F9B)
-L9F83:  .word EndGamePal01              ;($9FBF)
-L9F85:  .word EndGamePal02              ;($9FCB)
-L9F87:  .word EndGamePal03              ;($9FD7)
-L9F89:  .word EndGamePal04              ;($9FE3)
-L9F8B:  .word EndGamePal05              ;($9FEF)
-L9F8D:  .word EndGamePal06              ;($9FFB)
-L9F8F:  .word EndGamePal07              ;($A007)
-L9F91:  .word EndGamePal08              ;($A013)
-L9F93:  .word EndGamePal09              ;($A02E)
-L9F95:  .word EndGamePal0A              ;($A049)
-L9F97:  .word EndGamePal0A              ;($A049)
-L9F99:  .word EndGamePal0B              ;($9806)
+L9F81:  .word EndGamePal00              ;
+L9F83:  .word EndGamePal01              ;
+L9F85:  .word EndGamePal02              ;
+L9F87:  .word EndGamePal03              ;
+L9F89:  .word EndGamePal04              ;
+L9F8B:  .word EndGamePal05              ;
+L9F8D:  .word EndGamePal06              ;
+L9F8F:  .word EndGamePal07              ;
+L9F91:  .word EndGamePal08              ;
+L9F93:  .word EndGamePal09              ;
+L9F95:  .word EndGamePal0A              ;
+L9F97:  .word EndGamePal0A              ;
+L9F99:  .word EndGamePal0B              ;
 
 EndGamePal00:
 L9F9B:  .byte $3F                       ;PPU address high byte.
@@ -3838,9 +3844,11 @@ LA1B9:  .byte $00                       ;End PPU string write.
 ;It is used to locate the start of the PPU strings below.
 
 EndMessageStringTbl0:
-LA1BA:  .word $A1C2, $A1EB, $A20F, $A240
+    .word EndMessageString0, EndMessageString1
+    .word EndMessageString2, EndMessageString3
 
 ;Writes end message on name table 0 in row $2060 (4th row from top).
+EndMessageString0:
 LA1C2:  .byte $20                       ;PPU address high byte.
 LA1C3:  .byte $6D                       ;PPU address low byte.
 LA1C4:  .byte $08                       ;PPU string length.
@@ -3859,6 +3867,7 @@ LA1E0:  .byte $1B, $FF, $16, $12, $1C, $1C, $12, $18, $17, $07
 LA1EA:  .byte $00                       ;End PPU string write.
 
 ;Writes end message on name table 0 in row $2100 (9th row from top).
+EndMessageString1:
 LA1EB:  .byte $21                       ;PPU address high byte.
 LA1EC:  .byte $03                       ;PPU address low byte.
 LA1ED:  .byte $17                       ;PPU string length.
@@ -3877,6 +3886,7 @@ LA208:  .byte $1C, $19, $0A, $0C, $0E, $07
 LA209:  .byte $00                       ;End PPU string write.
 
 ;Writes end message on name table 0 in row $2180 (13th row from top).
+EndMessageString2:
 LA20F:  .byte $21                       ;PPU address high byte.
 LA210:  .byte $83                       ;PPU address low byte.
 LA211:  .byte $18                       ;PPU string length.
@@ -3897,6 +3907,7 @@ LA23D:  .byte $0D, $07
 LA23F:  .byte $00                       ;End PPU string write.
 
 ;Writes end message on name table 0 in row $2200 (18th row from top).
+EndMessageString4:
 LA240:  .byte $22                       ;PPU address high byte.
 LA241:  .byte $03                       ;PPU address low byte.
 LA242:  .byte $18                       ;PPU string length.
@@ -3918,14 +3929,14 @@ LA25F:  .byte $00                       ;End PPU string write.
 ;It is used to locate the start of the PPU strings below.
 
 EndMessageStringTbl1:
-LA265:  .word $A26D, $A276, $A27F, $A288
+LA265:  .word EraseEndMsg0, EraseEndMsg1, EraseEndMsg2, EraseEndMsg3
 
 ;Erases end message on name table 0 in row $2060 (4th row from top).
+EraseEndMsg0:
 LA26D:  .byte $20                       ;PPU address high byte.
 LA26E:  .byte $6D                       ;PPU address low byte.
 LA26F:  .byte $48                       ;PPU string length.
 LA270:  .byte $FF                       ;Repeat bit set. Repeats entry 8 times.
-
 ;Erases end message on name table 0 in row $20C0 (7th row from top).
 LA271:  .byte $20                       ;PPU address high byte.
 LA272:  .byte $C3                       ;PPU address low byte.
@@ -3935,11 +3946,11 @@ LA274:  .byte $FF                       ;Repeat bit set. Repeats entry 26 times.
 LA275:  .byte $00                       ;End PPU string write.
 
 ;Erases end message on name table 0 in row $2100 (9th row from top).
+EraseEndMsg1:
 LA276:  .byte $21                       ;PPU address high byte.
 LA277:  .byte $03                       ;PPU address low byte.
 LA278:  .byte $57                       ;PPU string length.
 LA279:  .byte $FF                       ;Repeat bit set. Repeats entry 23 times.
-
 ;Erases end message on name table 0 in row $2140 (11th row from top).
 LA27A:  .byte $21                       ;PPU address high byte.
 LA27B:  .byte $42                       ;PPU address low byte.
@@ -3949,11 +3960,11 @@ LA27D:  .byte $FF                       ;Repeat bit set. Repeats entry 10 times.
 LA27E:  .byte $00                       ;End PPU string write.
 
 ;Erases end message on name table 0 in row $2180 (13th row from top).
+EraseEndMsg2:
 LA27F:  .byte $21                       ;PPU address high byte.
 LA280:  .byte $83                       ;PPU address low byte.
 LA281:  .byte $58                       ;PPU string length.
 LA282:  .byte $FF                       ;Repeat bit set. Repeats entry 24 times.
-
 ;Erases end message on name table 0 in row $21C0 (15th row from top).
 LA283:  .byte $21                       ;PPU address high byte.
 LA284:  .byte $C2                       ;PPU address low byte.
@@ -3963,12 +3974,11 @@ LA286:  .byte $FF                       ;Repeat bit set. Repeats entry 12 times.
 LA287:  .byte $00                       ;End PPU string write.
 
 ;Erases end message on name table 0 in row $2200 (18th row from top).
+EraseEndMsg3:
 LA288:  .byte $22                       ;PPU address high byte.
 LA289:  .byte $03                       ;PPU address low byte.
 LA28A:  .byte $58                       ;PPU string length.
 LA28B:  .byte $FF                       ;Repeat bit set. Repeats entry 24 times.
-
-
 ;Erases end message on name table 0 in row $2240 (19th row from top).
 LA28C:  .byte $22                       ;PPU address high byte.
 LA28D:  .byte $42                       ;PPU address low byte.
