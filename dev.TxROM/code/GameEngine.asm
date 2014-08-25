@@ -9,22 +9,23 @@
 .require "Defines.asm"
 
 ;---------------------------[ Forward declarations ]----------------------------
+; These addresses are located in other banks.
 .alias ObjectAnimIndexTbl       $8572
 .alias FramePtrTable            $860B
 .alias PlacePtrTable            $86DF
-.alias StarPalSwitch            $8AC7
-.alias SamusEnterDoor           $8B13
+.alias SamusEnterDoor           $8B13   
 .alias AreaPointers             $9598
 .alias AreaRoutine              $95C3
 .alias EnemyHitPointTbl         $962B
 .alias EnemyDataTable8B         $968B
 .alias EnemyInitDelayTbl        $96BB
-.alias DecSpriteYCoord          $988A
-.alias NMIScreenWrite           $9A07
-.alias EndGamePalWrite          $9F54
 .alias SpecItmsTable            $9598
-.alias CopyMap                  $A93E
-.alias SoundEngine              $B3B4
+.alias SoundEngine              $B3B4       ; Both Title & Area
+.alias StarPalSwitch            $8AC7       ; Title bank only
+.alias DecSpriteYCoord          $988A       ; Title bank only
+.alias NMIScreenWrite           $9A07       ; Title bank only
+.alias EndGamePalWrite          $9F54       ; Title bank only
+.alias CopyMap                  $A93E       ; Title bank only
 
 ;------------------------------[ Start of code ]--------------------------------
 .org $C000

@@ -2,14 +2,6 @@ REM Make.bat
 
 :start
 @echo off
-REM Make sure Ophis is installed.
-REM ophis >nul 2>nul
-REM if %ERRORLEVEL% neq 9009 goto ophis_exists
-REM echo Ophis is not installed or is not in path.
-REM echo Please download Ophis from http://michaelcmartin.github.io/Ophis/
-REM pause
-REM exit /b
-:ophis_exists
 
 REM Fail if no source directory has been passed.
 if "%1" neq "" (goto has_src_dir)
@@ -51,12 +43,12 @@ echo .outfile "bin/%srcdir%.nes" >> %workdir%\make.asm
 echo .include "code/header.asm" >> %workdir%\make.asm
 
 REM compile each of the banks in make.txt, and add each to the make.asm file.
-for /f "tokens=1-3 delims=," %%G in (%workdir%/make.txt) do (
+for /f "tokens=1-5 delims=," %%G in (%workdir%/make.txt) do (
     if %%G==map (
         echo Mapping %%H:
         util\ophis.exe -m "%workdir%/map.txt" "%workdir%/%%H"
         del "ophis.bin"
-        util\getlabels.exe "%workdir%/map.txt" "%workdir%/%%I"
+        util\getlabels.exe "%workdir%/map.txt" "%workdir%/%%I" "%%J" "%%K"
         REM del "%workdir%\map.txt"     -- NOT necessary, as it is in obj folder.
     )
     if %%G==prg (

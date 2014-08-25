@@ -3907,7 +3907,7 @@ LA23D:  .byte $0D, $07
 LA23F:  .byte $00                       ;End PPU string write.
 
 ;Writes end message on name table 0 in row $2200 (18th row from top).
-EndMessageString4:
+EndMessageString3:
 LA240:  .byte $22                       ;PPU address high byte.
 LA241:  .byte $03                       ;PPU address low byte.
 LA242:  .byte $18                       ;PPU string length.
@@ -3990,10 +3990,10 @@ LA290:  .byte $00                       ;End PPU string write
 ;The following table is used by the LoadCredits routine to load the end credits on the screen.
 
 CreditsPointerTbl:
-LA291:  .word $A2E9, $A2FB, $A31A, $A31B, $A32D, $A339, $A34F, $A362, $A375, $A384, $A39F, $A3AA
-LA2A9:  .word $A3C8, $A3D8, $A3F1, $A412, $A417, $A426, $A442, $A46B, $A470, $A493, $A49C, $A4AD
-LA2C1:  .word $A4BD, $A4CD, $A4D2, $A4D7, $A4DC, $A4E1, $A4E6, $A4EB, $A4EF, $A4F0, $A508, $A51A
-LA2D9:  .word $A51F, $A524, $A51F, $A524, $A538, $A53D, $A538, $A53D
+LA291:  .word LA2E9, LA2FB, LA31A, LA31B, LA32D, LA339, LA34F, LA362, LA375, LA384, LA39F, LA3AA
+LA2A9:  .word LA3C8, LA3D8, LA3F1, LA412, LA417, LA426, LA442, LA46B, LA470, LA493, LA49C, LA4AD
+LA2C1:  .word LA4BD, LA4CD, LA4D2, LA4D7, LA4DC, LA4E1, LA4E6, LA4EB, LA4EF, LA4F0, LA508, LA51A
+LA2D9:  .word LA51F, LA524, LA51F, LA524, LA538, LA53D, LA538, LA53D
 
 ;Writes credits on name table 0 in row $2020 (2nd row from top).
 LA2E9:  .byte $20                       ;PPU address high byte.
