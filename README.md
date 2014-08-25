@@ -1,25 +1,26 @@
 Metroid for MMC3
 ===========
+This is the disassembled source code of METROID for the Nintendo Entertainment
+System (NES). You can reassemble the source code using Ophis v2.1 (a build of Ophis
+for Windows is included in this repository, or you can [build it from source](https://github.com/michaelcmartin/Ophis)).
 
-This is the source code of METROID, as disassembled by Kent Hansen and organized
-and commented by Nick Mikstas. The source code has been changed to use the MMC3
-(the original METROID game used the MMC1), but no other functionality has been
-removed or added. You can reassemble this using the Ophis Assembler:
-https://hkn.eecs.berkeley.edu/~mcmartin/ophis/
+Features
+-----------
+The original version of METROID used the [MMC1 memory controller](http://wiki.nesdev.com/w/index.php/MMC1). This version has been changed to use the improved [MMC3 memory controller](http://wiki.nesdev.com/w/index.php/MMC1). The source code is also better organized, better labeled, better commented, and omits much of the code and data which was unused in the original game. Because of these omissions, reorganizations, and the change in memory ASIC, the assembled binary of MetroidMMC3 will not be identical to a rip of the original METROID ROM. However, it will run identically to the original METROID (except for insignificant differences in timing - MetroidMMC3 runs a few cycles faster than the original in limited circumstances; frame timing remains identical).
 
-The disassembly is separated by bank, so I set up a rudimentary make system that
-will assemble each separate bank using Ophis, and then combine the banks into
-a NES binary. To make the ROM, you need run the 'make_xxxxx.bat' file (this
-requires the windows shell, of course).
+MetroidMMC3 would be an ideal foundation for anyone who is interested in creating a
+modification or total conversion of METROID for the NES.
 
-Moving forward...
+Building MetroidMMC3
+-----------
+I have implemented a rudimentary make system using windows batch files. You can
+assemble the latest version of MetroidMMC3 by running the "make_txrom.bat" file.
+You can also assemble the original disassembly of METROID (for the MMC1) by running
+"make_original.bat".
+
+History of the METROID Disassembly
 ===========
-The source code is currently about 85% documented, which is an amazing
-accomplishment. I'd like to see the remainder of the source code documented, but
-it's too big a project for me to take on as an individual. Would anyone be
-interested in taking it on as a group project? Each interested person could
-take on a single undocumented routine, one at a time, figure out what it does,
-and then name it and document it.
-
-Discussion of this code is available at the NESDEV community:
-http://forums.nesdev.com/viewtopic.php?f=2&t=11529
+MetroidMMC3 is based on the original disassembly of METROID (created by Kent Hansen),
+which has been further organized and commented by Nick Mikstas. A more detailed history
+of the METROID source code is available online at the
+[Metroid Database](http://www.metroid-database.com/m1/sourcecode.php).
