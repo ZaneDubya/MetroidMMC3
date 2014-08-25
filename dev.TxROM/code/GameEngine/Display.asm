@@ -12,7 +12,7 @@ LC1B1:  iny                             ;
 LC1B2:  bne -                           ;Loop while more sprite RAM to clear.
 LC1B4:  lda GameMode                    ;
 LC1B6:  beq Exit101                     ;Exit subroutine if GameMode=Play(#$00)
-LC1B8:  jmp DecSpriteYCoord             ;Find proper y coord of sprites.
+LC1B8:  jmp (Bank0_DecSpriteYCoord)     ;Find proper y coord of sprites.
 
 Exit101:
 LC1BB:  rts                             ;Return used by subroutines above and below.
@@ -35,7 +35,7 @@ LC1CA:  dey                             ;Loop unitl $200 thru $25F is filled wit
 LC1CB:  bpl -                           ;
 LC1CD:  lda GameMode                    ;
 LC1CF:  beq Exit101                     ; branch if mode = Play.
-LC1D1:  jmp DecSpriteYCoord             ;Find proper y coord of sprites.
+LC1D1:  jmp (Bank0_DecSpriteYCoord)     ;Find proper y coord of sprites.
 
 ;--------------------------------[ Check and prepare palette write ]---------------------------------
 
@@ -45,7 +45,7 @@ LC1E2:  beq +                           ;Is game being played? If so, branch to 
 LC1E4:  lda TitleRoutine                ;
 LC1E6:  cmp #$1D                        ;Is Game at ending sequence? If not, branch
 LC1E8:  bcc +                           ;
-LC1EA:  jmp EndGamePalWrite             ;Write palette data for ending.
+LC1EA:  jmp (Bank0_EndGamePalWrite)     ;Write palette data for ending.
 LC1ED:* ldy PalDataPending              ;
 LC1EF:  bne ++                          ;Is palette data pending? If so, branch.
 LC1F1:  lda GameMode                    ;
@@ -53,7 +53,7 @@ LC1F3:  beq +                           ;Is game being played? If so, branch to 
 LC1F5:  lda TitleRoutine                ;
 LC1F7:  cmp #$15                        ;Is intro playing? If not, branch.
 LC1F9:  bcs +                           ;
-LC1FB:  jmp StarPalSwitch               ;Cycles palettes for intro stars twinkle.
+LC1FB:  jmp (Bank0_StarPalSwitch)       ;Cycles palettes for intro stars twinkle. Will rts at the end.
 LC1FE:* rts                             ;Exit when no palette data pending.
 
 ;Prepare to write palette data to PPU.

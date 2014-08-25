@@ -31,12 +31,12 @@ MMCWriteReg3:
     asl
     tay
     lda #$06                    
-    sta $8000
-    sty $8001
+    sta MMC3BankSelect
+    sty MMC3BankData
     iny
     lda #$07
-    sta $8000
-    sty $8001
+    sta MMC3BankSelect
+    sty MMC3BankData
     lda $00                         ;Restore A with current bank number before exiting.
     rts                             ;
 
@@ -69,7 +69,7 @@ LC533:  sty GamePaused                  ;Ensure game is not paused.
 LC535:  iny                             ;Y=1.
 LC536:  sty GameMode                    ;Game is at title routines.
 LC538:  jsr ScreenNmiOff                ;Waits for NMI to end then turns it off.
-LC53B:  jsr CopyMap                     ;Copy game map from ROM to cartridge RAM $7000-$73FF
+LC53B:  jsr CopyMapFromBank0            ;Copy game map from ROM to cartridge RAM $7000-$73FF
 LC53E:  jsr ClearNameTables             ;Erase name table data.
 
 LC541:  ldy #$A0                        ;
@@ -80,6 +80,9 @@ LC54A:  bne -                           ;
 
 LC54C:  jsr InitTitleGFX                ;Load title GFX.
 LC54F:  jmp NmiOn                       ;Turn on VBlank interrupts.
+
+CopyMapFromBank0:
+    jmp (Bank0_CopyMap)
 
 ;Brinstar memory page.
 

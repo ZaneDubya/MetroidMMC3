@@ -18,19 +18,19 @@ RESET:
     BPL -                           ; Wait for VBlank
 *   LDA PPUStatus                   ; 
     BPL -                           ; 
-    lda #$06                    ; 
-    sta $8000
-    stx $8001
-    inx
-    lda #$07
-    sta MMC3BankSelect
-    stx MMC3BankData
-    jmp Startup                 ; Do preliminary housekeeping.
+    lda #$06                        ; 
+    sta MMC3BankSelect              ;
+    stx MMC3BankData                ;
+    inx                             ;
+    lda #$07                        ;
+    sta MMC3BankSelect              ;
+    stx MMC3BankData                ;
+    jmp Startup                     ; Do preliminary housekeeping.
 
 ;---------------------------------[ Startup ]-----------------------------------
 Startup:
     lda #$00                            ; A = $00
-    jsr MMCWriteReg3                    ;Swap to PRG bank #0 at $8000
+    jsr MMCWriteReg3                    ; Swap to PRG bank 0 (Title)
     tax                                 ; X = $00
     dex                                 ; X = $FF
     txs                                 ; S points to end of stack page
@@ -146,7 +146,7 @@ NMI:
     bne ++                          ;Skip if the frame couldn't finish in time.
     lda GameMode                    ;
     beq +                           ;Branch if mode=Play.
-    jsr NMIScreenWrite              ;Write end message on screen(If appropriate).
+    jsr CheckBank0NMI               ;Write end message on screen(If appropriate).
 *   jsr CheckPalWrite               ;Check if palette data pending.
     jsr CheckPPUWrite               ;check if data needs to be written to PPU.
     jsr WritePPUCtrl                ;Update $2000 & $2001.
@@ -163,3 +163,6 @@ NMI:
     pla                             ;restore A.
     plp                             ;Restore processor status flags.
     rti                             ;Return from NMI.
+    
+CheckBank0NMI:
+    jmp (Bank0_NMIScreenWrite)

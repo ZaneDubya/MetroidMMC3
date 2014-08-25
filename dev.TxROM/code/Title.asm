@@ -11,8 +11,21 @@
 .require "Defines.asm"
 .require "GameEngineDeclarations.asm"
 
-;-----------------------------------------[ Start of code ]------------------------------------------
+;-------------------------------[ Address Table ]-------------------------------
+;The core GameEngine bank (bank 7) needs to be able to jmp to routines
+;located in this bank. The addresses of these routines that are directly
+;referenced by GameEngine are located at the beginning of this bank.
+.word $8010
+.word StarPalSwitch
+.word DecSpriteYCoord
+.word NMIScreenWrite
+.word EndGamePalWrite
+.word CopyMap
+.word $0000
+.word $0000
 
+;-----------------------------------------[ Start of code ]------------------------------------------
+;Code begins at $8010
 L8000:  lda TitleRoutine                ;
 L8002:  cmp #$15                        ;If intro routines not running, branch.
 L8004:  bcs ++                          ;
@@ -20,14 +33,6 @@ L8006:  lda Joy1Change                  ;
 L8008:  and #$10                        ;if start has not been pressed, branch.
 L800A:  beq +                           ;
 L800C:  ldy #$00                        ;
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
 L8016:  lda PPUCNT0ZP                   ;       
 L8018:  and #$FC                        ;Set name table to name table 0.
 L801A:  sta PPUCNT0ZP                   ;
@@ -97,10 +102,6 @@ L8086:  sty SpareMemCB                  ;Not accessed by game.
 L8088:  sty SpareMemC9                  ;Not accessed by game.
 L808A:  lda #$02                        ;A=2.
 L808C:  sta IntroMusicRestart           ;Title rountines cycle twice before restart of music.
-        nop
-        nop
-        nop
-        nop
 L8092:  sty PalDataIndex                ;Reset index to palette data.
 L8094:  sty ScreenFlashPalIndex         ;Reset index into screen flash palette data.
 L8096:  sty IntroStarOffset             ;Reset index into IntroStarPntr table.
@@ -287,8 +288,6 @@ L81E4:  STA ObjectX                     ;not used later in the title routine.  T
 L81E7:  LDA AnimResetIndex              ;remnants of some abandoned code.
 L81EA:  STA AnimIndex                   ;
 L81ED:  RTS                             ;
-
-.advance $822E, $00
 
 ChangeIntroNameTable:
 L822E:  LDA PPUCNT0ZP                   ;
@@ -2922,7 +2921,6 @@ L9A05:  .byte $F0                       ;Repeat bit set. Repeats entry 4 times.
 L9A06:  .byte $00                       ;End PPU string write. 
 
 ;----------------------------------------[ Ending routines ]-----------------------------------------
-
 ;The following routine is accessed via the NMI routine every frame.
 NMIScreenWrite:
 L9A07:  LDA TitleRoutine                ;

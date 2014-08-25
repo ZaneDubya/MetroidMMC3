@@ -9,7 +9,7 @@
 .require "Defines.asm"
 
 ;---------------------------[ Forward declarations ]----------------------------
-; These addresses are located in other banks.
+; These addresses are located in area banks.
 .alias ObjectAnimIndexTbl       $8572
 .alias FramePtrTable            $860B
 .alias PlacePtrTable            $86DF
@@ -20,12 +20,15 @@
 .alias EnemyDataTable8B         $968B
 .alias EnemyInitDelayTbl        $96BB
 .alias SpecItmsTable            $9598
-.alias SoundEngine              $B3B4       ; Both Title & Area
-.alias StarPalSwitch            $8AC7       ; Title bank only
-.alias DecSpriteYCoord          $988A       ; Title bank only
-.alias NMIScreenWrite           $9A07       ; Title bank only
-.alias EndGamePalWrite          $9F54       ; Title bank only
-.alias CopyMap                  $A93E       ; Title bank only
+; The sound engine is located in all area banks and the title bank:
+.alias SoundEngine              $B3B4
+; These are indexes in the Title bank address table.
+.alias Bank0_TitleRoutine       $8000       ; Index 0
+.alias Bank0_StarPalSwitch      $8002       ; Index 1
+.alias Bank0_DecSpriteYCoord    $8004       ; Index 2
+.alias Bank0_NMIScreenWrite     $8006       ; Index 3
+.alias Bank0_EndGamePalWrite    $8008       ; Index 4
+.alias Bank0_CopyMap            $800A       ; Index 5
 
 ;------------------------------[ Start of code ]--------------------------------
 .org $C000
@@ -88,9 +91,9 @@ DecTimer:
 GoMainRoutine:
     lda GameMode                    ;0 if game is running, 1 if at intro screen.
     beq +                           ;Branch if mode=Play.
-    jmp $8000                       ;Jump to $8000, where a routine similar to the one-->
-                                        ;below is executed, only using TitleRoutine instead
-                                        ;of MainRoutine as index into a jump table.
+    jmp (Bank0_TitleRoutine)        ;Jump to address in Bank 0, where a routine similar to the one-->
+                                    ;below is executed, only using TitleRoutine instead
+                                    ;of MainRoutine as index into a jump table.
 *   lda Joy1Change                  ;
     and #$10                        ;Has START been pressed?-->
     beq +++                         ;if not, execute current routine as normal.
