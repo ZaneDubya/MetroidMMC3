@@ -220,14 +220,14 @@ L95DA:  .byte $01, $00, $03, $43, $00, $00, $00, $00, $00, $00, $69
 ; based on the value of the index in EnDataIndex, X.
 L95E5:  LDA EnDataIndex, X
 L95E8:  JSR CommonJump_ChooseRoutine
-L95EB:  .word $99B8     ; Enemy dies
+L95EB:  .word $99B8     ; Called when enemy dies
 L95ED:  .word $99D3
-L95EF:  .word $99E5     ; Waver update
-L95F1:  .word $99D8     ; Floater update
-L95F3:  .word $99FA     ; Skree update
-L95F5:  .word $9A4C     ; Zoomer update
-L95F7:  .word $9AF5     ; Swooper update
-L95F9:  .word $9B32     ; Zeb update
+L95EF:  .word $99E5     ; Waver every frame update
+L95F1:  .word $99D8     ; Floater every frame update
+L95F3:  .word $99FA     ; Skree every frame update
+L95F5:  .word $9A4C     ; Zoomer every frame update
+L95F7:  .word $9AF5     ; Swooper every frame update
+L95F9:  .word $9B32     ; Zeb every frame update
 L95FB:  .word $9BA2
 L95FD:  .word $9BD2
 L95FF:  .word $9C1A

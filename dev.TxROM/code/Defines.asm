@@ -156,7 +156,7 @@
 .alias InArea                   $74     ;#$10(or #$00)=Brinstar, #$11=Norfair, #$12=Kraid hideout,-->
                                         ;#$13=Tourian, #$14=Ridley hideout.
 
-.alias SpareMem75               $75     ;Initialized to #$FF in AreaInit. Not used.
+.alias SpareMem75               $75     ; Unused
 .alias PalToggle                $76
 
 .alias ItemRoomMusicStatus      $79     ;#$00=Item room music not playing. 
@@ -221,7 +221,7 @@
 .alias CrossDataIndex           $C6     ;#$00 thru #$04. Index to find cross sprite data.
 .alias DrawCross                $C7     ;#$01=Draw cross on screen during crosshairs routine.
 .alias SpriteLoadPending        $C8     ;Set to #$00 after sprite RAM load complete.
-.alias SpareMemC9               $C9     :Written to in title routine, but never accessed.
+.alias SpareMemC9               $C9     ;Written to in title routine, but never accessed.
 .alias SpareMemCB               $CB     ;Written to in title routine, but never accessed.
 .alias SpareMemCC               $CC     ;Written to in title routine, but never accessed.
 .alias SpareMemCD               $CD     ;Written to in title routine, but never accessed.
@@ -233,7 +233,7 @@
 .alias SpareMemD3               $D3     ;Written to in title routine, but never accessed.
 .alias SpareMemD7               $D7     ;Written to in title routine, but never accessed.
 .alias IntroMusicRestart        $D8     ;After all title routines run twice, restarts intro music.
-.alias ABStatus                 $F0     ;Stores A and B button status in AreaInit. Never used.
+.alias SpareMemF0               $F0     ;Never used.
 ;                               $F7
 
 .alias MirrorCntrl              $FA     ;If bit 3 is set, PPU set to horizontal mirroring-->

@@ -198,28 +198,23 @@ LC4B0:  bne SetMainRoutine              ;Branch always.
 ;-------------------------------------------[ AreaInit ]---------------------------------------------
 
 AreaInit:
-LC801:  lda #$00                        ;
-LC803:  sta ScrollX                     ;Clear ScrollX.
-LC805:  sta ScrollY                     ;Clear ScrollY.
-LC807:  lda PPUCNT0ZP                   ;       
-LC809:  and #$FC                        ;Sets nametable address = $2000.
-LC80B:  sta PPUCNT0ZP                   ;
-LC80D:  inc MainRoutine                 ;Increment MainRoutine to MoreInit.
-LC80F:  lda Joy1Status                  ;
-LC811:  and #$C0                        ;Stores status of both the A and B buttons.
-LC813:  sta ABStatus                    ;Appears to never be accessed.
-LC815:  jsr EraseAllSprites             ;Clear all sprite info.
-LC818:  lda #$10                        ;Prepare to load Brinstar memory page.
-LC81A:  jsr IsEngineRunning             ;Check to see if ok to switch lower memory page.
+    lda #$00                        ;
+    sta ScrollX                     ;Clear ScrollX.
+    sta ScrollY                     ;Clear ScrollY.
+    lda PPUCNT0ZP                   ;       
+    and #$FC                        ;Sets nametable address = $2000.
+    sta PPUCNT0ZP                   ;
+    inc MainRoutine                 ;Increment MainRoutine to MoreInit.
+    jsr EraseAllSprites             ;Clear all sprite info.
+    lda #$10                        ;Prepare to load Brinstar memory page.
+    jsr IsEngineRunning             ;Check to see if ok to switch lower memory page.
 
 ;------------------------------------------[ MoreInit ]---------------------------------------------
 
 MoreInit:
 LC81D:  ldy #$01                        ;
 LC81F:  sty PalDataPending              ;Palette data pending = yes.
-LC821:  ldx #$FF                        ;
-LC823:  stx SpareMem75                  ;$75 Not referenced ever again in the game.
-LC825:  inx                             ;X=0.
+LC821:  ldx #$00                        ;
 LC826:  stx AtEnding                    ;Not playing ending scenes.
 LC829:  stx DoorStatus                  ;Samus not in door.
 LC82B:  stx SamusDoorData               ;Samus is not inside a door.
@@ -243,7 +238,6 @@ LC849:  jsr DestroyEnemies              ;
         stx DoorOnNameTable3            ;Clear data about doors on the name tables.
         stx DoorOnNameTable0            ;
         inx                             ;X=1.
-        stx SpareMem30                  ;Not accessed by game.
         inx                             ;X=2.
 LC854:  stx ScrollDir                   ;Set initial scroll direction as left.
 
@@ -291,7 +285,6 @@ LC86C:  jsr GetRoomNum                  ;Put room number at current map pos in $
         stx $91
         inx      ; X = 1
         stx PalDataPending
-        stx SpareMem30                  ;Not accessed by game.
         inc MainRoutine                 ;SamusInit is next routine to run.
         jmp ScreenOn
 

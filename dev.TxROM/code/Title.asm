@@ -139,7 +139,8 @@ L80C8:  .byte $00, $00, $00, $00, $00, $00, $C0, $C4
 
 DrawIntroBackground:
 L80D0:  LDA #$10                        ;Intro music flag.
-L80D2:  STA ABStatus                    ;Never accessed by game.
+        nop
+        nop
 L80D4:  STA MultiSFXFlag                ;Initiates intro music.
 L80D7:  JSR ScreenOff                   ;Turn screen off.
 L80DA:  JSR ClearNameTables             ;Erase name table data.
