@@ -59,30 +59,6 @@ LC2A2:  lda ScrollY                     ;X and Y scroll offsets are loaded seria
 LC2A4:  sta PPUScroll                   ;
 LC2A7:  rts                             ;
 
-;----------------------------------[ Add y index to stored addresses ]-------------------------------
-
-;Add Y to pointer at $0000. 
-
-AddYToPtr00:
-LC2A8:  tya                             ;
-LC2A9:  clc                             ;Add value stored in Y to lower address-->
-LC2AA:  adc $00                         ;byte stored in $00.
-LC2AC:  sta $00                         ;
-LC2AE:  bcc +                           ;Increment $01(upper address byte) if carry-->
-LC2B0:  inc $01                         ;has occurred.
-LC2B2:* rts                             ;
-
-;Add Y to pointer at $0002
-
-AddYToPtr02:
-LC2B3:  tya                             ;
-LC2B4:  clc                             ;Add value stored in Y to lower address-->
-LC2B5:  adc $02                         ;byte stored in $02.
-LC2B7:  sta $02                         ;
-LC2B9:  bcc +                           ;Increment $01(upper address byte) if carry-->
-LC2BB:  inc $03                         ;has occurred.
-LC2BD:* rts                             ;
-
 ;-------------------------------------[ PPU writing routines ]---------------------------------------
 
 ;Checks if any data is waiting to be written to the PPU.

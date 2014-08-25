@@ -177,8 +177,11 @@ L95A2:  .word EnemyFramePtrTbl2         ;($9CF0)tables needed to accommodate all
 L95A4:  .word EnemyPlacePtrTbl          ;($9D04)Pointers to enemy frame placement data.
 L95A6:  .word EnemyAnimIndexTbl         ;($9B85)Index to values in addr tables for enemy animations.
 
-L95A8:  .byte $60, $EA, $EA, $60, $EA, $EA, $60, $EA, $EA, $60, $EA, $EA, $60, $EA, $EA, $60
-L95B8:  .byte $EA, $EA, $60, $EA, $EA, $60, $EA, $EA, $60, $EA, $EA
+L95A8:  .byte $60, $EA, $EA, $60, $EA, $EA  ; rts nop nop rts nop nop
+L95AE:  .byte $60, $EA, $EA, $60, $EA, $EA  ; rts nop nop rts nop nop
+L95B4:  .byte $60, $EA, $EA, $60, $EA, $EA  ; rts nop nop rts nop nop
+L95BA:  .byte $60, $EA, $EA, $60, $EA, $EA  ; rts nop nop rts nop nop
+L95C0:  .byte $60, $EA, $EA                 ; rts nop nop
 
 AreaRoutine:
 L95C3:  JMP $9B48                       ;Area specific routine.

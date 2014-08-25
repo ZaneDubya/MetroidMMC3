@@ -2,7 +2,7 @@
 ; Programmed by HAI YUKAMI, ZARU SOBAJIMA, GPZ SENGOKU, N.SHIOTANI, & M.HOUDAI
 ; Disassembled by Kent Hansen. Commented by Nick Mikstas.
 ; This version is organized and ported to use the MMC3.
-; Area ROM Bank Common Routines & Data II ($B200 - $BFFF)
+; Area ROM Bank Common Routines & Data II (B200 - BFFF)
 
 .require "Defines.asm"
 .require "GameEngineDeclarations.asm"
@@ -209,7 +209,7 @@ LB333:  LDX #$98                        ;Lower address byte in ChooseNextSFXRout
 LB335:  BNE GotoSFXCheckFlags           ;Branch always.
 
 GotoSFXCheckFlags:
-LB337:  JSR CheckSFXFlag                ;($B4BD)Checks to see if SFX flags set.         
+LB337:  JSR CheckSFXFlag                ;Checks to see if SFX flags set.         
 LB33A:  JMP ($00E2)                     ;if no flag found, Jump to next SFX cycle,-->
                                         ;else jump to specific SFX handling routine.
 LoadSTriangleSFXInitFlags:
@@ -225,18 +225,18 @@ LB349:  BNE GotoSFXCheckFlags           ;Branch always.
 LoadMultiSFXInitFlags:
 LB34B:  LDA MultiSFXFlag                ;Load A with Multi init flags, (3rd SFX cycle).
 LB34E:  LDX #$A7                        ;Lower address byte in ChooseNextSFXRoutineTbl.
-LB350:  JSR CheckSFXFlag                ;($B4BD)Checks to see if SFX or music flags set.
-LB353:  JSR FindMusicInitIndex          ;($BC53)Find bit containing music init flag.
-LB356:  JSR Add8                        ;($BC64)Add 8 to MusicInitIndex.
+LB350:  JSR CheckSFXFlag                ;Checks to see if SFX or music flags set.
+LB353:  JSR FindMusicInitIndex          ;Find bit containing music init flag.
+LB356:  JSR Add8                        ;Add 8 to MusicInitIndex.
 LB359:  JMP ($00E2)                     ;If no flag found, Jump to next SFX cycle,-->
                                         ;else jump to specific SFX handling subroutine.
 LoadMultiSFXContFlags:
 LB35C:  LDA MultiContSFX                ;Load A with $68C flags (4th SFX cycle).
 LB35F:  LDX #$AC                        ;Lower address byte in ChooseNextSFXRoutineTbl.
-LB361:  JMP GotoSFXCheckFlags           ;($B337)Checks to see if SFX or music flags set.
+LB361:  JMP GotoSFXCheckFlags           ;Checks to see if SFX or music flags set.
 
 LoadSQ1Flags:
-LB364:  JSR LoadSQ1SFXInitFlags         ;($B329)Check for SQ1 init flags.
+LB364:  JSR LoadSQ1SFXInitFlags         ;Check for SQ1 init flags.
 LB367:  RTS                             ;
 
 LoadSQ1ChannelSFX:                      ;Used to determine which sound registers to change-->
@@ -274,7 +274,7 @@ LB38E:  RTS                             ;
 
 PauseSFX:
 LB38F:* INC SFXPaused                   ;SFXPaused=#$01
-LB392:  JSR ClearSounds                 ;($B43E)Clear sound registers of data.          
+LB392:  JSR ClearSounds                 ;Clear sound registers of data.          
 LB395:  STA PauseSFXStatus              ;PauseSFXStatus=#$00
 LB398:  RTS                             ;
 
@@ -287,7 +287,7 @@ LB3A5:  AND #$03                        ;
 LB3A7:  CMP #$03                        ;Every fourth frame, repeat GamePaused SFX
 LB3A9:  BNE +                           ;
 LB3AB:  LDY #$0D                        ;Lower address byte of GamePaused SFX data(Base=$B200)
-LB3AD:  JSR LoadSQ1ChannelSFX           ;($B368) Load GamePaused SFX data.
+LB3AD:  JSR LoadSQ1ChannelSFX           ; Load GamePaused SFX data.
 LB3B0:* INC PauseSFXStatus              ;
 LB3B3:* RTS                             ;
 
@@ -315,10 +315,10 @@ LB3C1:  CMP #$05                        ;Is game paused?  If yes, branch.
 LB3C3:  BEQ ---                         ;
 LB3C5:  LDA #$00                        ;Clear SFXPaused when game is running.
 LB3C7:  STA SFXPaused                   ;
-LB3CA:  JSR LoadNoiseSFXInitFlags       ;($B31B)Check noise SFX flags.
-LB3CD:  JSR LoadMultiSFXInitFlags       ;($B34B)Check multichannel SFX flags.
-LB3D0:  JSR LoadSTriangleSFXInitFlags   ;($B33D)Check triangle SFX flags.
-LB3D3:  JSR LoadMusicTempFlags          ;($BC36)Check music flags.
+LB3CA:  JSR LoadNoiseSFXInitFlags       ;Check noise SFX flags.
+LB3CD:  JSR LoadMultiSFXInitFlags       ;Check multichannel SFX flags.
+LB3D0:  JSR LoadSTriangleSFXInitFlags   ;Check triangle SFX flags.
+LB3D3:  JSR LoadMusicTempFlags          ;Check music flags.
 
 ClearSFXFlags:
 LB3D6:* LDA #$00                        ;
@@ -330,7 +330,7 @@ LB3E4:  STA MultiSFXFlag                ;
 LB3E7:  STA MusicInitFlag               ;
 LB3EA:  RTS                             ;
 
-LB3EB:* JSR InitializeSoundAddresses    ;($B404)Prepare to start playing music.         
+LB3EB:* JSR InitializeSoundAddresses    ;Prepare to start playing music.         
 LB3EE:  BEQ --                          ;Branch always.
 
 CheckRepeatMusic:
@@ -346,9 +346,9 @@ LB3FF:  CMP CurrentSFXFlags             ;with current SFX flags.  If both are eq
 LB402:  BEQ ++                          ;just clear music counters, else clear everything.
 
 InitializeSoundAddresses:               ;
-LB404:* JSR ClearMusicAndSFXAddresses   ;($B41D)Jumps to all subroutines needed to reset-->
-LB407:  JSR ClearSounds                 ;($B43E)all sound addresses in order to start-->
-LB40A:* JSR ClearSpecialAddresses       ;($B40E)playing music.
+LB404:* JSR ClearMusicAndSFXAddresses   ;Jumps to all subroutines needed to reset-->
+LB407:  JSR ClearSounds                 ;all sound addresses in order to start-->
+LB40A:* JSR ClearSpecialAddresses       ;playing music.
 LB40D:  RTS                             ;
 
 ClearSpecialAddresses:
@@ -396,16 +396,16 @@ LB463:  CMP #$03                        ;
 LB465:  BEQ MusicBranch01               ;Branch if SFX uses triangle wave.
 LB467:  RTS                             ;Exit if SFX routine uses no channels.
 
-LB468:* JSR LoadSQ1ChannelSFX           ;($B368)Prepare to load SQ1 channel with data.
+LB468:* JSR LoadSQ1ChannelSFX           ;Prepare to load SQ1 channel with data.
 LB46B:  BEQ ++                          ;Branch always.
 MusicBranch00:                          ;
-LB46D:  JSR LoadSQ2ChannelSFX           ;($B374)Prepare to load SQ2 channel with data.
+LB46D:  JSR LoadSQ2ChannelSFX           ;Prepare to load SQ2 channel with data.
 LB470:  BEQ ++                          ;Branch always.
 MusicBranch01:                          ;
-LB472:  JSR LoadTriangleChannelSFX      ;($B36C)Prepare to load triangle channel with data.
+LB472:  JSR LoadTriangleChannelSFX      ;Prepare to load triangle channel with data.
 LB475:  BEQ ++                          ;Branch always.
-LB477:* JSR LoadNoiseChannelSFX         ;($B370)Prepare to load noise channel with data.
-LB47A:* JSR UpdateContFlags             ;($B493)Set continuation flags for this SFX.
+LB477:* JSR LoadNoiseChannelSFX         ;Prepare to load noise channel with data.
+LB47A:* JSR UpdateContFlags             ;Set continuation flags for this SFX.
 LB47D:  TXA                             ;
 LB47E:  STA NoiseInUse,X                ;Indicate sound channel is in use.
 LB481:  LDA #$00                        ;
@@ -487,7 +487,7 @@ LB4F1:  STA $E2                         ;specific SFX handling routine for the S
 LB4F3:  INY                             ;found.  The address is stored in registers-->
 LB4F4:  LDA ($E0),Y                     ;$E2 and $E3.
 LB4F6:  STA $E3                         ;
-LB4F8:  JMP RestoreSFXFlags             ;($B4EA)Restore original data in CurrentSFXFlags.
+LB4F8:  JMP RestoreSFXFlags             ;Restore original data in CurrentSFXFlags.
 
 ;-----------------------------------[ SFX Handling Routines ]---------------------------------------
 
@@ -500,12 +500,12 @@ LB50B:  .byte $16, $15, $14, $12
 SpitFlameSFXStart:
 LB50F:  LDA #$14                        ;Number of frames to play sound before a change.
 LB511:  LDY #$21                        ;Lower byte of sound data start address(base=$B200).
-LB513:  JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB513:  JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 SpitFlameSFXContinue:
-LB516:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB516:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB519:  BNE +                           ;If more frames to process, branch.
-LB51B:  JMP EndNoiseSFX                 ;($B58F)End SFX.
+LB51B:  JMP EndNoiseSFX                 ;End SFX.
 LB51E:* LDY NoiseSFXData                ;
 LB521:  LDA $B4FB,Y                     ;Load data from table above and store in NoiseCntrl0.
 LB524:  STA NoiseCntrl0                 ;
@@ -515,7 +515,7 @@ LB52A:  RTS
 ScrewAttackSFXStart:
 LB52B:  LDA #$05                        ;Number of frames to play sound before a change.
 LB52D:  LDY #$11                        ;Lower byte of sound data start address(base=$B200).
-LB52F:  JSR SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB52F:  JSR SelectSFXRoutine            ;Setup registers for SFX.
 LB532:  LDA $B213                       ;#$00.
 LB535:  STA NoiseSFXData                ;Clear NoiseSFXData.
 LB538:* RTS                             ;
@@ -524,12 +524,12 @@ ScrewAttackSFXContinue:
 LB539:  LDA ScrewAttackSFXData          ;Prevents period index from being incremented until-->
 LB53C:  CMP #$02                        ;after the tenth frame of the SFX.
 LB53E:  BEQ +                           ;Branch if not ready to increment.
-LB540:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB540:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB543:  BNE -                           ;
 LB545:  INC ScrewAttackSFXData          ;Increment every fifth frame.
 LB548:  RTS                             ;
 
-LB549:* JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB549:* JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB54C:  BNE IncrementPeriodIndex        ;Start increasing period index after first ten frames.
 LB54E:  DEC NoiseSFXData                ;
 LB551:  DEC NoiseSFXData                ;Decrement NoiseSFXData by three every fifth frame.
@@ -538,7 +538,7 @@ LB557:  INC MultiSFXData                ;Increment MultiSFXData.  When it is equ
 LB55A:  LDA MultiSFXData                ;end screw attack SFX.  MultiSFXData does not-->
 LB55D:  CMP #$0F                        ;appear to be linked to multi SFX channels in-->
 LB55F:  BNE --                          ;this routine.
-LB561:  JMP EndNoiseSFX                 ;($B58F)End SFX.
+LB561:  JMP EndNoiseSFX                 ;End SFX.
 
 IncrementPeriodIndex:
 LB564:  INC NoiseSFXData                ;Incrementing the period index has the effect of-->
@@ -549,31 +549,31 @@ LB56D:  RTS                             ;
 MissileLaunchSFXStart:
 LB56E:  LDA #$18                        ;Number of frames to play sound before a change.
 LB570:  LDY #$15                        ;Lower byte of sound data start address(base=$B200).
-LB572:  JSR GotoSelectSFXRoutine        ;($B587)Prepare to setup registers for SFX.
+LB572:  JSR GotoSelectSFXRoutine        ;Prepare to setup registers for SFX.
 LB575:  LDA #$0A                        ;
 LB577:  STA NoiseSFXData                ;Start increment index for noise channel at #$0A.
 LB57A:  RTS                             ;
 
 MissileLaunchSFXContine:
-LB57B:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB57B:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB57E:  BNE IncrementPeriodIndex        ;
-LB580:  JMP EndNoiseSFX                 ;($B58F)End SFX.
+LB580:  JMP EndNoiseSFX                 ;End SFX.
 
 BombExplodeSFXStart:
 LB583:  LDA #$30                        ;Number of frames to play sound before a change.
 LB585:  LDY #$19                        ;Lower byte of sound data start address(base=$B200).
 
 GotoSelectSFXRoutine:
-LB587:* JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB587:* JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 ;The following routine is used to continue BombExplode and SamusWalk SFX.
 
 NoiseSFXContinue:
-LB58A:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB58A:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB58D:  BNE MusicBranch02               ;If more frames to process, branch to exit. 
 
 EndNoiseSFX:
-LB58F:  JSR ClearCurrentSFXFlags        ;($B4A2)Clear all SFX flags.
+LB58F:  JSR ClearCurrentSFXFlags        ;Clear all SFX flags.
 LB592:  LDA #$10                        ;
 LB594:  STA NoiseCntrl0                 ;disable envelope generator(sound off).
 
@@ -590,8 +590,8 @@ LB5A3:  BNE -                           ;Branch always.
 
 MultiSFXInit:
 LB5A5:  STA MultiSFXLength              ;
-LB5A8:  JSR LoadSQ2ChannelSFX           ;($B374)Set SQ2 SFX data.
-LB5AB:  JSR UpdateContFlags             ;($B493)Set continue SFX flag.
+LB5A8:  JSR LoadSQ2ChannelSFX           ;Set SQ2 SFX data.
+LB5AB:  JSR UpdateContFlags             ;Set continue SFX flag.
 LB5AE:  LDA #$01                        ;
 LB5B0:  STA SQ1InUse                    ;Disable music from using SQ1 and SQ2 while-->
 LB5B3:  LDA #$02                        ;SFX are playing.
@@ -612,7 +612,7 @@ LB5D2:  STA SQ2Cntrl0                   ;Disable SQ2 envelope generator(sound of
 LB5D5:  LDA #$7F                        ;
 LB5D7:  STA SQ1Cntrl1                   ;Disable SQ1 sweep.
 LB5DA:  STA SQ2Cntrl1                   ;Disable SQ2 sweep.
-LB5DD:  JSR ClearCurrentSFXFlags        ;($B4A2)Clear all SFX flags.
+LB5DD:  JSR ClearCurrentSFXFlags        ;Clear all SFX flags.
 LB5E0:  LDA #$00                        ;
 LB5E2:  STA SQ1InUse                    ;
 LB5E5:  STA SQ2InUse                    ;Allows music player to use SQ1 and SQ2 channels.
@@ -621,9 +621,9 @@ LB5EB:  RTS                             ;
 
 BossHitSFXStart:
 LB5EC:  LDY #$2D                        ;Low byte of SQ1 sound data start address(base=$B200).
-LB5EE:  JSR LoadSQ1ChannelSFX           ;($B368)Set SQ1 SFX data.
+LB5EE:  JSR LoadSQ1ChannelSFX           ;Set SQ1 SFX data.
 LB5F1:  LDY #$29                        ;Low byte of SQ2 sound data start address(base=$B200).
-LB5F3:  JMP MultiSFXInit                ;($B5A5)Initiate multi channel SFX.
+LB5F3:  JMP MultiSFXInit                ;Initiate multi channel SFX.
 
 BossHitSFXContinue:
 LB5F6:  INC SQ1SFXData                  ;Increment index to data in table below.
@@ -642,7 +642,7 @@ LB614:  AND #$7F                        ;Randomly set bits 7, 3, 2, 1 and 0.
 LB616:  STA SQ1SFXPeriodLow             ;Store in SQ1 period low.
 LB619:  ROL                             ;
 LB61A:  STA SQ1SQ2SFXData               ;
-LB61D:  JMP WriteSQ1SQ2PeriodLow        ;($B62C)Write period low data to SQ1 and SQ2.
+LB61D:  JMP WriteSQ1SQ2PeriodLow        ;Write period low data to SQ1 and SQ2.
 LB620:* INC SQ1SQ2SFXData               ;
 LB623:  INC SQ1SQ2SFXData               ;Increment SQ1 and SQ2 period low by two.
 LB626:  INC SQ1SFXPeriodLow             ;
@@ -655,23 +655,23 @@ LB632:  LDA SQ1SFXPeriodLow             ;channels.
 LB635:  STA SQ1Cntrl2                   ;
 LB638:  RTS                             ;
 
-LB639:* JMP EndMultiSFX                 ;($B5CD)End SFX.
+LB639:* JMP EndMultiSFX                 ;End SFX.
 
 BossHitSFXDataTbl:
 LB63C:  .byte $38, $3D, $3F, $3F, $3F, $3F, $3F, $3D, $3B, $39, $3B, $3D, $3F, $3D, $3B, $39
 LB64C:  .byte $3B, $3D, $3F, $39
 
 SamusHitSFXContinue:
-LB650:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB650:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB653:  BNE +                           ;If more SFX frames to process, branch.
-LB655:  JMP EndMultiSFX                 ;($B5CD)End SFX.
+LB655:  JMP EndMultiSFX                 ;End SFX.
 LB658:* LDY #$25                        ;Low byte of SQ1 sound data start address(base=$B200).
-LB65A:  JSR LoadSQ1ChannelSFX           ;($B368)Set SQ1 SFX data.
+LB65A:  JSR LoadSQ1ChannelSFX           ;Set SQ1 SFX data.
 LB65D:  LDA RandomNumber1               ;
 LB65F:  AND #$0F                        ;Randomly set last four bits of SQ1 period low.
 LB661:  STA SQ1Cntrl2                   ;
 LB664:  LDY #$25                        ;Low byte of SQ2 sound data start address(base=$B200).
-LB666:  JSR LoadSQ2ChannelSFX           ;($B374)Set SQ2 SFX data.
+LB666:  JSR LoadSQ2ChannelSFX           ;Set SQ2 SFX data.
 LB669:  LDA RandomNumber1               ;
 LB66B:  LSR                             ;Multiply random number by 4.
 LB66C:  LSR                             ;
@@ -681,7 +681,7 @@ LB672:  RTS                             ;
 
 SamusHitSFXStart:
 LB673:  LDY #$25                        ;Low byte of SQ1 sound data start address(base=$B200).
-LB675:  JSR LoadSQ1ChannelSFX           ;($B368)Set SQ1 SFX data.
+LB675:  JSR LoadSQ1ChannelSFX           ;Set SQ1 SFX data.
 LB678:  LDA RandomNumber1               ;
 LB67A:  AND #$0F                        ;Randomly set last four bits of SQ1 period low.
 LB67C:  STA SQ1Cntrl2                   ;
@@ -690,7 +690,7 @@ LB680:  LDA RandomNumber1               ;Randomly set last three bits of SQ2 per
 LB682:  AND #$03                        ;
 LB684:  ADC #$01                        ;Number of frames to play sound before a change.
 LB686:  LDY #$25                        ;Low byte of SQ2 sound data start address(base=$B200).
-LB688:  JSR MultiSFXInit                ;($B5A5)Initiate multi channel SFX.
+LB688:  JSR MultiSFXInit                ;Initiate multi channel SFX.
 LB68B:  LDA RandomNumber1               ;
 LB68D:  LSR                             ;Multiply random number by 4.
 LB68E:  LSR                             ;
@@ -700,15 +700,15 @@ LB694:* RTS                             ;
 
 IncorrectPasswordSFXStart:
 LB695:  LDY #$31                        ;Low byte of SQ1 sound data start address(base=$B200).
-LB697:  JSR LoadSQ1ChannelSFX           ;($B368)Set SQ1 SFX data.
+LB697:  JSR LoadSQ1ChannelSFX           ;Set SQ1 SFX data.
 LB69A:  LDA #$20                        ;Number of frames to play sound before a change.
 LB69C:  LDY #$35                        ;Low byte of SQ2 sound data start address(base=$B200).
-LB69E:  JMP MultiSFXInit                ;($B5A5)Initiate multi channel SFX.
+LB69E:  JMP MultiSFXInit                ;Initiate multi channel SFX.
 
 IncorrectPasswordSFXContinue:
-LB6A1:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB6A1:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB6A4:  BNE -                           ;If more frames to process, branch to exit.
-LB6A6:  JMP EndMultiSFX                 ;($B5CD)End SFX.
+LB6A6:  JMP EndMultiSFX                 ;End SFX.
 
 ;The following table is used by the below routine to load SQ1Cntrl2 data in the-->
 ;MissilePickupSFXContinue routine.
@@ -717,12 +717,12 @@ MissilePickupSFXTbl:
 LB6A9:  .byte $BD, $8D, $7E, $5E, $46, $3E, $00 
 
 MissilePickupSFXContinue:
-LB6B0:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB6B0:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB6B3:  BNE MusicBranch03               ;If more frames to process, branch to exit.
 LB6B5:  LDY SQ1SFXData                  ;
 LB6B8:  LDA MissilePickupSFXTbl,Y       ;Load SFX data from table above.
 LB6BB:  BNE +                           ;
-LB6BD:  JMP EndSQ1SFX                   ;($B6F2)SFX completed.
+LB6BD:  JMP EndSQ1SFX                   ;SFX completed.
 LB6C0:* STA SQ1Cntrl2                   ;
 LB6C3:  LDA $B244                       ;#$28.
 LB6C6:  STA SQ1Cntrl3                   ;load SQ1Cntrl3 with #$28.
@@ -737,14 +737,14 @@ LB6CF:  LDY #$41                        ;Lower byte of sound data start address(
 LB6D1:  BNE +++                         ;Branch always.
 
 EnergyPickupSFXContinue:
-LB6D3:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB6D3:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB6D6:  BNE MusicBranch03               ;If more frames to process, branch to exit.
 LB6D8:  INC SQ1SFXData                  ;
 LB6DB:  LDA SQ1SFXData                  ;Every six frames, reload SFX info.  Does it-->
 LB6DE:  CMP #$03                        ;three times for a total of 18 frames.
 LB6E0:  BEQ +                           ;
 LB6E2:  LDY #$3D                        ;
-LB6E4:  JMP LoadSQ1ChannelSFX           ;($B368)Set SQ1 SFX data.
+LB6E4:  JMP LoadSQ1ChannelSFX           ;Set SQ1 SFX data.
 
 EnergyPickupSFXStart:
 LB6E7:  LDA #$06                        ;Number of frames to play sound before a change.
@@ -755,7 +755,7 @@ LB6EB:  BNE +++                         ;Branch always.
 ;enemy hit and the Samus jump SFXs.
 
 SQ1SFXContinue:
-LB6ED:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB6ED:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB6F0:  BNE MusicBranch03               ;
 
 EndSQ1SFX:
@@ -763,7 +763,7 @@ LB6F2:* LDA #$10                        ;
 LB6F4:  STA SQ1Cntrl0                   ;Disable envelope generator(sound off).
 LB6F7:  LDA #$00                        ;
 LB6F9:  STA SQ1InUse                    ;Allows music to use SQ1 channel.
-LB6FC:  JSR ClearCurrentSFXFlags        ;($B4A2)Clear all SFX flags.
+LB6FC:  JSR ClearCurrentSFXFlags        ;Clear all SFX flags.
 LB6FF:  INC WriteMultiChannelData       ;Allows music routines to load SQ1 and SQ2 music.
 LB702:  RTS                             ;
 
@@ -804,7 +804,7 @@ LB735:  LDA #$0B                        ;Number of frames to play sound before a
 LB737:  LDY #$45                        ;Lower byte of sound data start address(base=$B200).
 
 SelectSFX1:
-LB739:* JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB739:* JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 BirdOutOfHoleSFXStart:
 LB73C:  LDA CurrentMusic                ;If escape music is playing, use this SFX to make-->
@@ -821,20 +821,20 @@ BulletFireSFXContinue:
 LB74F:  LDA HasBeamSFX                  ;
 LB752:  LSR                             ;If Samus has ice beam, branch.
 LB753:  BCS +++                         ;
-LB755:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB755:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB758:  BNE +                           ;If more frames to process, branch to exit.
-LB75A:  JMP EndSQ1SFX                   ;($B6F2)If SFX finished, jump.
+LB75A:  JMP EndSQ1SFX                   ;If SFX finished, jump.
 LB75D:* RTS                             ;
 
 HasIceBeamSFXStart:
 LB75E:* LDA #$07                        ;Number of frames to play sound before a change.
 LB760:  LDY #$61                        ;Lower byte of sound data start address(base=$B200).
-LB762:  JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB762:  JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 HasIceBeamSFXContinue:
-LB765:* JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB765:* JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB768:  BNE +                           ;If more frames to process, branch.
-LB76A:  JMP EndSQ1SFX                   ;($B6F2)If SFX finished, jump.
+LB76A:  JMP EndSQ1SFX                   ;If SFX finished, jump.
 LB76D:* LDA SQ1SFXData                  ;
 LB770:  AND #$01                        ;Determine index for IceBeamSFXDataTbl below.
 LB772:  TAY                             ;
@@ -848,17 +848,17 @@ LB779:  .byte $81                       ;
 WaveBeamSFXStart:
 LB77A:  LDA #$08                        ;Number of frames to play sound before a change.
 LB77C:  LDY #$5D                        ;Lower byte of sound data start address(base=$B200).
-LB77E:  JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB77E:  JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 WaveBeamSFXContinue:
-LB781:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB781:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB784:  BNE +                           ;If more frames to process, branch.
 LB786:  LDY SQ1SQ2SFXData               ;
 LB789:  INC SQ1SQ2SFXData               ;Load wave beam SFXDisable/enable envelope length-->
 LB78C:  LDA WaveBeamSFXDisLngthTbl,Y    ;data from WaveBeamSFXDisableLengthTbl.
 LB78F:  STA SQ1Cntrl0                   ;
 LB792:  BNE MusicBranch10               ;If at end of WaveBeamSFXDisableLengthTbl, end SFX.
-LB794:  JMP EndSQ1SFX                   ;($B6F2)If SFX finished, jump.
+LB794:  JMP EndSQ1SFX                   ;If SFX finished, jump.
 LB797:* LDA SQ1SFXData
 LB79A:  AND #$01                        ;
 LB79C:  TAY                             ;Load wave beam SFX period low data from-->
@@ -892,14 +892,14 @@ LB7BF:  LDA #$00                        ;
 LB7C1:  STA TriangleChangeHigh          ;No change in triangle channel period high.
 LB7C4:  LDA #$1F                        ;Number of frames to play sound before a change.
 LB7C6:  LDY #$85                        ;Lower byte of sound data start address(base=$B200).
-LB7C8:  JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB7C8:  JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 DoorOpenCloseSFXContinue:
-LB7CB:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB7CB:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB7CE:  BNE +                           ;
-LB7D0:  JMP EndTriangleSFX              ;($B896)End SFX.
-LB7D3:* JSR DecreaseTrianglePeriods     ;($B98C)Decrease periods.
-LB7D6:  JMP WriteTrianglePeriods        ;($B869)Save new periods.
+LB7D0:  JMP EndTriangleSFX              ;End SFX.
+LB7D3:* JSR DecreaseTrianglePeriods     ;Decrease periods.
+LB7D6:  JMP WriteTrianglePeriods        ;Save new periods.
 
 BeepSFXStart:
 LB7D9:  LDA TriangleContSFX             ;If BombLaunchSFX is already playing, branch-->
@@ -907,12 +907,12 @@ LB7DC:  AND #$80                        ;without playing BeepSFX.
 LB7DE:  BNE MusicBranch10               ;
 LB7E0:  LDA #$03                        ;Number of frames to play sound before a change.
 LB7E2:  LDY #$79                        ;Lower byte of sound data start address(base=$B200).
-LB7E4:  JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB7E4:  JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 BeepSFXContinue:
-LB7E7:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB7E7:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB7EA:  BNE MusicBranch10               ;If more frames to process, branch to exit.
-LB7EC:  JMP EndTriangleSFX              ;($B896)End SFX.
+LB7EC:  JMP EndTriangleSFX              ;End SFX.
 
 BigEnemyHitSFXStart:
 LB7EF:  LDA #$12                        ;Increase triangle low period by #$12 every frame.
@@ -926,13 +926,13 @@ LB802:  AND #$07                        ;#$1F.
 LB804:  STA TrianglePeriodHigh          ;Save new triangle period high data.
 LB807:  LDA #$0A                        ;Number of frames to play sound before a change.
 LB809:  LDY #$7D                        ;Lower byte of sound data start address(base=$B200).
-LB80B:  JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB80B:  JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 BigEnemyHitSFXContinue:
-LB80E:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB80E:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB811:  BNE +                           ;If more frames to process, branch
-LB813:  JMP EndTriangleSFX              ;($B896)End SFX
-LB816:* JSR IncreaseTrianglePeriods     ;($B978)Increase periods.
+LB813:  JMP EndTriangleSFX              ;End SFX
+LB816:* JSR IncreaseTrianglePeriods     ;Increase periods.
 LB819:  LDA RandomNumber1               ;
 LB81B:  AND #$3C                        ;
 LB81D:  STA TriangleSFXData             ;
@@ -948,7 +948,7 @@ LB833:  RTS                             ;
 SamusToBallSFXStart:
 LB834:  LDA #$08                        ;Number of frames to play sound before a change.
 LB836:  LDY #$6D                        ;Lower byte of sound data start address(base=$B200).
-LB838:  JSR SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB838:  JSR SelectSFXRoutine            ;Setup registers for SFX.
 LB83B:  LDA #$05                        ;
 LB83D:  STA PercentDifference           ;Stores percent difference. In this case 5 = 1/5 = 20%.
 LB840:  LDA $B26F                       ;#$DD.
@@ -959,15 +959,15 @@ LB84B:  STA TrianglePeriodHigh          ;Save new triangle period high data.
 LB84E:  RTS                             ;
 
 SamusToBallSFXContinue:
-LB84F:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB84F:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB852:  BNE +                           ;If more frames to process, branch.
-LB854:  JMP EndTriangleSFX              ;($B896)End SFX.
-LB857:* JSR DivideTrianglePeriods       ;($B9A0)reduces triangle period low by 20% each frame.
+LB854:  JMP EndTriangleSFX              ;End SFX.
+LB857:* JSR DivideTrianglePeriods       ;reduces triangle period low by 20% each frame.
 LB85A:  LDA TriangleLowPercentage       ;
 LB85D:  STA TriangleChangeLow           ;Store new values to change triangle periods.
 LB860:  LDA TriangleHighPercentage      ;
 LB863:  STA TriangleChangeHigh          ;
-LB866:  JSR DecreaseTrianglePeriods     ;($B98C)Decrease periods.
+LB866:  JSR DecreaseTrianglePeriods     ;Decrease periods.
 
 WriteTrianglePeriods:
 LB869:  LDA TrianglePeriodLow           ;Write TrianglePeriodLow to triangle channel.
@@ -980,18 +980,18 @@ LB877:  RTS                             ;
 BombLaunchSFXStart:
 LB878:  LDA #$04                        ;Number of frames to play sound before a change.
 LB87A:  LDY #$65                        ;Lower byte of sound data start address(base=$B200).
-LB87C:  JMP SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB87C:  JMP SelectSFXRoutine            ;Setup registers for SFX.
 
 BombLaunchSFXContinue:
-LB87F:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB87F:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB882:  BNE MusicBranch04               ;If more frames to process, branch to exit.
 LB884:  INC TriangleSFXData             ;
 LB887:  LDA TriangleSFXData             ;After four frames, load second part of SFX.
 LB88A:  CMP #$02                        ;
 LB88C:  BNE +                           ;
-LB88E:  JMP EndTriangleSFX              ;($B896)End SFX.
+LB88E:  JMP EndTriangleSFX              ;End SFX.
 LB891:* LDY #$69                        ;Lower byte of sound data start address(base=$B200).
-LB893:  JMP LoadTriangleChannelSFX      ;($B36C)Prepare to load triangle channel with data.
+LB893:  JMP LoadTriangleChannelSFX      ;Prepare to load triangle channel with data.
 
 EndTriangleSFX:
 LB896:  LDA #$00                        ;
@@ -999,7 +999,7 @@ LB898:  STA TriangleCntrl0              ;clear TriangleCntr0(sound off).
 LB89B:  STA TriangleInUse               ;Allows music to use triangle channel.
 LB89E:  LDA #$18                        ;
 LB8A0:  STA TriangleCntrl3              ;Set length index to #$03.
-LB8A3:  JSR ClearCurrentSFXFlags        ;($B4A2)Clear all SFX flags.
+LB8A3:  JSR ClearCurrentSFXFlags        ;Clear all SFX flags.
 
 MusicBranch04:
 LB8A6:  RTS                             ;Exit from for multiple routines.
@@ -1007,17 +1007,17 @@ LB8A6:  RTS                             ;Exit from for multiple routines.
 MetroidHitSFXStart:
 LB8A7:  LDA #$03                        ;Number of frames to play sound before a change.
 LB8A9:  LDY #$71                        ;Lower byte of sound data start address(base=$B200).
-LB8AB:  JSR SelectSFXRoutine            ;($B452)Setup registers for SFX.
-LB8AE:  JMP RndTrianglePeriods          ;($B8C3)MetroidHit SFX has several different sounds.
+LB8AB:  JSR SelectSFXRoutine            ;Setup registers for SFX.
+LB8AE:  JMP RndTrianglePeriods          ;MetroidHit SFX has several different sounds.
 
 MetroiHitSFXContinue:
-LB8B1:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB8B1:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB8B4:  BEQ +                           ;
 LB8B6:  INC TriangleSFXData             ;
 LB8B9:  LDA TriangleSFXData             ;Randomize triangle periods nine times throughout-->
 LB8BC:  CMP #$09                        ;the course of the SFX.
 LB8BE:  BNE MusicBranch04               ;If SFX not done, branch.
-LB8C0:  JMP EndTriangleSFX              ;($B896)End SFX.
+LB8C0:  JMP EndTriangleSFX              ;End SFX.
 
 RndTrianglePeriods:
 LB8C3:* LDA RandomNumber1               ;Randomly set or reset bits 7, 4, 2 and 1 of-->
@@ -1029,10 +1029,10 @@ LB8CE:  STA TriangleCntrl3              ;channel period high.
 LB8D1:  RTS                             ;
 
 SamusDieSFXStart:
-LB8D2:  JSR InitializeSoundAddresses    ;($B404)Clear all sound addresses.
+LB8D2:  JSR InitializeSoundAddresses    ;Clear all sound addresses.
 LB8D5:  LDA #$0E                        ;Number of frames to play sound before a change.
 LB8D7:  LDY #$75                        ;Lower byte of sound data start address(base=$B200).
-LB8D9:  JSR SelectSFXRoutine            ;($B452)Setup registers for SFX.
+LB8D9:  JSR SelectSFXRoutine            ;Setup registers for SFX.
 LB8DC:  LDA #$15                        ;Decrease triangle SFX periods by 4.8% every frame.
 LB8DE:  STA PercentDifference           ;
 LB8E1:  LDA $B277                       ;#$40.
@@ -1042,25 +1042,25 @@ LB8E9:  STA TrianglePeriodHigh          ;
 LB8EC:* RTS                             ;
 
 SamusDieSFXContinue:
-LB8ED:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB8ED:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB8F0:  BNE +                           ;
 LB8F2:  LDA #$20                        ;Store change in triangle period low.
 LB8F4:  STA TriangleChangeLow           ;
 LB8F7:  LDA #$00                        ;
 LB8F9:  STA TriangleChangeHigh          ;No change in triangle period high.
-LB8FC:  JSR DecreaseTrianglePeriods     ;($B98C)Decrease periods.
+LB8FC:  JSR DecreaseTrianglePeriods     ;Decrease periods.
 LB8FF:  INC TriangleSFXData             ;
 LB902:  LDA TriangleSFXData             ;
 LB905:  CMP #$06                        ;
 LB907:  BNE -                           ;If more frames to process, branch to exit.
-LB909:  JMP EndTriangleSFX              ;($B896)End SFX.
-LB90C:* JSR DivideTrianglePeriods       ;($B9A0)reduces triangle period low.
+LB909:  JMP EndTriangleSFX              ;End SFX.
+LB90C:* JSR DivideTrianglePeriods       ;reduces triangle period low.
 LB90F:  LDA TriangleLowPercentage       ;
 LB912:  STA TriangleChangeLow           ;Update triangle periods.
 LB915:  LDA TriangleHighPercentage      ;
 LB918:  STA TriangleChangeHigh          ;
-LB91B:  JSR IncreaseTrianglePeriods     ;($B978)Increase periods.
-LB91E:  JMP WriteTrianglePeriods        ;($B869)Save new periods.
+LB91B:  JSR IncreaseTrianglePeriods     ;Increase periods.
+LB91E:  JMP WriteTrianglePeriods        ;Save new periods.
 
 StatueRaiseSFXStart:
 LB921:  LDA $B283                       ;#$11.
@@ -1074,16 +1074,16 @@ LB934:  LDA #$0B                        ;
 LB936:  STA TriangleChangeLow           ;
 LB939:  LDA #$06                        ;Number of frames to play sound before a change.
 LB93B:  LDY #$81                        ;Lower byte of sound data start address(base=$B200).
-LB93D:  JMP SelectSFXroutine            ;($B452)Setup registers for SFX.
+LB93D:  JMP SelectSFXroutine            ;Setup registers for SFX.
 
 StatueRaiseSFXContinue:
-LB940:  JSR IncrementSFXFrame           ;($B4A9)Get next databyte to process in SFX.
+LB940:  JSR IncrementSFXFrame           ;Get next databyte to process in SFX.
 LB943:  BNE ++                          ;
 LB945:  INC TriangleSFXData             ;Increment TriangleSFXData every 6 frames.
 LB948:  LDA TriangleSFXData             ;
 LB94B:  CMP #$09                        ;When TriangleSFXData = #$09, end SFX.
 LB94D:  BNE +                           ;
-LB94F:  JMP EndTriangleSFX              ;($B896)End SFX.
+LB94F:  JMP EndTriangleSFX              ;End SFX.
 LB952:* LDA TriangleChangeLow           ;
 LB955:  PHA                             ;Save triangle periods.
 LB956:  LDA TriangleChangeHigh          ;
@@ -1092,14 +1092,14 @@ LB95A:  LDA #$25                        ;
 LB95C:  STA TriangleChangeLow           ;
 LB95F:  LDA #$00                        ;No change in triangle period high.
 LB961:  STA TriangleChangeHigh          ;
-LB964:  JSR IncreaseTrianglePeriods     ;($B978)Increase periods.
+LB964:  JSR IncreaseTrianglePeriods     ;Increase periods.
 LB967:  PLA                             ;
 LB968:  STA TriangleChangeHigh          ;Restore triangle periods.
 LB96B:  PLA                             ;
 LB96C:  STA TriangleChangeLow           ;
-LB96F:  JMP WriteTrianglePeriods        ;($B869)Save new periods.
-LB972:* JSR DecreaseTrianglePeriods     ;($B98C)Decrease periods.
-LB975:  JMP WriteTrianglePeriods        ;($B869)Save new periods.
+LB96F:  JMP WriteTrianglePeriods        ;Save new periods.
+LB972:* JSR DecreaseTrianglePeriods     ;Decrease periods.
+LB975:  JMP WriteTrianglePeriods        ;Save new periods.
 
 IncreaseTrianglePeriods:
 LB978:  CLC 
@@ -1193,16 +1193,16 @@ LBA36:* RTS                             ;
 
 LoadSQ1SQ2Channels:
 LBA37:  LDX #$00                        ;Load SQ1 channel data.
-LBA39:  JSR WriteSQCntrl0               ;($BA41)Write Cntrl0 data.
+LBA39:  JSR WriteSQCntrl0               ;Write Cntrl0 data.
 LBA3C:  INX                             ;Load SQ2 channel data.
-LBA3D:  JSR WriteSQCntrl0               ;($BA41)Write Cntrl0 data.
+LBA3D:  JSR WriteSQCntrl0               ;Write Cntrl0 data.
 LBA40:  RTS                             ;
 
 WriteSQCntrl0:
 LBA41:  LDA SQ1VolumeCntrl,X            ;Load SQ channel volume data. If zero, branch to exit.
 LBA44:  BEQ +++++                       ;
 LBA46:  STA VolumeCntrlAddress          ;
-LBA48:  JSR LoadSQ1SQ2Periods           ;($BA08)Load SQ1 and SQ2 control information.
+LBA48:  JSR LoadSQ1SQ2Periods           ;Load SQ1 and SQ2 control information.
 LBA4B:  LDA SQ1VolumeData,X             ;
 LBA4E:  CMP #$10                        ;If sound channel is not currently-->
 LBA50:  BEQ +++++++                     ;playing sound, branch.
@@ -1212,9 +1212,9 @@ LBA56:  BEQ +                           ;
 LBA58:  INY                             ;*2(2 byte address to find voulume control data).
 LBA59:  INY                             ;
 LBA5A:  BNE -                           ;Keep decrementing until desired address is found.
-LBA5C:* LDA VolumeCntrlAddressTbl,Y     ;Base is $BCB0.
+LBA5C:* LDA VolumeCntrlAddressTbl,Y     ;
 LBA5F:  STA $EC                         ;Volume data address low byte.
-LBA61:  LDA VolumeCntrlAddressTbl+1,Y   ;Base is $BCB1.
+LBA61:  LDA VolumeCntrlAddressTbl+1,Y   ;
 LBA64:  STA $ED                         ;Volume data address high byte.
 LBA66:  LDY SQ1VolumeIndex,X            ;Index to desired volume data.
 LBA69:  LDA ($EC),Y                     ;Load desired volume for current channel into-->
@@ -1252,15 +1252,15 @@ LBA99:* LDY #$10                        ;Disable envelope generator and set volu
 LBA9B:  BNE -----                       ;Branch always.
 
 GotoCheckRepeatMusic:
-LBA9D:* JSR CheckRepeatMusic            ;($B3F0)Resets music flags if music repeats.
+LBA9D:* JSR CheckRepeatMusic            ;Resets music flags if music repeats.
 LBAA0:  RTS                             ;
 
 GotoLoadSQ1SQ2Channels:
-LBAA1:* JSR LoadSQ1SQ2Channels          ;($BA37)Load SQ1 and SQ2 channel data.
+LBAA1:* JSR LoadSQ1SQ2Channels          ;Load SQ1 and SQ2 channel data.
 LBAA4:  RTS                             ;
 
 LoadCurrentMusicFrameData:
-LBAA5:  JSR ResetVolumeIndex            ;($B9F3)Reset index if at the beginning of a new note.
+LBAA5:  JSR ResetVolumeIndex            ;Reset index if at the beginning of a new note.
 LBAA8:  LDA #$00                        ;
 LBAAA:  TAX                             ;X = #$00.
 LBAAB:  STA ThisSoundChannel            ;(#$00, #$04, #$08 or #$0C).
@@ -1304,7 +1304,7 @@ LBAE9:  BEQ +                           ;At end of loop? If yes, branch.
 LBAEB:  AND #$C0                        ;
 LBAED:  CMP #$C0                        ;At beginnig of new loop? if yes, branch.
 LBAEF:  BEQ ++                          ;
-LBAF1:  JMP LoadMusicChannel            ;($BB1C)Load music data into channel.
+LBAF1:  JMP LoadMusicChannel            ;Load music data into channel.
 
 RepeatMusicLoop:
 LBAF4:* LDA SQ1RepeatCounter,X          ;If loop counter has reached zero, branch to exit.
@@ -1321,11 +1321,11 @@ LBB07:  STA SQ1RepeatCounter,X          ;in repeat counter addresses.  # of time
 LBB0A:  DEC SQ1RepeatCounter,X          ;Decrement loop counter.
 LBB0D:  LDA SQ1MusicIndexIndex,X        ;Store location of loop start in loop index address.
 LBB10:  STA SQ1LoopIndex,X              ;
-LBB13:* JMP LoadNextChannelIndexData    ;($BADC)Load next channel index data.
+LBB13:* JMP LoadNextChannelIndexData    ;Load next channel index data.
 
-LBB16:* JMP LoadNoiseChannelMusic       ;($BBDE)Load data for noise channel music.
+LBB16:* JMP LoadNoiseChannelMusic       ;Load data for noise channel music.
 
-LBB19:* JMP LoadTriangleCntrl0          ;($BBB7)Load Cntrl0 byte of triangle channel.
+LBB19:* JMP LoadTriangleCntrl0          ;Load Cntrl0 byte of triangle channel.
 
 LoadMusicChannel:
 LBB1C:  TYA                             ;
@@ -1337,7 +1337,7 @@ LBB24:  AND #$0F                        ;Separate note length data.
 LBB26:  CLC                             ;
 LBB27:  ADC NoteLengthTblOffset         ;Find proper note lengths table for current music.
 LBB2A:  TAY                             ;
-LBB2B:  LDA NoteLengths0Tbl,Y           ;(Base is $BEF7)Load note length and store in--> 
+LBB2B:  LDA NoteLengths0Tbl,Y           ;(Load note length and store in--> 
 LBB2E:  STA SQ1FrameCountInit,X         ;frame count init address.
 LBB31:  TAY                             ;Y now contains note length.
 LBB32:  TXA                             ;
@@ -1404,11 +1404,11 @@ LBBA5:  STA SQ1Cntrl1,Y                 ;
 LoadNewMusicFrameCount:
 LBBA8:  LDA SQ1FrameCountInit,X         ;Load new music frame count and store it in music-->
 LBBAB:  STA SQ1MusicFrameCount,X        ;frame count address.
-LBBAE:  JMP IncrementToNextChannel      ;($BAB3)Move to next sound channel.
+LBBAE:  JMP IncrementToNextChannel      ;Move to next sound channel.
 
 SQ1SQ2InUse:
 LBBB1:* INC SQ1InUse,X                  ;Restore in use status of SQ1 or SQ1.
-LBBB4:  JMP LoadNewMusicFrameCount      ;($BBA8)Load new music frame count.
+LBBB4:  JMP LoadNewMusicFrameCount      ;Load new music frame count.
 
 LoadTriangleCntrl0:
 LBBB7:  LDA TriangleCounterCntrl        ;
@@ -1418,7 +1418,7 @@ LBBBE:  LDA TriangleCounterCntrl        ;
 LBBC1:  AND #$F0                        ;If upper bits are set, branch to play longer note.
 LBBC3:  BNE +                           ;
 LBBC5:  TYA                             ;
-LBBC6:  JMP AddTriangleLength           ;($BBCD)Calculate length to play note.
+LBBC6:  JMP AddTriangleLength           ;Calculate length to play note.
 LBBC9:* LDA #$FF                        ;Disable length cntr(play until triangle data changes).
 LBBCB:  BNE +                           ;Branch always.
 
@@ -1431,7 +1431,7 @@ LBBD2:  CMP #$3C                        ;
 LBBD4:  BCC +                           ;If result is greater than #$3C, store #$3C(highest-->
 LBBD6:  LDA #$3C                        ;triangle linear count allowed).
 LBBD8:* STA TriLinearCount              ;
-LBBDB:* JMP LoadSoundDataIndexIndex     ;($BB37)Load index to sound data index.
+LBBDB:* JMP LoadSoundDataIndexIndex     ;Load index to sound data index.
 
 LoadNoiseChannelMusic:
 LBBDE:  LDA NoiseContSFX                ;
@@ -1443,10 +1443,10 @@ LBBEB:  LDA $B201,Y                     ;at address B201.  The possible values o
 LBBEE:  STA NoiseCntrl2                 ;#$01, #$04, #$07 or #$0A.
 LBBF1:  LDA $B202,Y                     ;
 LBBF4:  STA NoiseCntrl3                 ;
-LBBF7:* JMP LoadNewMusicFrameCount      ;($BBA8)Load new music frame count.
+LBBF7:* JMP LoadNewMusicFrameCount      ;Load new music frame count.
 
 ;The following table is used by the InitializeMusic routine to find the index for loading
-;addresses $062B thru $0637.  Base is $BD31.
+;addresses $062B thru $0637.  
 
 InitMusicIndexTbl:
 LBBFA:  .byte $41                       ;Ridley area music.
@@ -1506,15 +1506,15 @@ LBC3B:  BNE +                           ;Branch always.
 LoadMusicInitFlags:
 LBC3D:  LDA MusicInitFlag               ;Load A with Music flags, (10th SFX cycle).
 LBC40:  LDX #$B1                        ;Lower address byte in ChooseNextSFXRoutineTbl.
-LBC42:* JSR CheckSFXFlag                ;($B4BD)Checks to see if SFX or music flags set.
-LBC45:  JSR FindMusicInitIndex          ;($BC53)Find bit containing music init flag.
+LBC42:* JSR CheckSFXFlag                ;Checks to see if SFX or music flags set.
+LBC45:  JSR FindMusicInitIndex          ;Find bit containing music init flag.
 LBC48:  JMP ($00E2)                     ;If no flag found, Jump to next SFX cycle,-->
                                         ;else jump to specific SFX handling subroutine.
 
 ContinueMusic:                          ;11th and last SFX cycle.
 LBC4B:  LDA CurrentMusic                ;
 LBC4E:  BEQ +++                         ;Branch to exit of no music playing.
-LBC50:  JMP LoadCurrentMusicFrameData   ;($BAA5)Load info for current frame of music data.
+LBC50:  JMP LoadCurrentMusicFrameData   ;Load info for current frame of music data.
 
 ;MusicInitIndex values correspond to the following music:
 ;#$00=Ridley area music, #$01=Tourian music, #$02=Item room music, #$03=Kraid area music,
@@ -1546,22 +1546,22 @@ LBC73:  STA CurrentMusic                ;
 LBC76:* RTS                             ;
 
 Music00Start:
-LBC77:  JMP Music00Init                 ;($BCAA)Initialize music 00.
+LBC77:  JMP Music00Init                 ;Initialize music 00.
 
 Music01Start:
-LBC7A:  JMP Music01Init                 ;($BCA4)Initialize music 01.
+LBC7A:  JMP Music01Init                 ;Initialize music 01.
 
 Music02Start:
-LBC7D:  JMP Music02Init                 ;($BC9A)Initialize music 02.
+LBC7D:  JMP Music02Init                 ;Initialize music 02.
 
 Msic03Start:
-LBC80:  JMP Music03Init                 ;($BC96)Initialize music 03.
+LBC80:  JMP Music03Init                 ;Initialize music 03.
 
 Music04Start:
-LBC83:  JMP Music04Init                 ;($BC89)Initialize music 04.
+LBC83:  JMP Music04Init                 ;Initialize music 04.
 
 Music05Start:
-LBC86:  JMP Music05Init                 ;($BC9E)Initialize music 05.
+LBC86:  JMP Music05Init                 ;Initialize music 05.
 
 Music04Init:
 LBC89:  LDA #$B3                        ;Duty cycle and volume data for SQ1 and SQ2.
@@ -1570,9 +1570,9 @@ XYMusicInit:
 LBC8B:* TAX                             ;Duty cycle and volume data for SQ1.
 LBC8C:  TAY                             ;Duty cycle and volume data for SQ2.
 
-LBC8D:* JSR SetVolumeAndDisableSweep    ;($B9E4)Set duty cycle and volume data for SQ1 and SQ2.
-LBC90:  JSR InitializeMusic             ;($BF19)Setup music registers.
-LBC93:  JMP LoadCurrentMusicFrameData   ;($BAA5)Load info for current frame of music data.
+LBC8D:* JSR SetVolumeAndDisableSweep    ;Set duty cycle and volume data for SQ1 and SQ2.
+LBC90:  JSR InitializeMusic             ;Setup music registers.
+LBC93:  JMP LoadCurrentMusicFrameData   ;Load info for current frame of music data.
 
 Music03Init:
 LBC96:  LDA #$34                        ;Duty cycle and volume data for SQ1 and SQ2.
@@ -2130,16 +2130,16 @@ LBF17:  .byte $02                       ;About    1/32 seconds ($BA)
 LBF18:  .byte $03                       ;About    3/64 seconds ($BB)
 
 InitializeMusic:                                        
-LBF19:  JSR CheckMusicFlags             ;($B3FC)Check to see if restarting current music.
+LBF19:  JSR CheckMusicFlags             ;Check to see if restarting current music.
 LBF1C:  LDA CurrentSFXFlags             ;Load current SFX flags and store CurrentMusic address.
 LBF1F:  STA CurrentMusic                ;
 LBF22:  LDA MusicInitIndex              ;
 LBF25:  TAY                             ;
-LBF26:  LDA InitMusicIndexTbl,Y         ;($BBFA)Find index for music in InitMusicInitIndexTbl.
+LBF26:  LDA InitMusicIndexTbl,Y         ;Find index for music in InitMusicInitIndexTbl.
 LBF29:  TAY                             ;
 LBF2A:  LDX #$00                        ;
 
-LBF2C:* LDA InitMusicTbl,Y              ;Base is $BD31.
+LBF2C:* LDA InitMusicTbl,Y              ;
 LBF2F:  STA NoteLengthTblOffset,X       ;
 LBF32:  INY                             ;The following loop repeats 13 times to-->
 LBF33:  INX                             ;load the initial music addresses -->

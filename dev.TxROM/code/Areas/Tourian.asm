@@ -1628,19 +1628,21 @@ LA30F:  RTS
 
 LA310:  .byte $0C, $0D, $0E, $0F, $07
 
-LA315:  LDY #$05
-LA317:  JSR $99B1
-LA31A:  DEY 
-LA31B:  BPL $A317
-LA31D:  STA $92
-LA31F:  RTS
+LA315:
+    LDY #$05
+*   JSR $99B1
+    DEY 
+    BPL -
+    STA MetroidOnSamus
+    RTS
 
-LA320:  TXA 
-LA321:  JSR $9B1B
-LA324:  TAY 
-LA325:  JSR $99B1
-LA328:  STA $92
-LA32A:  RTS
+LA320:
+    TXA 
+    JSR $9B1B
+    TAY 
+    JSR $99B1
+    STA MetroidOnSamus
+    RTS
 
 LA32B:  .byte $22, $FF, $FF, $FF, $FF
 
