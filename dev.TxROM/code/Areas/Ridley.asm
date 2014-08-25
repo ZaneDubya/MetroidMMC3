@@ -1,10 +1,8 @@
-; METROID source code
-; (C) 1986 NINTENDO
-; Programmed by HAI YUKAMI, ZARU SOBAJIMA, 
-;      GPZ SENGOKU, N.SHIOTANI, & M.HOUDAI
-;Commented by Dirty McDingus (nmikstas@yahoo.com)
-;Can be reassembled using Ophis.
-;Ridley hideout (memory page 5)
+; METROID Disassembly (c) 1986 NINTENDO
+; Programmed by HAI YUKAMI, ZARU SOBAJIMA, GPZ SENGOKU, N.SHIOTANI, & M.HOUDAI
+; Disassembled by Kent Hansen. Commented by Nick Mikstas.
+; This version is organized and ported to use the MMC3.
+; Ridley hideout (Rom Bank 5)
 
 .require "../Defines.asm"
 .require "../GameEngineDeclarations.asm"
