@@ -1,8 +1,8 @@
 Metroid for MMC3
 ===========
 This is the disassembled source code of METROID for the Nintendo Entertainment
-System (NES). You can reassemble the source code using Ophis v2.1 (a build of Ophis
-for Windows is included in this repository, or you can [build it from source](https://github.com/michaelcmartin/Ophis)).
+System (NES). You can reassemble the source code using the included assembler 
+(Ophis v2.1, built for Windows), or a build of the [latest version of Ophis](https://github.com/michaelcmartin/Ophis).
 
 Features
 -----------
