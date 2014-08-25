@@ -485,7 +485,7 @@
 
 .alias ChannelType              $065C   ;Stores channel type being processed(0,1,2,3 or 4)
 .alias CurrentMusicRepeat       $065D   ;Stores flags of music to repeat
-.alias MusicInitIndex           $065E   ;index for loading $62B thru $637(base=$BD31).
+.alias MusicInitIndex           $065E   ;index for loading $62B thru $637(base=BD31).
 
 .alias NoiseSFXLength           $0660   ;Stores number of frames to play Noise SFX
 .alias SQ1SFXLength             $0661   ;Stores number of frames to play SQ1 SFX
@@ -988,3 +988,7 @@
 .alias wa_BombCount             9
 .alias wa_BombExplode           10
 .alias wa_Missile               11
+
+;-----------------------------[ ROM Bank locations ]----------------------------
+.alias ROMBank_Switchable       $8000
+.alias ROMBank_Fixable          $C000

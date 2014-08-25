@@ -7,7 +7,7 @@
 .require "../Defines.asm"
 .require "../GameEngineDeclarations.asm"
 
-.org $8000
+.org ROMBank_Switchable
 .include "../AreaCommon.asm"
 
 ;------------------------------------------[ Graphics data ]-----------------------------------------
@@ -147,44 +147,44 @@ L9550:  .byte $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $00, $
 ;----------------------------------------------------------------------------------------------------
 
 PalPntrTbl:
-L9560:  .word Palette00                 ;($A718)
-L9562:  .word Palette01                 ;($A73C)
-L9564:  .word Palette02                 ;($A748)
-L9566:  .word Palette03                 ;($A742)
-L9568:  .word Palette04                 ;($A74E)
-L956A:  .word Palette05                 ;($A754)
-L956C:  .word Palette05                 ;($A754)
-L956E:  .word Palette06                 ;($A759)
-L9570:  .word Palette07                 ;($A75E)
-L9572:  .word Palette08                 ;($A773)
-L9574:  .word Palette09                 ;($A788)
-L9576:  .word Palette0A                 ;($A78D)
-L9578:  .word Palette0A                 ;($A78D)
-L957A:  .word Palette0A                 ;($A78D)
-L957C:  .word Palette0A                 ;($A78D)
-L957E:  .word Palette0A                 ;($A78D)
-L9580:  .word Palette0A                 ;($A78D)
-L9582:  .word Palette0A                 ;($A78D)
-L9584:  .word Palette0A                 ;($A78D)
-L9586:  .word Palette0A                 ;($A78D)
-L9588:  .word Palette0B                 ;($A794)
-L958A:  .word Palette0C                 ;($A79B)
-L958C:  .word Palette0D                 ;($A7A2)
-L958E:  .word Palette0E                 ;($A7A9)
-L9590:  .word Palette0F                 ;($A7B1)
-L9592:  .word Palette10                 ;($A7B9)
-L9594:  .word Palette11                 ;($A7C1)
-L9596:  .word Palette12                 ;($A7C9)
+L9560:  .word Palette00                 ;
+L9562:  .word Palette01                 ;
+L9564:  .word Palette02                 ;
+L9566:  .word Palette03                 ;
+L9568:  .word Palette04                 ;
+L956A:  .word Palette05                 ;
+L956C:  .word Palette05                 ;
+L956E:  .word Palette06                 ;
+L9570:  .word Palette07                 ;
+L9572:  .word Palette08                 ;
+L9574:  .word Palette09                 ;
+L9576:  .word Palette0A                 ;
+L9578:  .word Palette0A                 ;
+L957A:  .word Palette0A                 ;
+L957C:  .word Palette0A                 ;
+L957E:  .word Palette0A                 ;
+L9580:  .word Palette0A                 ;
+L9582:  .word Palette0A                 ;
+L9584:  .word Palette0A                 ;
+L9586:  .word Palette0A                 ;
+L9588:  .word Palette0B                 ;
+L958A:  .word Palette0C                 ;
+L958C:  .word Palette0D                 ;
+L958E:  .word Palette0E                 ;
+L9590:  .word Palette0F                 ;
+L9592:  .word Palette10                 ;
+L9594:  .word Palette11                 ;
+L9596:  .word Palette12                 ;
 
 AreaPointers:
-L9598:  .word SpecItmsTbl               ;($A83B)Beginning of special items table.
-L959A:  .word RmPtrTbl                  ;($A7D1)Beginning of room pointer table.
-L959C:  .word StrctPtrTbl               ;($A7FB)Beginning of structure pointer table.
-L959E:  .word MacroDefs                 ;($AE49)Beginning of macro definitions.
-L95A0:  .word EnemyFramePtrTbl1         ;($A42C)Address table into enemy animation data. Two-->
-L95A2:  .word EnemyFramePtrTbl2         ;($A52C)tables needed to accommodate all entries.
-L95A4:  .word EnemyPlacePtrTbl          ;($A540)Pointers to enemy frame placement data.
-L95A6:  .word EnemyAnimIndexTbl         ;($A406)Index to values in addr tables for enemy animations.
+L9598:  .word SpecItmsTbl               ;Beginning of special items table.
+L959A:  .word RmPtrTbl                  ;Beginning of room pointer table.
+L959C:  .word StrctPtrTbl               ;Beginning of structure pointer table.
+L959E:  .word MacroDefs                 ;Beginning of macro definitions.
+L95A0:  .word EnemyFramePtrTbl1         ;Address table into enemy animation data. Two-->
+L95A2:  .word EnemyFramePtrTbl2         ;tables needed to accommodate all entries.
+L95A4:  .word EnemyPlacePtrTbl          ;Pointers to enemy frame placement data.
+L95A6:  .word EnemyAnimIndexTbl         ;Index to values in addr tables for enemy animations.
 
 L95A8:  JMP $A320 
 L95AB:  JMP $A315

@@ -62,8 +62,8 @@ LC1FF:* dey                             ;Palette # = PalDataPending - 1.
 LC200:  tya                             ;
 LC201:  asl                             ;* 2, each pal data ptr is 2 bytes (16-bit).
 LC202:  tay                             ;
-LC203:  ldx $9560,y                     ;X = low byte of PPU data pointer.
-LC206:  lda $9561,y                     ;
+LC203:  ldx PalPntrTbl,y                ;X = low byte of PPU data pointer.
+LC206:  lda PalPntrTbl+1,y              ;
 LC209:  tay                             ;Y = high byte of PPU data pointer.
 LC20A:  lda #$00                        ;Clear A.
 LC20C:  sta PalDataPending              ;Reset palette data pending byte.

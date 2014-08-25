@@ -19,7 +19,7 @@ RESET:
 *   LDA PPUStatus                   ; 
     BPL -                           ; 
     txa                             ; A = 0
-    jsr MMCWriteReg3                ; Switch Bank 0 (Title) into $8000 - $BFFF.
+    jsr MMCWriteReg3                ; Switch Bank 0 (Title) into 8000 - BFFF.
     jmp Startup                     ; Do preliminary housekeeping.
 
 ;---------------------------------[ Startup ]-----------------------------------

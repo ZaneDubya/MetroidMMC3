@@ -10,7 +10,8 @@
 .alias ObjectAnimIndexTbl       $8572
 .alias FramePtrTable            $860B
 .alias PlacePtrTable            $86DF
-.alias SamusEnterDoor           $8B13   
+.alias SamusEnterDoor           $8B13
+.alias PalPntrTbl               $9560
 .alias AreaPointers             $9598
 .alias AreaRoutine              $95C3
 .alias EnemyHitPointTbl         $962B
@@ -251,10 +252,10 @@ LC860:  lda $95DA       ; Get ??? Something to do with palette switch
         sta PalToggle
         lda #$FF
         sta RoomNumber                  ;Room number = $FF(undefined room).
-LC869:  jsr CopyPtrs    ; copy pointers from ROM to RAM 
+LC869:  jsr CopyPtrs                    ; copy pointers from ROM to RAM 
 LC86C:  jsr GetRoomNum                  ;Put room number at current map pos in $5A.
 *       jsr SetupRoom                   ;
-        ldy RoomNumber  ; load room number
+        ldy RoomNumber                  ; load room number
         iny
         bne -
 

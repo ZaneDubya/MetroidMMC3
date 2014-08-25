@@ -3,7 +3,7 @@
 ; Disassembled by Kent Hansen. Commented by Nick Mikstas.
 ; This version is organized and ported to use the MMC3.
 ; Graphics data (ROM Bank 6)
-.org $8000
+.org ROMBank_Switchable
 
 .require "Defines.asm"
 

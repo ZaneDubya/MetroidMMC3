@@ -3,7 +3,7 @@
 ; Disassembled by Kent Hansen. Commented by Nick Mikstas.
 ; This version is organized and ported to use the MMC3.
 ; Title/Password/Ending (ROM Bank 0)
-.org $8000
+.org ROMBank_Switchable
 
 .require "Defines.asm"
 .require "GameEngineDeclarations.asm"
@@ -12,7 +12,7 @@
 ;The core GameEngine bank (bank 7) needs to be able to jmp to routines
 ;located in this bank. The addresses of these routines that are directly
 ;referenced by GameEngine are located at the beginning of this bank.
-.word $8010
+.word TitleMainRoutine
 .word StarPalSwitch
 .word DecSpriteYCoord
 .word NMIScreenWrite
@@ -22,23 +22,24 @@
 .word $0000
 
 ;-----------------------------------------[ Start of code ]------------------------------------------
-;Code begins at $8010
-L8000:  lda TitleRoutine                ;
-L8002:  cmp #$15                        ;If intro routines not running, branch.
-L8004:  bcs ++                          ;
-L8006:  lda Joy1Change                  ;
-L8008:  and #$10                        ;if start has not been pressed, branch.
-L800A:  beq +                           ;
-L800C:  ldy #$00                        ;
-L8016:  lda PPUCNT0ZP                   ;       
-L8018:  and #$FC                        ;Set name table to name table 0.
-L801A:  sta PPUCNT0ZP                   ;
-L801C:  lda #$1B                        ;If start pressed, load START/CONTINUE screen.
-L801E:  sta TitleRoutine                ;
-L8020:  bne ++                          ;Branch always.
-L8022:* jsr RemoveIntroSprites          ;Remove sparkle and crosshair sprites from screen.
-L8025:  lda TitleRoutine                ;
-L8027:* jsr ChooseRoutine               ;Jump to proper routine below.
+;Code begins at ROMBank_Switchable+0x10
+TitleMainRoutine:
+    lda TitleRoutine                ;
+    cmp #$15                        ;If intro routines not running, branch.
+    bcs ++                          ;
+    lda Joy1Change                  ;
+    and #$10                        ;if start has not been pressed, branch.
+    beq +                           ;
+    ldy #$00                        ;
+    lda PPUCNT0ZP                   ;       
+    and #$FC                        ;Set name table to name table 0.
+    sta PPUCNT0ZP                   ;
+    lda #$1B                        ;If start pressed, load START/CONTINUE screen.
+    sta TitleRoutine                ;
+    bne ++                          ;Branch always.
+*   jsr RemoveIntroSprites          ;Remove sparkle and crosshair sprites from screen.
+    lda TitleRoutine                ;
+*   jsr ChooseRoutine               ;Jump to proper routine below.
 
 L802A:  .word InitializeAfterReset      ;First routine after reset.
 L802C:  .word DrawIntroBackground       ;Draws ground on intro screen.

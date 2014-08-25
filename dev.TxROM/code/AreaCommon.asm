@@ -2,7 +2,7 @@
 ; Programmed by HAI YUKAMI, ZARU SOBAJIMA, GPZ SENGOKU, N.SHIOTANI, & M.HOUDAI
 ; Disassembled by Kent Hansen. Commented by Nick Mikstas.
 ; This version is organized and ported to use the MMC3.
-; Area ROM Bank Common Routines & Data ($8000 - $8D60)
+; Area ROM Bank Common Routines & Data (8000 - 8D60)
 .require "Defines.asm"
 .require "GameEngineDeclarations.asm"
 
@@ -10,7 +10,7 @@
 ; The CommonJump table. Area code will JMP/JSR directly to this table.
 ; Name / Address JMP/JSR to.        ; JMP/JSR?  Area?   Description      
 CommonJump_UnknownUpdateAnim0:      ; JMP       All     UpdateEnemyAnim, followed 
-    JMP UpdateEnemyAnim0            ;                   by call to $8058
+    JMP UpdateEnemyAnim0            ;                   by call to 8058
 CommonJump_UnknownUpdateAnim1:      ; JMP       All     UpdateEnemyAnim, followed 
     JMP UpdateEnemyAnim1            ;                   by call to $*F416
 CommonJump_Unknown06:               ; JMP       All     ??????
@@ -60,9 +60,11 @@ CommonJump_Base10Subtract:          ; JSR       T       Calls Base10Subtract
 
 ; These are the addresses of four common routines (minus one). These routines
 ; are called by pushing the address onto the stack, and then executing RTS. An
-; example of this calling scheme can be seen at $9AE2 in the Brinstar ROM bank.
+; example of this calling scheme can be seen at 9AE2 in the Brinstar ROM bank.
 ; Each address is repeated one time, in this order: A B C C B A D D
-L8048:  .word $84FD, $84A6, $844A, $844A, $84A6, $84FD, $83F4, $83F4
+L8048:  .word Unknown84FE-1, Unknown84A7-1, Unknown844B-1
+        .word Unknown844B-1, Unknown84A7-1, Unknown84FE-1
+        .word Unknown83F4-1, Unknown83F4-1
 
 L8058:  LDX PageIndex                   ;   X = Index of object we are working on ($00, $10, $20 ... $f0)
 L805A:  LDA EnData05,X                  ;   A = EnData05 of object X.       
@@ -121,11 +123,11 @@ L80AD:  BNE -                           ;       }
                                         ;   }
 L80AF:* RTS                             ;   rts
 
-
-L80B0:  LDY EnDataIndex,X               
-L80B3:  LDA $977B,Y
-L80B6:  ASL                             ;*2 
-L80B7:  RTS
+Unknown80B0:
+    LDY EnDataIndex,X               
+    LDA $977B,Y
+    ASL                             ;*2 
+    RTS
 
 L80B8:  LDX PageIndex
 L80BA:  BCS $80FA
@@ -133,7 +135,7 @@ L80BC:  LDA EnData05,X
 L80BF:  BPL $80C7
 L80C1:  JSR $81FC
 L80C4:  JMP $80F6
-L80C7:  JSR $80B0
+L80C7:  JSR Unknown80B0
 L80CA:  BPL $80EA
 L80CC:  LDA $6B03,X
 L80CF:  BEQ $80C1
@@ -163,7 +165,7 @@ L80FF:  LDA EnData05,X
 L8102:  BPL $810A
 L8104:  JSR $81FC
 L8107:  JMP $812F
-L810A:  JSR $80B0
+L810A:  JSR Unknown80B0
 L810D:  BPL $8123
 L810F:  LDA $6B03,X
 L8112:  BEQ $8104
@@ -182,10 +184,10 @@ L812C:  JSR $856B
 L812F:  LDA #$01
 L8131:  STA $66
 L8133:  RTS
- 
+
 L8134:  LDX PageIndex
 L8136:  BCS $816D
-L8138:  JSR $80B0
+L8138:  JSR Unknown80B0
 L813B:  BPL $815E
 L813D:  LDA EnData05,X
 L8140:  BMI $8148
@@ -211,7 +213,7 @@ L816D:  RTS
 
 L816E:  LDX PageIndex
 L8170:  BCS $81B0
-L8172:  JSR $80B0
+L8172:  JSR Unknown80B0
 L8175:  BPL $81A0
 L8177:  LDA EnData05,X
 L817A:  BMI $8182
@@ -229,7 +231,7 @@ L8195:  JMP $81AC
 L8198:  STA $0403,X
 L819B:  STA $0407,X
 L819E:  BEQ $81AC
-L81A0:  JSR $80B0
+L81A0:  JSR Unknown80B0
 L81A3:  LSR 
 L81A4:  LSR 
 L81A5:  BCC $81AC
@@ -262,7 +264,7 @@ L81D7:  STA $6AFF,X
 
 L81DA:  JSR $81F6
 L81DD:  BNE $81F5
-L81DF:  JSR $80B0
+L81DF:  JSR Unknown80B0
 L81E2:  SEC 
 L81E3:  BPL $81ED
 L81E5:  LDA #$00
@@ -287,7 +289,7 @@ L820C:  STA $6AFE,X
 
 L820F:  JSR $81F6
 L8212:  BNE $822A
-L8214:  JSR $80B0
+L8214:  JSR Unknown80B0
 L8217:  SEC 
 L8218:  BPL $8222
 L821A:  LDA #$00
@@ -314,7 +316,7 @@ L8241:  STA $82
 L8243:  RTS
 
 Common8244:
-L8244:  JSR $80B0
+L8244:  JSR Unknown80B0
 L8247:  BPL $824C
 L8249:  JMP $833F
 L824C:  LDA EnData05,X
@@ -414,7 +416,7 @@ L830D:  AND #$1F
 L830F:  STA EnData05,X
 L8312:  JSR $81B1
 L8315:  JMP $82A2
-L8318:  JSR $80B0
+L8318:  JSR Unknown80B0
 L831B:  BPL $8320
 L831D:  JMP $8395
 L8320:  LDA EnData05,X
@@ -518,6 +520,7 @@ L83EF:  ADC $0403,X
 L83F2:  STA $00
 L83F4:  RTS
 
+Unknown83F4:
 L83F5:  LDX PageIndex
 L83F7:  LDA EnYRoomPos,X
 L83FA:  SEC 
@@ -561,6 +564,7 @@ L8446:  INC $6B01,X
 L8449:  SEC 
 L844A:  RTS
 
+Unknown844B:
 L844B:  LDX PageIndex
 L844D:  LDA EnYRoomPos,X
 L8450:  CLC 
@@ -606,6 +610,7 @@ L84A2:  DEC $6B01,X
 L84A5:  SEC 
 L84A6:  RTS
 
+Unknown84A7:
 L84A7:  LDX PageIndex
 L84A9:  LDA EnXRoomPos,X
 L84AC:  SEC 
@@ -647,6 +652,7 @@ L84F9:  INC $6B01,X
 L84FC:  SEC 
 L84FD:  RTS
 
+Unknown84FE:
 L84FE:  LDX PageIndex
 L8500:  LDA EnXRoomPos,X
 L8503:  CLC 
@@ -1449,7 +1455,7 @@ L8B52:* DEX                             ;
 SetDoorEntryInfo:
 L8B53:* TXA                             ;X contains door scroll status and is transferred to A.
 L8B54:  STA DoorScrollStatus            ;Save door scroll status.
-L8B56:  JSR SamusInDoor                 ;($8B74)Indicate Samus just entered a door.
+L8B56:  JSR SamusInDoor                 ;Indicate Samus just entered a door.
 L8B59:  LDA #$12                        ;
 L8B5B:  STA DoorDelay                   ;Set DoorDelay to 18 frames(going into door).
 L8B5D:  LDA SamusDoorData               ;
