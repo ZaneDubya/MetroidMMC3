@@ -7,10 +7,19 @@
 
 ;---------------------------[ Forward declarations ]----------------------------
 ; These addresses are located in area banks.
+.alias RunObjectRoutine         $8058
+.alias Unknown80B0              $80B0
+.alias Unknown81DA              $81DA
+.alias Unknown8206              $8206
+.alias Unknown820F              $820F
+.alias Unknown8296              $8296
+.alias Unknown832F              $832F
 .alias ObjectAnimIndexTbl       $8572
 .alias FramePtrTable            $860B
 .alias PlacePtrTable            $86DF
 .alias SamusEnterDoor           $8B13
+.alias DisplayDoors             $8B79
+
 .alias PalPntrTbl               $9560
 .alias AreaPointers             $9598
 .alias AreaRoutine              $95C3
@@ -591,7 +600,7 @@ LCB42:  jsr LFC65                       ; update of Mellow/Memu enemies
 LCB45:  jsr LF93B                       ;
 LCB48:  jsr LFBDD                       ; destruction of green spinners
 LCB4B:  jsr SamusEnterDoor              ;Check if Samus entered a door.
-LCB4E:  jsr $8B79                       ; display of doors
+LCB4E:  jsr DisplayDoors                ; display of doors
 LCB51:  jsr UpdateTiles                 ; tile de/regeneration
 LCB54:  jsr LF034                       ; Samus <--> enemies crash detection
 LCB57:  jsr DisplayBar                  ;Display of status bar.
@@ -1926,17 +1935,16 @@ UpdateWaveBullet:
         bne +
         sta $0500,x
         jmp LD522
-
 *       cmp $0501,x
         beq ---
         inc $0501,x
         iny
         lda ($0A),y
-        jsr $8296
+        jsr Unknown8296
         ldx PageIndex
         sta ObjVertSpeed,x
         lda ($0A),y
-        jsr $832F
+        jsr Unknown832F
         ldx PageIndex
         sta ObjHorzSpeed,x
         tay
@@ -3046,7 +3054,7 @@ LDCFC:  lda InArea
         bmi LDD75
         jsr GetEnemy8BValue
         sta $00
-        jsr $80B0
+        jsr Unknown80B0
         and #$20
         sta EnDataIndex,x
         lda #$05
@@ -5041,7 +5049,7 @@ LF40D:  jmp $95E5                       ; Area Enemy update
 
 UpdateEnemyAnim0:
         jsr UpdateEnemyAnim
-        jsr $8058
+        jsr RunObjectRoutine
 
 CheckObjectAttribs:
         ldx PageIndex
@@ -5159,7 +5167,7 @@ LF4EE:  dec EnSpecialAttribs,x
         and #$3F
         sta EnStatus,x
         pha
-        jsr $80B0
+        jsr Unknown80B0
         and #$20
         beq +
         pla
@@ -5202,7 +5210,7 @@ LF536:  lda EnSpecialAttribs,x
         jsr LF515
         lda #$40
         sta $040D,x
-        jsr $80B0
+        jsr Unknown80B0
         and #$20
         beq +
         lda #$05
@@ -5210,7 +5218,7 @@ LF536:  lda EnSpecialAttribs,x
         jmp $95A8
 *       rts
 
-*       jsr $80B0
+*       jsr Unknown80B0
         and #$20
         bne ---
         jsr SFX_Metal
@@ -5241,7 +5249,7 @@ PlaySnd2:
 PlaySnd3:
         jsr SFX_BigEnemyHit             ;
 *       ldx PageIndex
-        jsr $80B0
+        jsr Unknown80B0
         and #$20
         beq +
         lda $040E,x
@@ -5255,7 +5263,7 @@ PlaySnd3:
         sta $040C,x
         asl
         bmi +
-        jsr $80B0
+        jsr Unknown80B0
         and #$20
         bne +
         ldy $040E,x
@@ -5330,7 +5338,7 @@ PlaySnd3:
         ldx PageIndex
         rts
 
-LF676:  jsr $80B0
+LF676:  jsr Unknown80B0
         asl
         asl
         asl
@@ -5404,7 +5412,7 @@ LF6B9:  lda #$00
         ror
         eor $0403,x
         bpl +
-        jsr $81DA
+        jsr Unknown81DA
 *       lda #$FB
         jsr LF7B3
         lda ScrollDir
@@ -5431,7 +5439,7 @@ LF6B9:  lda #$00
         ror
         eor $0402,x
         bpl +
-        jmp $820F
+        jmp Unknown820F
 
 AddFlagToEnData05:
         ora EnData05,x
@@ -5529,7 +5537,7 @@ LF7BA:  dec EnDelay,x
         iny
         lda ($00),y
         sta $0408,x
-        jsr $80B0
+        jsr Unknown80B0
         bpl ++
         lda #$00
         sta EnCounter,x
@@ -5547,12 +5555,12 @@ LF7BA:  dec EnDelay,x
         bmi +
         lsr
         bcc ++
-        jsr $81D1
+        jsr Unknown81DA
         jmp ++
 
 *       and #$04
         beq +
-        jsr $8206
+        jsr Unknown8206
 *       lda #$DF
         jmp LF7B3
 
@@ -5758,11 +5766,11 @@ LF991:  jsr LFA5B
         inc EnDelay,x
         iny
         lda ($0A),y
-        jsr $8296
+        jsr Unknown8296
         ldx PageIndex
         sta $0402,x
         lda ($0A),y
-        jsr $832F
+        jsr Unknown832F
         ldx PageIndex
         sta $0403,x
         tay
@@ -5970,10 +5978,10 @@ LFAFF:  sty PageIndex
         sta EnDelay,x
         jmp KillObject                  ;Free enemy data slot.
 
-LFB7B:  jsr $80B0                       ;
-        ror EnData05,x
+LFB7B:  jsr Unknown80B0                 ;
+        ror EnData05,x                  ;
         lda EnemyInitDelayTbl,y         ;(Load initial delay for enemy movement.
-        sta EnDelay,x           ;
+        sta EnDelay,x                   ;
 
 Exit13: 
         rts                             ;Exit from multiple routines.

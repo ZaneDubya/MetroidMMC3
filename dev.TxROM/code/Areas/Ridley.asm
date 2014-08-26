@@ -9,6 +9,7 @@
 
 .org ROMBank_Switchable
 .include "../AreaCommon.asm"
+.advance $8D60,$EA
 
 ;------------------------------------------[ Graphics data ]-----------------------------------------
 
@@ -509,9 +510,9 @@ L9A05:  LSR $00
 L9A07:  ROL 
 L9A08:  ASL 
 L9A09:  TAY 
-L9A0A:  LDA $8049,Y
+L9A0A:  LDA CommonRoutines+1,Y
 L9A0D:  PHA 
-L9A0E:  LDA $8048,Y
+L9A0E:  LDA CommonRoutines,Y
 L9A11:  PHA 
 L9A12:  RTS
 

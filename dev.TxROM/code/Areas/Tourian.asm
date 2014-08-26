@@ -9,6 +9,7 @@
 
 .org ROMBank_Switchable
 .include "../AreaCommon.asm"
+.advance $8D60,$EA
 
 ;------------------------------------------[ Graphics data ]-----------------------------------------
 
