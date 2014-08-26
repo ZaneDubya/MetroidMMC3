@@ -6,6 +6,7 @@
 .require "Defines.asm"
 .require "GameEngineDeclarations.asm"
 
+; Forward declarations to the area data (Brinstar, Norfair, etc).
 .alias EnemyDataTable7B     $977B
 .alias EnemyDataTable8B     $968B
 .alias EnemyDataPtrTable    $96DB
@@ -128,11 +129,7 @@ L80AD:  BNE -                           ;       }
                                         ;   }
 L80AF:* RTS                             ;   rts
 
-Unknown80B0:
-    LDY EnDataIndex,X               
-    LDA EnemyDataTable7B,Y
-    ASL                             ;*2 
-    RTS
+.advance $80B8,$00
 
 Unknown80B8:
 L80B8:  LDX PageIndex
@@ -141,7 +138,7 @@ L80BC:  LDA EnData05,X
 L80BF:  BPL L80C7
 L80C1:  JSR Unknown81FC
 L80C4:  JMP L80F6
-L80C7:  JSR Unknown80B0
+L80C7:  JSR AreaCommon80B0
 L80CA:  BPL L80EA
 L80CC:  LDA $6B03,X
 L80CF:  BEQ L80C1
@@ -172,7 +169,7 @@ L80FF:  LDA EnData05,X
 L8102:  BPL L810A
 L8104:  JSR Unknown81FC
 L8107:  JMP Unknown812F
-L810A:  JSR Unknown80B0
+L810A:  JSR AreaCommon80B0
 L810D:  BPL L8123
 L810F:  LDA $6B03,X
 L8112:  BEQ L8104
@@ -197,7 +194,7 @@ L8133:  RTS
 Unknown8134:
 L8134:  LDX PageIndex
 L8136:  BCS L816D
-L8138:  JSR Unknown80B0
+L8138:  JSR AreaCommon80B0
 L813B:  BPL L815E
 L813D:  LDA EnData05,X
 L8140:  BMI L8148
@@ -225,7 +222,7 @@ L816D:  RTS
 Unknown816E:
 L816E:  LDX PageIndex
 L8170:  BCS L81B0
-L8172:  JSR Unknown80B0
+L8172:  JSR AreaCommon80B0
 L8175:  BPL L81A0
 L8177:  LDA EnData05,X
 L817A:  BMI L8182
@@ -243,7 +240,7 @@ L8195:  JMP Set66To01AndReturn1
 L8198:  STA $0403,X
 L819B:  STA $0407,X
 L819E:  BEQ Set66To01AndReturn1
-L81A0:  JSR Unknown80B0
+L81A0:  JSR AreaCommon80B0
 L81A3:  LSR 
 L81A4:  LSR 
 L81A5:  BCC Set66To01AndReturn1
@@ -281,7 +278,7 @@ L81D7:  STA $6AFF,X
 Unknown81DA:
 L81DA:  JSR GetEnemy8BFlag
 L81DD:  BNE L81F5
-L81DF:  JSR Unknown80B0
+L81DF:  JSR AreaCommon80B0
 L81E2:  SEC 
 L81E3:  BPL L81ED
 L81E5:  LDA #$00
@@ -309,7 +306,7 @@ L820C:  STA $6AFE,X
 Unknown820F:                    ; Called from GameEngine.asm
 L820F:  JSR GetEnemy8BFlag
 L8212:  BNE L822A
-L8214:  JSR Unknown80B0
+L8214:  JSR AreaCommon80B0
 L8217:  SEC 
 L8218:  BPL L8222
 L821A:  LDA #$00
@@ -337,7 +334,7 @@ L8241:  STA $82
 L8243:  RTS
 
 Common8244:
-L8244:  JSR Unknown80B0
+L8244:  JSR AreaCommon80B0
 L8247:  BPL L824C
 L8249:  JMP Common833F
 L824C:  LDA EnData05,X
@@ -446,7 +443,7 @@ L8312:  JSR Unknown81B1
 L8315:  JMP Clear00AndReturn
 
 Common8318:
-L8318:  JSR Unknown80B0
+L8318:  JSR AreaCommon80B0
 L831B:  BPL +
 L831D:  JMP Common8395
 L8320:* LDA EnData05,X
@@ -1052,4 +1049,3 @@ DoorDataTable:
 L8D3A:  .byte $E8, $10, $60, $AD, $91, $69, $8D, $78, $68, $AD, $92, $69, $8D, $79, $68, $A9 
 L8D4A:  .byte $00, $85, $00, $85, $02, $AD, $97, $69, $29, $80, $F0, $06, $A5, $00, $09, $80
 L8D5A:  .byte $85, $00, $AD, $97, $69, $29
-
