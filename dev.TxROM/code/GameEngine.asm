@@ -8,6 +8,7 @@
 ;---------------------------[ Forward declarations ]----------------------------
 ; These addresses are located in area banks.
 .alias RunObjectRoutine         $8058
+.alias Unknown80B0              $80B0
 .alias Unknown81DA              $81DA
 .alias Unknown8206              $8206
 .alias Unknown820F              $820F
@@ -47,7 +48,6 @@
 .include "GameEngine/Rooms.asm"
 .include "GameEngine/Sound.asm"
 .include "GameEngine/StatusBar.asm"
-.include "GameEngine/FromAreaCommon.asm"
     
 ;-------------------------------[ Main loop ]-----------------------------------
 
@@ -3054,7 +3054,7 @@ LDCFC:  lda InArea
         bmi LDD75
         jsr GetEnemy8BValue
         sta $00
-        jsr AreaCommon80B0
+        jsr Unknown80B0
         and #$20
         sta EnDataIndex,x
         lda #$05
@@ -5167,7 +5167,7 @@ LF4EE:  dec EnSpecialAttribs,x
         and #$3F
         sta EnStatus,x
         pha
-        jsr AreaCommon80B0
+        jsr Unknown80B0
         and #$20
         beq +
         pla
@@ -5210,7 +5210,7 @@ LF536:  lda EnSpecialAttribs,x
         jsr LF515
         lda #$40
         sta $040D,x
-        jsr AreaCommon80B0
+        jsr Unknown80B0
         and #$20
         beq +
         lda #$05
@@ -5218,7 +5218,7 @@ LF536:  lda EnSpecialAttribs,x
         jmp $95A8
 *       rts
 
-*       jsr AreaCommon80B0
+*       jsr Unknown80B0
         and #$20
         bne ---
         jsr SFX_Metal
@@ -5249,7 +5249,7 @@ PlaySnd2:
 PlaySnd3:
         jsr SFX_BigEnemyHit             ;
 *       ldx PageIndex
-        jsr AreaCommon80B0
+        jsr Unknown80B0
         and #$20
         beq +
         lda $040E,x
@@ -5263,7 +5263,7 @@ PlaySnd3:
         sta $040C,x
         asl
         bmi +
-        jsr AreaCommon80B0
+        jsr Unknown80B0
         and #$20
         bne +
         ldy $040E,x
@@ -5338,7 +5338,7 @@ PlaySnd3:
         ldx PageIndex
         rts
 
-LF676:  jsr AreaCommon80B0
+LF676:  jsr Unknown80B0
         asl
         asl
         asl
@@ -5537,7 +5537,7 @@ LF7BA:  dec EnDelay,x
         iny
         lda ($00),y
         sta $0408,x
-        jsr AreaCommon80B0
+        jsr Unknown80B0
         bpl ++
         lda #$00
         sta EnCounter,x
@@ -5978,7 +5978,7 @@ LFAFF:  sty PageIndex
         sta EnDelay,x
         jmp KillObject                  ;Free enemy data slot.
 
-LFB7B:  jsr AreaCommon80B0                 ;
+LFB7B:  jsr Unknown80B0                 ;
         ror EnData05,x                  ;
         lda EnemyInitDelayTbl,y         ;(Load initial delay for enemy movement.
         sta EnDelay,x                   ;
