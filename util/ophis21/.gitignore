@@ -1,0 +1,4 @@
+*.pyc
+*~
+src/build
+src/dist
