@@ -1,6 +1,13 @@
 #!/bin/bash
 # Make.sh
 
+# Get location of WINE executable; fail if not found.
+WINEBIN=$(which wine)
+if [ "$1" = "dev.TxROM" ] && [ "${WINEBIN}" = "" ]; then
+	echo "WINE is needed to compile this version of the ROM. Please install."
+	exit 1
+fi
+
 # Fail if no source directory has been passed.
 if [ ! -d "$1" ] || [ "$1" = "" ]; then
 	echo Cannot run this script from the command line.
@@ -35,7 +42,7 @@ echo [done]
 # util\if6502 $SRCDIR/code $WORKDIR/code -all
 echo -n Copying code files...
 mkdir $WORKDIR/code
-cp $SRCDIR/code/* $WORKDIR/code/ 2>/dev/null
+cp -R $SRCDIR/code/* $WORKDIR/code/ 2>/dev/null
 echo [done]
 
 # Create make.asm file to combine all assembled PRGs into the final ROM.
@@ -48,25 +55,17 @@ echo ".include \"code/header.asm\"" >> $WORKDIR/make.asm
 # Compile each of the banks in make.txt, and add each to the make.asm file.
 while IFS="," read f1 f2 f3 f4 f5;
 do
-	echo -n "Assembling ${f2}: "
-	./util/ophis21/bin/ophis -o "${WORKDIR}/${f3}.bin" "${WORKDIR}/PRG/${f3}.asm"
-	echo ".incbin \"${f3}.bin\"" >> $WORKDIR/make.asm
+	if [ "$f1" = "map" ]; then
+		echo -n "Mapping ${f2}: "
+		./util/ophis21/bin/ophis -m "${WORKDIR}/map.txt" "${WORKDIR}/${f2}"
+		rm -f "ophis.bin"
+		$WINEBIN ./util/GetLabels.exe "${WORKDIR}/map.txt" "${WORKDIR}/${f3}" "${f4}" "${f5}"
+	elif [ "$f1" = "prg" ]; then
+		echo -n "Assembling ${f2}: "
+		./util/ophis21/bin/ophis -o "${WORKDIR}/${f3}.bin" "${WORKDIR}/PRG/${f3}.asm"
+		echo ".incbin \"${f3}.bin\"" >> $WORKDIR/make.asm
+	fi
 done < $WORKDIR/make.txt
-
-#for /f "tokens=1-5 delims=," %%G in ($WORKDIR/make.txt) do (
-#    if %%G==map (
-#        echo Mapping %%H:
-#        util\ophis.exe -m "$WORKDIR/map.txt" "$WORKDIR/%%H"
-#        del "ophis.bin"
-#        util\getlabels.exe "$WORKDIR/map.txt" "$WORKDIR/%%I" "%%J" "%%K"
-#        REM del "$WORKDIR\map.txt"     -- NOT necessary, as it is in obj folder.
-#    )
-#    if %%G==prg (
-#       echo Assembling %%H:
-#        ophis -o "$WORKDIR/%%I.bin" "$WORKDIR\PRG\%%I.asm"
-#        echo .incbin "%%I.bin" >> $WORKDIR\make.asm
-#    )
-#)
 
 rm -rf bin 2&>/dev/null && mkdir bin
 
