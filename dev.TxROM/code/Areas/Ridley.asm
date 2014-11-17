@@ -1790,7 +1790,7 @@ LAFE7:  .byte $BD, $CD, $CE, $CF, $D0, $D1, $D2, $D3, $D4, $90, $91, $92, $93, $
 LAFF7:  .byte $20, $C0, $C0, $C0, $C0, $C0, $C0, $C0, $C0
 
 .advance $B000, $00
-.include "../Music/RidleyMusic.asm"
+.include "../music/RidleyMusic.asm"
 
 .advance $B200, $00
 .include "../SoundEngine.asm"

@@ -42,7 +42,7 @@ copy /y NUL %workdir%\make.asm >NUL
 echo .outfile "bin/%srcdir%.nes" >> %workdir%\make.asm
 echo .include "code/header.asm" >> %workdir%\make.asm
 
-REM compile each of the banks in make.txt, and add each to the make.asm file.
+REM Compile each of the banks in make.txt, and add each to the make.asm file.
 for /f "tokens=1-5 delims=," %%G in (%workdir%/make.txt) do (
     if %%G==map (
         echo Mapping %%H:
@@ -53,7 +53,7 @@ for /f "tokens=1-5 delims=," %%G in (%workdir%/make.txt) do (
     )
     if %%G==prg (
         echo Assembling %%H:
-        ophis -o "%workdir%/%%I.bin" "%workdir%\PRG\%%I.asm"
+        util\ophis.exe -o "%workdir%/%%I.bin" "%workdir%\PRG\%%I.asm"
         echo .incbin "%%I.bin" >> %workdir%\make.asm
     )
 )
@@ -65,7 +65,7 @@ mkdir bin
 
 REM Combine the banks
 echo Combining banks into ROM:
-ophis obj/make.asm
+util\ophis.exe obj/make.asm
 
 choice /c:yn /m "Make again?"
 if errorlevel 2 goto :end
